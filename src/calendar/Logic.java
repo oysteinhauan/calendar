@@ -5,7 +5,8 @@ package calendar;
  */
 public class Logic {
 
-    public int getNumber(){
-        return;
+    public int getNumber()
+    {
+        return 5;
     }
 }
