@@ -7,6 +7,6 @@ public class Logic {
 
     public int getNumber()
     {
-        return 5;
+        return 42;
     }
 }
