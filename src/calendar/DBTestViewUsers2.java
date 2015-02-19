@@ -5,7 +5,7 @@ import java.sql.*;
 /**
  * Created by oysteinhauan on 19/02/15.
  */
-public class DBTestInsertUsers2 {
+public class DBTestViewUsers2 {
 
     public static void main(String[] args) {
         try {
