@@ -5,7 +5,7 @@ import java.sql.*;
 /**
  * Created by oysteinhauan on 18/02/15.
  */
-public class DBTest {
+public class DBTestViewUsers {
 
     public static void main(String[] args) {
         try {
@@ -39,11 +39,13 @@ public class DBTest {
                 String lastname = rs.getString("lastname");
 
                 //Display values
-                System.out.print("ID: " + user_id);
-                System.out.print(", Phone Number: " + phone_number);
-                System.out.print(", Firstname: " + firstname);
-                System.out.println(", Lastname: " + lastname);
-                System.out.println(", Postal Code: " + postal_code);
+                System.out.print("\nID: " + user_id);
+                System.out.print("\nFirstname: " + firstname);
+                System.out.println("\nLastname: " + lastname);
+                System.out.println("\nPostal Code: " + postal_code);
+                System.out.print("\nPhone Number: " + phone_number + "\n\n\n");
+
+
             }
 
             rs.close();
