@@ -1,11 +1,11 @@
-package calendar;
+package calendarTest;
 
 import java.sql.*;
 
 /**
- * Created by oysteinhauan on 19/02/15.
+ * Created by oysteinhauan on 18/02/15.
  */
-public class DBTestViewUsers2 {
+public class DBTestViewUsers {
 
     public static void main(String[] args) {
         try {
@@ -16,9 +16,9 @@ public class DBTestViewUsers2 {
             throw new RuntimeException("Cannot find the driver in the classpath!", e);
         }
 
-        String url = "jdbc:mysql://mysql.stud.ntnu.no:3306/oysteibh_calendartest";
-        String username = "oysteibh";
-        String password = "qwerty";
+        String url = "jdbc:mysql://localhost:3306/calendar";
+        String username = "oystein";
+        String password = "qwertyuiop";
         Connection connection = null;
         Statement statement = null;
         try {
@@ -63,5 +63,3 @@ public class DBTestViewUsers2 {
 
 
 }
-
-

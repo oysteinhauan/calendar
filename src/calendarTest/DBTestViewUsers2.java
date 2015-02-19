@@ -1,11 +1,11 @@
-package calendar;
+package calendarTest;
 
 import java.sql.*;
 
 /**
- * Created by oysteinhauan on 18/02/15.
+ * Created by oysteinhauan on 19/02/15.
  */
-public class DBTestViewUsers {
+public class DBTestViewUsers2 {
 
     public static void main(String[] args) {
         try {
@@ -16,16 +16,16 @@ public class DBTestViewUsers {
             throw new RuntimeException("Cannot find the driver in the classpath!", e);
         }
 
-        String url = "jdbc:mysql://localhost:3306/calendar";
-        String username = "oystein";
-        String password = "qwertyuiop";
+        String url = "jdbc:mysql://mysql.stud.ntnu.no:3306/oysteibh_calendartest";
+        String username = "oysteibh";
+        String password = "qwerty";
         Connection connection = null;
         Statement statement = null;
         try {
             System.out.println("Connecting database...");
             connection = DriverManager.getConnection(url, username, password);
             System.out.println("Database connected!");
-            System.out.println("Creating Statement...");
+            System.out.println("Creating Statement...\n\n");
             statement = connection.createStatement();
             String sql = "SELECT user_id, firstname, lastname, phone_number, postal_code FROM users";
             ResultSet rs = statement.executeQuery(sql);
@@ -39,11 +39,11 @@ public class DBTestViewUsers {
                 String lastname = rs.getString("lastname");
 
                 //Display values
-                System.out.print("\nID: " + user_id);
-                System.out.print("\nFirstname: " + firstname);
-                System.out.println("\nLastname: " + lastname);
-                System.out.println("\nPostal Code: " + postal_code);
-                System.out.print("\nPhone Number: " + phone_number + "\n\n\n");
+                System.out.println("ID: " + user_id);
+                System.out.println("Firstname: " + firstname);
+                System.out.println("Lastname: " + lastname);
+                System.out.println("Postal Code: " + postal_code);
+                System.out.println("Phone Number: " + phone_number + "\n\n\n");
 
 
             }
@@ -63,3 +63,5 @@ public class DBTestViewUsers {
 
 
 }
+
+

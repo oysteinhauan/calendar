@@ -1,4 +1,4 @@
-package calendar;
+package calendarTest;
 
 /**
  * Created by oysteinhauan on 06/02/15.
