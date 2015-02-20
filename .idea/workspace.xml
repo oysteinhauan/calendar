@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="76b3447d-6286-4ba9-92a0-d37f4a5ce347" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/mysql_connector_java_5_1_34_bin__2_.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/calendar.iml" afterPath="$PROJECT_DIR$/calendar.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/calendarTest/DBTestInsertUsers.java" afterPath="$PROJECT_DIR$/src/calendarTest/DBTestInsertUsers.java" />
     </list>
     <ignored path="calendar.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -51,11 +49,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DBTestViewUsers2.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="DBTestViewUsers2.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/calendarTest/DBTestViewUsers2.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="150" max-vertical-offset="1095">
-              <caret line="27" column="57" selection-start-line="27" selection-start-column="57" selection-end-line="27" selection-end-column="57" />
+            <state vertical-scroll-proportion="1.1071428" vertical-offset="0" max-vertical-offset="1095">
+              <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
               <folding>
                 <marker date="1424336519000" expanded="true" signature="1059:1132" placeholder="SELECT user_..users..." />
               </folding>
@@ -63,18 +61,18 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DBTestInsertUsers.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="DBTestInsertUsers.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/calendarTest/DBTestInsertUsers.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.33169532" vertical-offset="150" max-vertical-offset="1440">
-              <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="120" max-vertical-offset="1455">
+              <caret line="23" column="17" selection-start-line="23" selection-start-column="17" selection-end-line="23" selection-end-column="17" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <marker date="1424336519000" expanded="true" signature="1628:1723" placeholder="INSERT INTO ..." />
-                <marker date="1424336519000" expanded="true" signature="1816:1905" placeholder="INSERT INTO ..." />
-                <marker date="1424336519000" expanded="true" signature="1973:2065" placeholder="INSERT INTO ..." />
-                <marker date="1424336519000" expanded="true" signature="2133:2222" placeholder="INSERT INTO ..." />
-                <marker date="1424336519000" expanded="true" signature="2290:2381" placeholder="INSERT INTO ..." />
+                <marker date="1424341914000" expanded="true" signature="1655:1750" placeholder="INSERT INTO ..." />
+                <marker date="1424341914000" expanded="true" signature="1843:1932" placeholder="INSERT INTO ..." />
+                <marker date="1424341914000" expanded="true" signature="2000:2092" placeholder="INSERT INTO ..." />
+                <marker date="1424341914000" expanded="true" signature="2160:2249" placeholder="INSERT INTO ..." />
+                <marker date="1424341914000" expanded="true" signature="2317:2408" placeholder="INSERT INTO ..." />
               </folding>
             </state>
           </provider>
@@ -117,8 +115,9 @@
         <option value="$PROJECT_DIR$/src/calendar/DBTestInsertUsers2.java" />
         <option value="$PROJECT_DIR$/src/calendar/DBTestViewUsers2.java" />
         <option value="$PROJECT_DIR$/src/calendar/DBTestInsertUsers.java" />
-        <option value="$PROJECT_DIR$/src/calendarTest/DBTestInsertUsers.java" />
         <option value="$PROJECT_DIR$/src/calendarTest/DBtest.java" />
+        <option value="$PROJECT_DIR$/src/calendarTest/DBTestInsertUsers.java" />
+        <option value="$PROJECT_DIR$/.idea/workspace.xml" />
       </list>
     </option>
   </component>
@@ -196,6 +195,42 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="calendarTest" />
+              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mysql-connector-java-5.1.34-bin.jar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="calendar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="calendar" />
+              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="calendarTest" />
+              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="calendar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="calendar" />
+              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value=".idea" />
               <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -550,8 +585,8 @@
     </list>
     <recent_temporary>
       <list size="3">
-        <item index="0" class="java.lang.String" itemvalue="Application.DBTestViewUsers2" />
-        <item index="1" class="java.lang.String" itemvalue="Application.DBTestInsertUsers" />
+        <item index="0" class="java.lang.String" itemvalue="Application.DBTestInsertUsers" />
+        <item index="1" class="java.lang.String" itemvalue="Application.DBTestViewUsers2" />
         <item index="2" class="java.lang.String" itemvalue="Application.DBTestViewUsers" />
       </list>
     </recent_temporary>
@@ -569,7 +604,7 @@
       <workItem from="1423223928073" duration="616000" />
       <workItem from="1423225457665" duration="104000" />
       <workItem from="1423225819681" duration="392000" />
-      <workItem from="1424288195984" duration="8847000" />
+      <workItem from="1424288195984" duration="11550000" />
     </task>
     <task id="LOCAL-00001" summary="Test3">
       <created>1423226549400</created>
@@ -579,11 +614,11 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="9959000" />
+    <option name="totallyTimeSpent" value="12662000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="12" y="23" width="1260" height="760" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32784432" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -605,7 +640,7 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24876848" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32934132" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32934132" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -692,27 +727,35 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/calendarTest/DBTestViewUsers2.java">
+    <entry file="file://$PROJECT_DIR$/src/calendarTest/DBTestInsertUsers.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="150" max-vertical-offset="1095">
-          <caret line="27" column="57" selection-start-line="27" selection-start-column="57" selection-end-line="27" selection-end-column="57" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="120" max-vertical-offset="1455">
+          <caret line="23" column="17" selection-start-line="23" selection-start-column="17" selection-end-line="23" selection-end-column="17" />
           <folding>
-            <marker date="1424336519000" expanded="true" signature="1059:1132" placeholder="SELECT user_..users..." />
+            <element signature="imports" expanded="true" />
+            <marker date="1424341914000" expanded="true" signature="1655:1750" placeholder="INSERT INTO ..." />
+            <marker date="1424341914000" expanded="true" signature="1843:1932" placeholder="INSERT INTO ..." />
+            <marker date="1424341914000" expanded="true" signature="2000:2092" placeholder="INSERT INTO ..." />
+            <marker date="1424341914000" expanded="true" signature="2160:2249" placeholder="INSERT INTO ..." />
+            <marker date="1424341914000" expanded="true" signature="2317:2408" placeholder="INSERT INTO ..." />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/calendarTest/DBTestInsertUsers.java">
+    <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33169532" vertical-offset="150" max-vertical-offset="1440">
-          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="12345">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/calendarTest/DBTestViewUsers2.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.1071428" vertical-offset="0" max-vertical-offset="1095">
+          <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <marker date="1424336519000" expanded="true" signature="1628:1723" placeholder="INSERT INTO ..." />
-            <marker date="1424336519000" expanded="true" signature="1816:1905" placeholder="INSERT INTO ..." />
-            <marker date="1424336519000" expanded="true" signature="1973:2065" placeholder="INSERT INTO ..." />
-            <marker date="1424336519000" expanded="true" signature="2133:2222" placeholder="INSERT INTO ..." />
-            <marker date="1424336519000" expanded="true" signature="2290:2381" placeholder="INSERT INTO ..." />
+            <marker date="1424336519000" expanded="true" signature="1059:1132" placeholder="SELECT user_..users..." />
           </folding>
         </state>
       </provider>

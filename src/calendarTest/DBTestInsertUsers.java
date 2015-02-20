@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
+import java.util.Calendar;
 
 /**
  * Created by oysteinhauan on 18/02/15.
