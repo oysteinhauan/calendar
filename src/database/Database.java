@@ -12,14 +12,15 @@ public class Database {
     private Statement statement = null;
     private boolean connected = false;
 
-    public Database(String db_name, String username, String password){
-        String url = "jdbc:mysql://mysql.stud.ntnu.no:3306/" + db_name;
-        this.username = username;
-        this.password = password;
+    String url;
+
+    public Database(String db_name){
+        url = "jdbc:mysql://mysql.stud.ntnu.no:3306/" + db_name;
+
     }
 
 
-    public void connectDb(String url, String username, String password) {
+    public void connectDb(String username, String password) {
         try {
             System.out.println("Loading driver...");
             Class.forName("com.mysql.jdbc.Driver");
@@ -40,7 +41,7 @@ public class Database {
     public void closeConnection(){
 
         System.out.println("Closing connection.");
-        if (connected = true) try {
+        if (connected) try {
             connection.close();
         } catch (SQLException ignore) {
         }
@@ -48,7 +49,7 @@ public class Database {
 
 
     public ResultSet readQuery(String sql){
-        if (connected = false){
+        if (!connected){
             throw new RuntimeException("No database connected!");
         }
         else{
@@ -64,7 +65,7 @@ public class Database {
     }
 
     public void updateQuery(String sql){
-        if (connected = false){
+        if (!connected){
             throw new RuntimeException("No database connected!");
         }
         else{
