@@ -1,18 +1,18 @@
-package calendarTest;
+package database;
 
 import java.sql.*;
 
 /**
- * Created by oysteinhauan on 19/02/15.
+ * Created by oysteinhauan on 24/02/15.
  */
-public class DBtest {
+public class Database {
 
     private String db_name, username, password;
     private Connection connection = null;
     private Statement statement = null;
     private boolean connected = false;
 
-    public DBtest(String db_name, String username, String password){
+    public Database(String db_name, String username, String password){
         String url = "jdbc:mysql://mysql.stud.ntnu.no:3306/" + db_name;
         this.username = username;
         this.password = password;
