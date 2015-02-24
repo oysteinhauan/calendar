@@ -7,6 +7,8 @@ import java.util.Date;
  */
 public class Person {
 
+
+
     private String username, password, firstname, lastname;
     private Date dateOfBirth;
 
