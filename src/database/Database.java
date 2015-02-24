@@ -40,7 +40,7 @@ public class Database {
     public void closeConnection(){
 
         System.out.println("Closing connection.");
-        if (connected = true) try {
+        if (connected) try {
             connection.close();
         } catch (SQLException ignore) {
         }
@@ -48,7 +48,7 @@ public class Database {
 
 
     public ResultSet readQuery(String sql){
-        if (connected = false){
+        if (!connected){
             throw new RuntimeException("No database connected!");
         }
         else{
@@ -64,7 +64,7 @@ public class Database {
     }
 
     public void updateQuery(String sql){
-        if (connected = false){
+        if (!connected){
             throw new RuntimeException("No database connected!");
         }
         else{
