@@ -7,13 +7,11 @@ import java.util.Date;
  */
 public class Person {
 
-<<<<<<< HEAD
     private String username, password, firstname, lastname, email, position;
-=======
 
 
-    private String username, password, firstname, lastname;
->>>>>>> 0c3eda300f4e25296c16b2b9e8eccc08ddc4b990
+
+
     private Date dateOfBirth;
 
     //lager tomt Personobjekt
