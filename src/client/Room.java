@@ -9,6 +9,4 @@ public class Room {
     int seats;
     boolean available;
 
-
-
 }

@@ -7,20 +7,18 @@ import java.util.Date;
  */
 public class Person {
 
-    private String username, password, firstname, lastname;
+    private String username, password, firstname, lastname, email, position;
     private Date dateOfBirth;
 
     //lager tomt Personobjekt
-    public Person(){
+    public Person(String username){
+
         this.username = username;
-        this.password = password;
-        this.firstname = firstname;
-        this.lastname = lastname;
     }
 
-    public String getPassword() {
-        return password;
-    }
+//    public String getPassword() {
+//        return password;
+//    }
 
     public void setPassword(String password) {
 
