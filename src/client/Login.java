@@ -25,10 +25,12 @@ public class Login {
                     throw new IllegalArgumentException("Invalid username");
                 } else {
                     this.password = rs.getString("password");
+                    rs.close();
                 }
             }
 
         } catch (SQLException e){
+
         }
 
     }
@@ -40,9 +42,7 @@ public class Login {
         else loggedin = true;
     }
 
-    public String getPassword(){
-        return this.password;
-    }
+
 
 
 

@@ -6,9 +6,8 @@ package client;
 public class Room {
 
     int RoomID;
+
     int seats;
     boolean available;
-
-    
 
 }
