@@ -14,6 +14,10 @@ public class Database {
 
     String url;
 
+    public Database(){
+        url = "jdbc:mysql://mysql.stud.ntnu.no:3306/all_s_ntnu_gruppe40";
+    }
+
     public Database(String db_name){
         url = "jdbc:mysql://mysql.stud.ntnu.no:3306/" + db_name;
 

@@ -31,6 +31,10 @@ public class Appointment {
 
     }
 
+//    public Appointment getAppointment(int id){
+//
+//    }
+
     public Date getDateAndTime(){
         return this.dateAndTime;
     }
