@@ -15,112 +15,133 @@ import java.util.List;
  */
 public class Appointment {
 
-    java.sql.Date date;
-    java.sql.Time time;
+    String date;
+    String time;
     int duration;
-    //varighet i minutter
-    ArrayList<Person> attendingPeople;
+    //ArrayList<Person> attendingPeople;
     String subject;
     String description;
-    Room room;
+    //Room room;
     int roomId;
     int appointmentId;
 
 
-    public Appointment(int id, java.sql.Date date, Time time, int duration, ArrayList<Person> attendingPeople, String subject, String description, Room room, int roomId) {
+    public Appointment(int id, String date, String time, int duration,
+                       String subject, String description, int roomId) {
+
         this.date = date;
         this.time = time;
         this.duration = duration;
-        this.attendingPeople = attendingPeople;
+        //this.attendingPeople = attendingPeople;
         this.subject = subject;
         this.description = description;
-        this.room = room;
+        //this.room = room;
         this.roomId = roomId;
         this.appointmentId = id;
     }
 
-    public void setDateAndTime(int year, int month, int date, int hrs, int min){
-        //Må sjekke om det er ledig i møterom osv. først
-
-        this.dateAndTime.setYear(year);
-        this.dateAndTime.setMonth(month);
-        this.dateAndTime.setDate(date);
-        this.dateAndTime.setHours(hrs);
-        this.dateAndTime.setMinutes(min);
-
+    public String getDate() {
+        return date;
     }
 
-    public Date getDate(){
+    public void setDate(String date) { this.date = date; }
 
-        return this.dateAndTime;
+    public String getTime() {
+        return time;
     }
 
-    public void setDuration(int duration){
-        //Må sjekke om det er ledig i møterom osv. først
-
-        this.duration = duration;
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public int getDuration() {
-        return this.duration;
+        return duration;
     }
 
-    public int getId(){
-
-        return appointmentId;
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 
-    public void addAttendant(Person attendant){
-        //Må være mer sjekk før man kan legge til folk
-
-
-        attendingPeople.add(attendant);
-    }
-
-    public ArrayList getAttendants(){
-
+  /* public ArrayList<Person> getAttendingPeople() {
         return attendingPeople;
     }
 
-    public int findRoomId(){
+    public void setAttendingPeople(ArrayList<Person> attendingPeople) {
+        this.attendingPeople = attendingPeople;
+    }*/
 
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+   /* public Room getRoom() {
+        return room;
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
+    }*/
+
+    public int getRoomId() {
         return roomId;
     }
 
-    public void createAppointmentInDB(Appointment appointment){
+    public void setRoomId(int roomId) {
+        this.roomId = roomId;
+    }
+
+    public int getAppointmentId() {
+        return appointmentId;
+    }
+
+    public void setAppointmentId(int appointmentId) {
+        this.appointmentId = appointmentId;
+    }
+
+    @Override
+    public String toString() {
+        return "Appointment{" +
+                "date='" + date + '\'' +
+                ", time='" + time + '\'' +
+                ", duration=" + duration +
+                ", subject='" + subject + '\'' +
+                ", description='" + description + '\'' +
+                //", room=" + room +
+                ", roomId=" + roomId +
+                ", appointmentId=" + appointmentId +
+                '}';
+    }
+
+    public void createAppointmentInDB(){
 
 
-        //tar en appointment og legger til i databasen hvis den ikke finnes fra før.
-
-        try {
-            String sql = "insert into appointment values(%d, D%, %d, %s "  + (appointment.getId() + "") + ";";
-
-            Database db = new Database("all_s_gruppe40_calendar");
-            db.connectDb("all_s_gruppe40", "qwerty");
-            ResultSet rs = db.readQuery(sql);
-
-            while (rs.next()){
-                date = rs.getDate("date");
-                time = rs.getTime("time");
-                duration = rs.getInt("duration");
-                subject = rs.getString("subject");
-                description = rs.getString("description");
-                roomId = rs.getInt("roomId");
+        //tar en appointment og legger til i databasen
 
 
-            }
 
-            String userIds = "select username from userAppointment where appointmentId =" + (appointmentId + "") + ";";
-            ResultSet rs2 = db.readQuery(userIds);
-            while (rs2.next()){
+        Database db = new Database("all_s_gruppe40_calendar");
+        db.connectDb("all_s_gruppe40", "qwerty");
 
-                String username = rs2.getString("username");
 
-            }
+        String sql = "insert into appointment values(" + (getAppointmentId() + "") + ", '"  + getDate() + "', " +
+                (getDuration() + "") + ", '" + getSubject() + "', '" + getDescription() + "', " + (getRoomId() + "") + ", '" + getTime() +"');";
+        System.out.println(sql);
+        db.updateQuery(sql);
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+
+
 
     }
 
