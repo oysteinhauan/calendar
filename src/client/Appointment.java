@@ -18,7 +18,7 @@ public class Appointment {
     String date;
     String time;
     int duration;
-    //ArrayList<Person> attendingPeople;
+    //ArrayList<User> attendingPeople;
     String subject;
     String description;
     //Room room;
@@ -27,7 +27,7 @@ public class Appointment {
 
 
     public Appointment(int id, String date, String time, int duration,
-                       String subject, String description, int roomId) {
+                       String subject, String description) {
 
         this.date = date;
         this.time = time;
@@ -36,7 +36,7 @@ public class Appointment {
         this.subject = subject;
         this.description = description;
         //this.room = room;
-        this.roomId = roomId;
+        //this.roomId = roomId;
         this.appointmentId = id;
     }
 
@@ -112,6 +112,7 @@ public class Appointment {
 
     @Override
     public String toString() {
+
         return "Appointment{" +
                 "date='" + date + '\'' +
                 ", time='" + time + '\'' +
@@ -139,9 +140,47 @@ public class Appointment {
                 (getDuration() + "") + ", '" + getSubject() + "', '" + getDescription() + "', " + (getRoomId() + "") + ", '" + getTime() +"');";
         System.out.println(sql);
         db.updateQuery(sql);
+        db.closeConnection();
 
 
 
+    }
+
+    public ArrayList<Room> findRoom(ArrayList<Appointment> appointments, ArrayList<Room> rooms){
+
+        //søke gjennom alle rom og avtaler for å finne ledig rom til møtet
+        // antar all dataen i databasen er ferdig uthentet og generert som objekter
+        // returnerer en liste med alle ledige rom
+
+        if (Integer.valueOf(this.roomId)  == null){
+
+
+
+        } else {
+
+
+        }
+
+        //div, må flyttes til annen metode
+        Database db = new Database("all_s_gruppe40_calendar");
+        db.connectDb("all_s_gruppe40", "qwerty");
+        String sql = "select * from room where size >=" + attendingPeople.size() + "and available = true;";
+        ResultSet rs = db.readQuery(sql);
+
+        while(rs.next()){
+
+            int roomId = rs.getInt();
+            int roomSize = rs.getInt();
+            String roomName = rs.getString();
+
+            System.out.println(
+                    "room id=" + roomId + "\n" +
+                    "room size=" + roomSize + "\n" +
+                    "room name=" + roomName + "\n\n\n"
+            );
+
+
+        }
 
     }
 
