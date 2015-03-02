@@ -23,8 +23,7 @@ public class Room {
     public Room() {
     }
 
-    public Room(int roomID, int seats, String roomName ){
-        setRoomID(roomID);
+    public Room(int seats, String roomName ){
         setSeats(seats);
         this.roomName = roomName;
     }
@@ -62,9 +61,30 @@ public class Room {
 
             db = new Database("all_s_gruppe40_calendar");
             db.connectDb("all_s_gruppe40", "qwerty");
+        try {
+            String sql = "SELECT max(roomId) FROM room";
+            ResultSet rs = db.readQuery(sql);
+            int id = -1;
+            while (rs.next()) {
+                id = rs.getInt("max(roomId)") + 1;
+            }
+
+            if (id == -1) {
+                throw new IllegalArgumentException("fuck up fra DB ID");
+            }
+
+            room.setRoomID(id);
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
             sql = ("INSERT INTO room values(" + room.roomID + "," + room.seats  +  ", '" + room.roomName + "');");
             db.updateQuery(sql);
             db.closeConnection();
+
+        }
+
 
 
     }
