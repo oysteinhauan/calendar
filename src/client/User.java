@@ -2,11 +2,6 @@ package client;
 
 import database.Database;
 
-import database.Database;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Date;
 
 /**
  * Created by oysteinhauan on 24/02/15.
@@ -20,11 +15,11 @@ public class User {
     private String email;
     private String position;
     database.Database db;
-    private Date dateOfBirth;
     String sql;
 
 
-    public User(String username, String password, String firstname, String lastname, String email, String positoion, Date dateOfBirth) {
+    public User(String username, String password, String firstname,
+                String lastname, String email, String position) {
         setUsername(username);
         setPassword(password);
         setFirstname(firstname);
@@ -52,7 +47,6 @@ public class User {
         this.username = username;
     }
 
-
     public String getFirstname() {
         return firstname;
     }
@@ -73,14 +67,6 @@ public class User {
         return "" + getFirstname() + " " + getLastname();
     }
 
-    public Date getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(Date dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -93,12 +79,18 @@ public class User {
         return position;
     }
 
-
     public void setPosition(String position) {
         this.position = position;
     }
 
 
+    public void addUserToDB(){
+        db = new Database("all_s_gruppe40_calendar");
+        sql = "INSERT INTO user VALUES( '" + getUsername() + "', '" + getPassword() + "', '" + getFirstname() + "', '"
+                + getLastname() + "', '" + getPosition() + "', '" + getEmail() + "');";
+        db.connectDb("all_s_gruppe40", "qwerty");
+        db.updateQuery(sql);
+    }
 
 
 }
