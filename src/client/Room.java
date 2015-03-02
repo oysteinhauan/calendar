@@ -55,8 +55,6 @@ public class Room {
 
 
 
-//Henter ut et rom fra databasen og oppretter det som et objekt
-
     public void createRoom(Room room){
 
             db = new Database("all_s_gruppe40_calendar");
@@ -84,8 +82,14 @@ public class Room {
             db.closeConnection();
 
         }
+    }
 
-
+    public void deleteRoom(int roomID){
+        db = new Database("all_s_gruppe40_calendar");
+        db.connectDb("all_s_gruppe40", "qwerty");
+        sql = "DELETE FROM room WHERE roomId = " + String.valueOf(roomID) + ";";
+        db.updateQuery(sql);
+        db.closeConnection();
 
     }
 
@@ -111,11 +115,10 @@ public class Room {
             }
 
         return this;
-
-
     }
 
-    // naa er det saann at for aa oppdatere maa alt legges inn - bor kanskje gjores lettere?
+
+
     public void updateRoom(int roomID, int seats, String roomName){
         db = new Database("all_s_gruppe40_calendar");
         db.connectDb("all_s_gruppe40", "qwerty");
@@ -124,5 +127,7 @@ public class Room {
         db.closeConnection();
 
     }
+
+
 
 }

@@ -23,9 +23,11 @@ public class RoomTest {
 
         //room.updateRoom(6, 8, "sexy");
 
-        Room room3 = new Room(8, "Rongved");
+        //Room room3 = new Room(8, "Rongved");
 
-        room.createRoom(room3);
+        //room.createRoom(room3);
+
+        room.deleteRoom(7);
 
     }
 }
