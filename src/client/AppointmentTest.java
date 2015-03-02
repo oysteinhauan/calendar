@@ -9,9 +9,7 @@ public class AppointmentTest {
 
     public static void main(String[] args) {
 
-        //Appointment appointment = Appointment.createAppointment("2015-01-01", "12:00", 90, "test", "test");
-        //appointment.createAppointmentInDB();
-        //System.out.println(appointment.toString());
+        //kjører et enkelt program  i consollen som lar deg legge til en ny appointment.
 
         System.out.println("skriv inn ny appointment:");
         Scanner sc = new Scanner(System.in);

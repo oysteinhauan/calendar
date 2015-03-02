@@ -3,12 +3,11 @@ package client;
 import database.Database;
 
 import java.sql.ResultSet;
-import java.sql.SQLDataException;
+
 import java.sql.SQLException;
-import java.sql.Time;
+
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+
 
 /**
  * Created by oysteinhauan on 24/02/15.
@@ -25,7 +24,7 @@ public class Appointment {
     Room room;
     int roomId;
     int appointmentId;
-    //tabase db = new Database();
+
 
 
     public Appointment(String date, String time, int duration,
@@ -74,7 +73,82 @@ public class Appointment {
         return null;
     }
 
-    public void setId(int id){
+
+    @Override
+    public String toString() {
+
+        return "Appointment{" +
+                "date='" + date + '\'' +
+                ", time='" + time + '\'' +
+                ", duration=" + duration +
+                ", subject='" + subject + '\'' +
+                ", description='" + description + '\'' +
+                //", room=" + room +
+                ", roomId=" + roomId +
+                ", appointmentId=" + appointmentId +
+                '}';
+    }
+
+    public void createAppointmentInDB(Appointment appointment, Database db) {
+
+
+        //tar en appointment og legger til i databasen
+
+
+        String sql = "insert into appointment values(" + (appointment.getAppointmentId() + "") + ", '" + appointment.getDate() + "', " +
+                (appointment.getDuration() + "") + ", '" + appointment.getSubject() + "', '" + appointment.getDescription() + "', "
+                + (appointment.getRoomId() + "") + ", '" + getTime() + "');";
+
+        System.out.println(sql);
+        db.updateQuery(sql);
+        db.closeConnection();
+
+
+    }
+
+    public void findRoom() {
+
+        /*
+        søke gjennom alle rom og avtaler for å finne ledig rom til møtet
+        antar all dataen i databasen er ferdig uthentet og generert som objekter
+        returnerer en liste med alle ledige rom
+        */
+
+        try {
+            Database db = new Database("all_s_gruppe40_calendar");
+            db.connectDb("all_s_gruppe40", "qwerty");
+            String sql2 = "";
+            String sql = "select * from room where size >=" + attendingPeople.size() + "and roomId not in (select roomId from roomOccupation)" +
+                    "and   ;";
+            ResultSet rs = db.readQuery(sql);
+
+            while (rs.next()) {
+
+                int roomId = rs.getInt("roomId");
+                int roomSize = rs.getInt("roomSize");
+                String roomName = rs.getString("roomName");
+
+                System.out.println(
+                        "room id=" + roomId + "\n" +
+                                "room size=" + roomSize + "\n" +
+                                "room name=" + roomName + "\n\n\n"
+                );
+
+
+            }
+
+            System.out.println(sql);
+            db.updateQuery(sql);
+            db.closeConnection();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    public void setId(int id) {
 
         this.appointmentId = id;
     }
@@ -104,13 +178,14 @@ public class Appointment {
         this.duration = duration;
     }
 
-   public ArrayList<User> getAttendingPeople() {
+    public ArrayList<User> getAttendingPeople() {
         return attendingPeople;
     }
 
     public void addAttendant(User attendant) {
         //Må være mer sjekk før man kan legge til folk
     }
+
     public String getSubject() {
         return subject;
     }
@@ -127,7 +202,7 @@ public class Appointment {
         this.description = description;
     }
 
-   public Room getRoom() {
+    public Room getRoom() {
         return room;
     }
 
@@ -151,80 +226,4 @@ public class Appointment {
         this.appointmentId = appointmentId;
     }
 
-    @Override
-    public String toString() {
-
-        return "Appointment{" +
-                "date='" + date + '\'' +
-                ", time='" + time + '\'' +
-                ", duration=" + duration +
-                ", subject='" + subject + '\'' +
-                ", description='" + description + '\'' +
-                //", room=" + room +
-                ", roomId=" + roomId +
-                ", appointmentId=" + appointmentId +
-                '}';
-    }
-
-    public void createAppointmentInDB(Appointment appointment, Database db){
-
-
-        //tar en appointment og legger til i databasen
-
-
-
-
-
-
-
-        String sql = "insert into appointment values(" + (appointment.getAppointmentId() + "") + ", '"  + appointment.getDate() + "', " +
-                (appointment.getDuration() + "") + ", '" + appointment.getSubject() + "', '" + appointment.getDescription() + "', "
-                + (appointment.getRoomId() + "") + ", '" + getTime() +"');";
-
-        System.out.println(sql);
-        db.updateQuery(sql);
-        db.closeConnection();
-
-
-
-    }
-
-    /*public ArrayList<Room> findRoom(ArrayList<Appointment> appointments, ArrayList<Room> rooms){
-
-        //søke gjennom alle rom og avtaler for å finne ledig rom til møtet
-        // antar all dataen i databasen er ferdig uthentet og generert som objekter
-        // returnerer en liste med alle ledige rom
-
-        if (Integer.valueOf(this.roomId)  == null){
-
-
-
-        } else {
-
-
-        }
-
-        //div, må flyttes til annen metode
-        Database db = new Database("all_s_gruppe40_calendar");
-        db.connectDb("all_s_gruppe40", "qwerty");
-        String sql = "select * from room where size >=" + attendingPeople.size() + "and available = true;";
-        ResultSet rs = db.readQuery(sql);
-
-        while(rs.next()){
-
-            int roomId = rs.getInt();
-            int roomSize = rs.getInt();
-            String roomName = rs.getString();
-
-            System.out.println(
-                    "room id=" + roomId + "\n" +
-                    "room size=" + roomSize + "\n" +
-                    "room name=" + roomName + "\n\n\n"
-            );
-
-
-        }*/
-
-    }
-
-
+}
