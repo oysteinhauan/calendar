@@ -22,22 +22,60 @@ public class Appointment {
     ArrayList<User> attendingPeople;
     String subject;
     String description;
-    //Room room;
+    Room room;
     int roomId;
     int appointmentId;
+    //tabase db = new Database();
 
 
-    public Appointment(int id, String date, String time, int duration,
+    public Appointment(String date, String time, int duration,
                        String subject, String description) {
 
         this.date = date;
         this.time = time;
         this.duration = duration;
-        //this.attendingPeople = attendingPeople;
         this.subject = subject;
         this.description = description;
-        //this.room = room;
-        //this.roomId = roomId;
+        this.roomId = 1;
+
+
+    }
+
+    public static Appointment createAppointment(String date, String time, int duration, String subject, String description) {
+
+
+        Database db = new Database();
+        db.connectDb("all_s_gruppe40", "qwerty");
+
+        try {
+            Appointment appointment = new Appointment(date, time, duration, subject, description);
+            String sql = "SELECT max(appointmentId) FROM appointment";
+            ResultSet rs = db.readQuery(sql);
+            int id = -1;
+            while (rs.next()) {
+                id = rs.getInt("max(appointmentId)") + 1;
+            }
+
+            if (id == -1) {
+                throw new IllegalArgumentException("fuck up fra DB ID");
+            }
+
+            appointment.setId(id);
+            appointment.createAppointmentInDB(appointment, db);
+            return appointment;
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+
+            db.closeConnection();
+        }
+        return null;
+    }
+
+    public void setId(int id){
+
         this.appointmentId = id;
     }
 
@@ -45,7 +83,9 @@ public class Appointment {
         return date;
     }
 
-    public void setDate(String date) { this.date = date; }
+    public void setDate(String date) {
+        this.date = date;
+    }
 
     public String getTime() {
         return time;
@@ -55,6 +95,7 @@ public class Appointment {
         this.time = time;
     }
 
+
     public int getDuration() {
         return duration;
     }
@@ -63,13 +104,13 @@ public class Appointment {
         this.duration = duration;
     }
 
-  /* public ArrayList<Person> getAttendingPeople() {
+   public ArrayList<User> getAttendingPeople() {
         return attendingPeople;
     }
 
-    public void addAttendant(User attendant){
+    public void addAttendant(User attendant) {
         //Må være mer sjekk før man kan legge til folk
-
+    }
     public String getSubject() {
         return subject;
     }
@@ -86,13 +127,13 @@ public class Appointment {
         this.description = description;
     }
 
-   /* public Room getRoom() {
+   public Room getRoom() {
         return room;
     }
 
     public void setRoom(Room room) {
         this.room = room;
-    }*/
+    }
 
     public int getRoomId() {
         return roomId;
@@ -125,19 +166,21 @@ public class Appointment {
                 '}';
     }
 
-    public void createAppointmentInDB(){
+    public void createAppointmentInDB(Appointment appointment, Database db){
 
 
         //tar en appointment og legger til i databasen
 
 
 
-        Database db = new Database("all_s_gruppe40_calendar");
-        db.connectDb("all_s_gruppe40", "qwerty");
 
 
-        String sql = "insert into appointment values(" + (getAppointmentId() + "") + ", '"  + getDate() + "', " +
-                (getDuration() + "") + ", '" + getSubject() + "', '" + getDescription() + "', " + (getRoomId() + "") + ", '" + getTime() +"');";
+
+
+        String sql = "insert into appointment values(" + (appointment.getAppointmentId() + "") + ", '"  + appointment.getDate() + "', " +
+                (appointment.getDuration() + "") + ", '" + appointment.getSubject() + "', '" + appointment.getDescription() + "', "
+                + (appointment.getRoomId() + "") + ", '" + getTime() +"');";
+
         System.out.println(sql);
         db.updateQuery(sql);
         db.closeConnection();
@@ -146,7 +189,7 @@ public class Appointment {
 
     }
 
-    public ArrayList<Room> findRoom(ArrayList<Appointment> appointments, ArrayList<Room> rooms){
+    /*public ArrayList<Room> findRoom(ArrayList<Appointment> appointments, ArrayList<Room> rooms){
 
         //søke gjennom alle rom og avtaler for å finne ledig rom til møtet
         // antar all dataen i databasen er ferdig uthentet og generert som objekter
@@ -180,9 +223,8 @@ public class Appointment {
             );
 
 
-        }
+        }*/
 
     }
 
-}
 
