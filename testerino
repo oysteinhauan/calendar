@@ -1,1 +1,4 @@
 https://github.com/loldemort/calendar.git
+
+databasen vi skal bruke :
+mysql -A -h mysql.stud.ntnu.no -u all_s_gruppe40 -p all_s_gruppe40_calendar;

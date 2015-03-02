@@ -18,7 +18,8 @@ public class Appointment {
     String date;
     String time;
     int duration;
-    //ArrayList<User> attendingPeople;
+    //varighet i minutter
+    ArrayList<User> attendingPeople;
     String subject;
     String description;
     //Room room;
@@ -66,9 +67,8 @@ public class Appointment {
         return attendingPeople;
     }
 
-    public void setAttendingPeople(ArrayList<Person> attendingPeople) {
-        this.attendingPeople = attendingPeople;
-    }*/
+    public void addAttendant(User attendant){
+        //Må være mer sjekk før man kan legge til folk
 
     public String getSubject() {
         return subject;
