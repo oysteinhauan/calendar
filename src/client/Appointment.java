@@ -11,7 +11,7 @@ public class Appointment {
     Date dateAndTime;
     int duration;
     //varighet i minutter
-    ArrayList<Person> attendingPeople;
+    ArrayList<User> attendingPeople;
     String subject;
     String description;
     Room room;
@@ -49,7 +49,7 @@ public class Appointment {
         return this.duration;
     }
 
-    public void addAttendant(Person attendant){
+    public void addAttendant(User attendant){
         //Må være mer sjekk før man kan legge til folk
 
 
