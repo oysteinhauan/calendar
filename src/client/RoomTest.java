@@ -13,11 +13,15 @@ public class RoomTest {
 
         System.out.println(room.getSeats());
 
-        Room room1 = new Room(5, 15, "ola");
+        //Room room1 = new Room(6, 15, "yea");
 
-        room.createRoom(room1);
+        //room.createRoom(room1);
 
-        room.updateRoom(5, 10, "coolio");
+        Room room2 = new Room();
+
+        room2.updateRoom(5, 10, "coolio");
+
+        room.updateRoom(6, 8, "sexy");
 
     }
 }
