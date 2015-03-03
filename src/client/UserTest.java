@@ -10,11 +10,11 @@ public class UserTest {
 //        u.addUserToDB();
 
         User u = new User();
-        u.getUserFromDB("henloef");
+        u.getUserFromDB("oysteibh");
         System.out.println(u.toString());
-        u.updateUserInfoInDB("positon", "kosmonaut");
-        u.getUserFromDB("henloef");
-        System.out.println(u.toString());
+        //u.updateUserInfoInDB("positon", "scrummaster");
+        //u.getUserFromDB("henloef");
+        //System.out.println(u.toString());
 
 
 
