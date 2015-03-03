@@ -42,6 +42,26 @@ public class Database {
         }
     }
 
+    public void connectDb(){
+
+        try {
+            System.out.println("Loading driver...");
+            Class.forName("com.mysql.jdbc.Driver");
+            System.out.println("Driver loaded!");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Cannot locate the driver!", e);
+        }
+        try {
+            System.out.println("Connecting database...");
+            connection = DriverManager.getConnection(url, "all_s_gruppe40", "qwerty");
+            System.out.println("Database connected! :)");
+            connected = true;
+        } catch (SQLException e) {
+            throw new RuntimeException("Cannot connect the database! :(", e);
+        }
+
+    }
+
     public void closeConnection(){
 
         System.out.println("Closing connection.");
