@@ -7,9 +7,10 @@ public class RoomTest {
 
     public static void main(String[] args) {
 
-        Room room = new Room();
+        Room room = new Room(50, "Arena");
 
         //room.getRoom(2);
+        room.createRoom(room);
 
         //System.out.println(room.getSeats());
 
@@ -21,7 +22,7 @@ public class RoomTest {
 
         //room2.updateRoom(5, 10, "coolio");
 
-        room.updateRoom(6, 8, "hola");
+        //room.updateRoom(6, 8, "hola");
 
         //Room room3 = new Room(8, "Rongved");
 

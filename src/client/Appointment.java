@@ -101,7 +101,7 @@ public class Appointment {
         /*
         søke gjennom alle rom og avtaler for å finne ledig rom til møtet
         antar all dataen i databasen er ferdig uthentet og generert som objekter
-        returnerer en liste med alle ledige rom
+        returnerer rommet som er best egnet plassmessig.
         */
 
         try {
@@ -129,7 +129,7 @@ public class Appointment {
             }
             this.roomId = actualroom;
             if(this.roomId == -1){
-                throw new IllegalAccessError("what");
+                throw new IllegalAccessError("No available roomz");
             }
 
 

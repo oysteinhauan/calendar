@@ -31,7 +31,7 @@ public class AppointmentTest {
 
         }
 
-        Appointment test = Appointment.createAppointment(start, end, subject, description, 6);
+        Appointment test = Appointment.createAppointment(start, end, subject, description, 20);
         test.toString();
 
     }
