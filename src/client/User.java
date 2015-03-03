@@ -103,6 +103,7 @@ public class User {
         db = new Database("all_s_gruppe40_calendar");
         sql = "INSERT INTO user VALUES( '" + getUsername() + "', '" + getPassword() + "', '" + getFirstname() + "', '"
                 + getLastname() + "', '" + getPosition() + "', '" + getEmail() + "');";
+
         db.connectDb("all_s_gruppe40", "qwerty");
         db.updateQuery(sql);
         db.closeConnection();
@@ -118,7 +119,6 @@ public class User {
 
             while (rs.next()){
                 setUsername(username);
-
                 this.firstname = rs.getString("firstname");
                 this.lastname = rs.getString("lastname");
                 this.position = rs.getString("position");
@@ -136,4 +136,15 @@ public class User {
         return this;
 
     }
+
+    public void updateUserInfoInDB(String columnToUpdate, String updatedInfo){
+
+        db = new Database("all_s_gruppe40_calendar");
+        sql = "UPDATE user SET " + columnToUpdate + "='" + updatedInfo + "' WHERE username = '" + username + "';";
+        db.connectDb("all_s_gruppe40", "qwerty");
+        db.updateQuery(sql);
+        db.closeConnection();
+
+    }
+
 }
