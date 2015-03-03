@@ -6,7 +6,13 @@ package client;
 public class UserTest {
 
     public static void main(String[] args) {
-        User u = new User("henloef", "karsk", "Henrik", "Løfaldli", "henloef@spacex.com", "CEO");
-        u.addUserToDB();
+//        User u = new User("henloef", "karsk", "Henrik", "Løfaldli", "henloef@spacex.com", "CEO");
+//        u.addUserToDB();
+
+        User u = new User();
+        u.getUserFromDB("henloef");
+        System.out.println(u.toString());
+
+
     }
 }
