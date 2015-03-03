@@ -21,7 +21,7 @@ public class Appointment {
     Timestamp start, end;
 
     int size;
-    ArrayList<User> attendingPeople;
+    ArrayList<String> attendingPeople;
     String subject;
     String description;
     Room room;
@@ -197,13 +197,13 @@ public class Appointment {
     }
 
 
-    public ArrayList<User> getAttendingPeople() {
+    public ArrayList<String> getAttendingPeople() {
         return attendingPeople;
     }
 
-    public void addAttendant(User attendant) {
+    public void addAttendant(String username) {
         //Må være mer sjekk før man kan legge til folk
-        attendingPeople.add(attendant);
+        attendingPeople.add(username);
     }
 
     public String getSubject() {
