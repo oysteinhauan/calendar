@@ -21,7 +21,7 @@ public class Appointment {
     Timestamp start, end;
 
     int size;
-    ArrayList<User> attendingPeople;
+    ArrayList<String> attendingPeople;
     String subject;
     String description;
     Room room;
@@ -102,6 +102,7 @@ public class Appointment {
                 appointment.setEnd(rs.getTimestamp("end"));
                 appointment.setRoomId(rs.getInt("roomId"));
             }
+            rs.close();
             db.closeConnection();
             return appointment;
         } catch (SQLException e) {
@@ -128,6 +129,8 @@ public class Appointment {
 
 
     }
+
+
 
     public void findRoom() {
 
@@ -197,13 +200,46 @@ public class Appointment {
     }
 
 
-    public ArrayList<User> getAttendingPeople() {
+    public ArrayList<String> getAttendingPeople() {
         return attendingPeople;
     }
 
-    public void addAttendant(User attendant) {
-        //Må være mer sjekk før man kan legge til folk
-        attendingPeople.add(attendant);
+    public void addAttendant(String username) {
+        Database db = new Database();
+
+        db.connectDb();
+        String sql1 = "select count(*) as no_of_attendants from userAppointment where appointmentId = " + this.appointmentId + ";";
+        String sql2 = "select username from userAppointment where username = '" + username + "' and appointmentId = " + this.appointmentId + ";";
+        ResultSet rs1 = db.readQuery(sql1);
+        ResultSet rs2 = db.readQuery(sql2);
+        int attendants = -1;
+        boolean alreadyRegistered = false;
+        try {
+            while (rs1.next()) {
+                attendants = rs1.getInt("no_of_attendants");
+            }
+            if(rs2.next()){
+                alreadyRegistered = true;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+
+
+
+        if (attendingPeople.size() >= this.size || attendingPeople.size() >= attendants){
+            throw new IllegalArgumentException("Meeting is full.");
+        }
+        if (attendingPeople.contains(username) || alreadyRegistered){
+            throw new IllegalArgumentException("User is already partaking in this event.");
+        }
+
+        attendingPeople.add(username);
+        db.updateQuery("insert into userAppointment values( '" + username + "', " + this.appointmentId + ";");
+
+        db.closeConnection();
+        }
     }
 
     public String getSubject() {
