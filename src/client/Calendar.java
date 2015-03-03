@@ -16,8 +16,18 @@ public class Calendar {
     }
 
     public void viewCalendar(){
+        System.out.println("**** Welcome! ****");
+        System.out.println("This is " + user.getUsername() + "s appointments:");
+        System.out.println("   ");
         for (Appointment appointment : appointments) {
-            System.out.println(appointment.toString());
+            System.out.println("Subject: " + appointment.getSubject());
+            System.out.println("Description: " + appointment.getDescription());
+            System.out.println("Room: " + appointment.getRoomId());
+            System.out.println("Start: " + appointment.getStart());
+            System.out.println("End: " + appointment.getEnd());
+            System.out.println("__________________________");
+            System.out.println("  ");
+
         }
     }
 }
