@@ -3,7 +3,6 @@ package client;
 import database.Database;
 
 import java.sql.ResultSet;
-
 import java.sql.SQLException;
 
 import java.sql.Timestamp;
@@ -145,7 +144,6 @@ public class Appointment {
 
 
     public void setId(int id) {
-
         this.appointmentId = id;
     }
 
@@ -172,6 +170,7 @@ public class Appointment {
 
     public void addAttendant(User attendant) {
         //Må være mer sjekk før man kan legge til folk
+        attendingPeople.add(attendant);
     }
 
     public String getSubject() {

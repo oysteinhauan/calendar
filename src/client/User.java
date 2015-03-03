@@ -2,6 +2,9 @@ package client;
 
 import database.Database;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 
 /**
  * Created by oysteinhauan on 24/02/15.
@@ -17,6 +20,9 @@ public class User {
     database.Database db;
     String sql;
 
+    public User(){
+
+    }
 
     public User(String username, String password, String firstname,
                 String lastname, String email, String position) {
@@ -29,7 +35,16 @@ public class User {
 
     }
 
-    
+    @Override
+    public String toString() {
+        return "User{" +
+                "username='" + username + '\'' +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", email='" + email + '\'' +
+                ", position='" + position + '\'' +
+                '}';
+    }
 
     public String getPassword() {
         return password;
@@ -88,9 +103,48 @@ public class User {
         db = new Database("all_s_gruppe40_calendar");
         sql = "INSERT INTO user VALUES( '" + getUsername() + "', '" + getPassword() + "', '" + getFirstname() + "', '"
                 + getLastname() + "', '" + getPosition() + "', '" + getEmail() + "');";
+
         db.connectDb("all_s_gruppe40", "qwerty");
         db.updateQuery(sql);
+        db.closeConnection();
     }
 
+    public User getUserFromDB(String username){
+
+        try {
+            db = new Database("all_s_gruppe40_calendar");
+            db.connectDb("all_s_gruppe40", "qwerty");
+            sql = "SELECT * FROM user WHERE username='" + username + "';";
+            ResultSet rs = db.readQuery(sql);
+
+            while (rs.next()){
+                setUsername(username);
+                this.firstname = rs.getString("firstname");
+                this.lastname = rs.getString("lastname");
+                this.position = rs.getString("position");
+                this.email =rs.getString("email");
+            }
+            db.closeConnection();
+            rs.close();
+
+        }
+        catch (SQLException e){
+
+        }
+
+
+        return this;
+
+    }
+
+    public void updateUserInfoInDB(String columnToUpdate, String updatedInfo){
+
+        db = new Database("all_s_gruppe40_calendar");
+        sql = "UPDATE user SET " + columnToUpdate + "='" + updatedInfo + "' WHERE username = '" + username + "';";
+        db.connectDb("all_s_gruppe40", "qwerty");
+        db.updateQuery(sql);
+        db.closeConnection();
+
+    }
 
 }
