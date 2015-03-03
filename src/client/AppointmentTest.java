@@ -1,5 +1,6 @@
 package client;
 
+import java.sql.Timestamp;
 import java.util.Scanner;
 
 /**
@@ -13,22 +14,24 @@ public class AppointmentTest {
 
         System.out.println("skriv inn ny appointment:");
         Scanner sc = new Scanner(System.in);
-        String date = "", time = "", subject = "", descrition = "";
+        String subject = "", description = "";
+        Timestamp start = null, end = null;
+
         int duration = -1;
         while (sc.hasNext()){
 
-            date = sc.next();
-            time = sc.next();
-            duration = sc.nextInt();
-            subject = sc.next();
-            descrition = sc.next();
+            start = Timestamp.valueOf(sc.nextLine());
+            end = Timestamp.valueOf(sc.nextLine());
+
+            subject = sc.nextLine();
+            description = sc.nextLine();
             break;
 
 
 
         }
 
-        Appointment test = Appointment.createAppointment(date, time, duration,  subject, descrition);
+        Appointment test = Appointment.createAppointment(start, end, subject, description, 6);
         test.toString();
 
     }

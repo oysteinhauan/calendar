@@ -6,7 +6,11 @@ import java.sql.ResultSet;
 
 import java.sql.SQLException;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+
+import java.sql.Date;
+import java.util.Collections;
 
 
 /**
@@ -14,10 +18,10 @@ import java.util.ArrayList;
  */
 public class Appointment {
 
-    String date;
-    String time;
-    int duration;
-    //varighet i minutter
+
+    Timestamp start, end;
+
+    int size;
     ArrayList<User> attendingPeople;
     String subject;
     String description;
@@ -27,44 +31,33 @@ public class Appointment {
 
 
 
-    public Appointment(String date, String time, int duration,
-                       String subject, String description) {
+    public Appointment(Timestamp start, Timestamp end,
+                       String subject, String description, int size) {
 
-        this.date = date;
-        this.time = time;
-        this.duration = duration;
+        this.start = start;
+        this.end = end;
         this.subject = subject;
         this.description = description;
-        this.roomId = 1;
+        this.size = size;
+
 
 
     }
 
-    public static Appointment createAppointment(String date, String time, int duration, String subject, String description) {
+    public static Appointment createAppointment(Timestamp start, Timestamp end, String subject, String description, int size) {
 
 
         Database db = new Database();
         db.connectDb("all_s_gruppe40", "qwerty");
 
         try {
-            Appointment appointment = new Appointment(date, time, duration, subject, description);
-            String sql = "SELECT max(appointmentId) FROM appointment";
-            ResultSet rs = db.readQuery(sql);
-            int id = -1;
-            while (rs.next()) {
-                id = rs.getInt("max(appointmentId)") + 1;
-            }
-
-            if (id == -1) {
-                throw new IllegalArgumentException("fuck up fra DB ID");
-            }
-
-            appointment.setId(id);
+            Appointment appointment = new Appointment(start, end, subject, description, size);
+            appointment.findRoom();
             appointment.createAppointmentInDB(appointment, db);
             return appointment;
 
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
 
@@ -78,9 +71,8 @@ public class Appointment {
     public String toString() {
 
         return "Appointment{" +
-                "date='" + date + '\'' +
-                ", time='" + time + '\'' +
-                ", duration=" + duration +
+                "start='" + start + '\'' +
+                ", end='" + end + '\'' +
                 ", subject='" + subject + '\'' +
                 ", description='" + description + '\'' +
                 //", room=" + room +
@@ -93,11 +85,10 @@ public class Appointment {
 
 
         //tar en appointment og legger til i databasen
-
-
-        String sql = "insert into appointment values(" + (appointment.getAppointmentId() + "") + ", '" + appointment.getDate() + "', " +
-                (appointment.getDuration() + "") + ", '" + appointment.getSubject() + "', '" + appointment.getDescription() + "', "
-                + (appointment.getRoomId() + "") + ", '" + getTime() + "');";
+        String sql = "insert into appointment (start, end, subject, description, roomId) values( '"+ String.valueOf(appointment.getStart()) + "', '" +
+                String.valueOf(appointment.getEnd()) + "', '" + appointment.getSubject() + "', '"
+                + appointment.getDescription() + "', "
+                + (appointment.getRoomId() + "") + ");";
 
         System.out.println(sql);
         db.updateQuery(sql);
@@ -117,28 +108,33 @@ public class Appointment {
         try {
             Database db = new Database("all_s_gruppe40_calendar");
             db.connectDb("all_s_gruppe40", "qwerty");
-            String sql2 = "";
-            String sql = "select * from room where size >=" + attendingPeople.size() + "and roomId not in (select roomId from roomOccupation)" +
-                    "and   ;";
+            String sql = "select roomId, size from room where size >= " + this.size +
+                    " and roomId not in (select roomId from appointment where start between '" +
+                    start + "' and '" + end + "' or end between '" + start + "' and '" + end + "');";
+
             ResultSet rs = db.readQuery(sql);
+            int actualroom = -1;
+            int tempsize = 0;
+            int index = 0;
 
             while (rs.next()) {
-
-                int roomId = rs.getInt("roomId");
-                int roomSize = rs.getInt("roomSize");
-                String roomName = rs.getString("roomName");
-
-                System.out.println(
-                        "room id=" + roomId + "\n" +
-                                "room size=" + roomSize + "\n" +
-                                "room name=" + roomName + "\n\n\n"
-                );
-
+                if (index == 0){
+                    tempsize = rs.getInt("size");
+                    actualroom = rs.getInt("roomId");
+                    index++;
+                }
+                if(rs.getInt("size") < tempsize){
+                    actualroom = rs.getInt("roomId");
+                }
 
             }
+            this.roomId = actualroom;
+            if(this.roomId == -1){
+                throw new IllegalAccessError("what");
+            }
+
 
             System.out.println(sql);
-            db.updateQuery(sql);
             db.closeConnection();
 
         } catch (SQLException e) {
@@ -153,30 +149,22 @@ public class Appointment {
         this.appointmentId = id;
     }
 
-    public String getDate() {
-        return date;
+    public Timestamp getStart() {
+        return start;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setStart(Timestamp start) {
+        this.start = start;
     }
 
-    public String getTime() {
-        return time;
+    public Timestamp getEnd() {
+        return end;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setEnd(Timestamp end) {
+        this.end = end;
     }
 
-
-    public int getDuration() {
-        return duration;
-    }
-
-    public void setDuration(int duration) {
-        this.duration = duration;
-    }
 
     public ArrayList<User> getAttendingPeople() {
         return attendingPeople;
