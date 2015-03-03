@@ -21,13 +21,13 @@ public class RoomTest {
 
         //room2.updateRoom(5, 10, "coolio");
 
-        //room.updateRoom(6, 8, "sexy");
+        room.updateRoom(6, 8, "hola");
 
         //Room room3 = new Room(8, "Rongved");
 
         //room.createRoom(room3);
 
-        room.deleteRoom(7);
+        //room.deleteRoom(7);
 
     }
 }

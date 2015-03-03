@@ -84,6 +84,7 @@ public class Room {
         }
     }
 
+    //bor kanskje sjekke om roomID finnes
     public void deleteRoom(int roomID){
         db = new Database("all_s_gruppe40_calendar");
         db.connectDb("all_s_gruppe40", "qwerty");
@@ -118,11 +119,11 @@ public class Room {
     }
 
 
-
+    //bor kanskje sjekke at roomId faktisk ligger i db, ha en sjekk aller forst
     public void updateRoom(int roomID, int seats, String roomName){
         db = new Database("all_s_gruppe40_calendar");
         db.connectDb("all_s_gruppe40", "qwerty");
-        sql = "UPDATE room, set size = " + String.valueOf(seats) + ", set roomName = " + roomName + ", where roomID = " + String.valueOf(roomID) + ";";
+        sql = "UPDATE room SET size = " + String.valueOf(seats) + ", roomName = '" + roomName + "' WHERE roomID = " + String.valueOf(roomID) + ";";
         db.updateQuery(sql);
         db.closeConnection();
 
