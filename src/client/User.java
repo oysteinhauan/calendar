@@ -4,6 +4,7 @@ import database.Database;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 
 /**
@@ -107,6 +108,35 @@ public class User {
         db.connectDb("all_s_gruppe40", "qwerty");
         db.updateQuery(sql);
         db.closeConnection();
+    }
+
+    public ArrayList<Appointment> getAppointmentsForUser(User user){
+
+        try {
+            ArrayList<Integer> appIdList = new ArrayList<Integer>();
+            ArrayList<Appointment> appList = new ArrayList<Appointment>();
+
+            Database db = new Database();
+            db.connectDb("all_s_gruppe40", "qwerty");
+            String sql = "select appointmentId from userAppointment where username = '" + user.getUsername()
+                    + "';";
+            ResultSet rs = db.readQuery(sql);
+            while (rs.next()) {
+                appIdList.add(rs.getInt("appointmentId"));
+            }
+            db.closeConnection();
+
+            for (Integer id: appIdList){
+                appList.add(Appointment.getAppointment(id));
+            }
+            return appList;
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+
     }
 
     public User getUserFromDB(String username){
