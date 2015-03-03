@@ -140,7 +140,7 @@ public class User {
     }
 
     public User getUserFromDB(String username){
-
+        //henter ut informasjonen om en bruker fra databasen, basert på burkernavnet som skrives
         try {
             db = new Database("all_s_gruppe40_calendar");
             db.connectDb("all_s_gruppe40", "qwerty");
@@ -168,13 +168,21 @@ public class User {
     }
 
     public void updateUserInfoInDB(String columnToUpdate, String updatedInfo){
-
+        //skriv inn hvilken kolonne som skal få sin informasjon oppdatert, og hva den nye informasjonen skal være
         db = new Database("all_s_gruppe40_calendar");
         sql = "UPDATE user SET " + columnToUpdate + "='" + updatedInfo + "' WHERE username = '" + username + "';";
         db.connectDb("all_s_gruppe40", "qwerty");
         db.updateQuery(sql);
         db.closeConnection();
 
+    }
+
+    public void deleteUserFromDb(String username) {
+        db = new Database("all_s_gruppe40_calendar");
+        sql = "DELETE FROM user WHERE username='" + username + "';";
+        db.connectDb("all_s_gruppe40", "qwerty");
+        db.updateQuery(sql);
+        db.closeConnection();
     }
 
 }
