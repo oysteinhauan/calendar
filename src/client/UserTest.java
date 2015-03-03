@@ -12,6 +12,10 @@ public class UserTest {
         User u = new User();
         u.getUserFromDB("henloef");
         System.out.println(u.toString());
+        u.updateUserInfoInDB("positon", "kosmonaut");
+        u.getUserFromDB("henloef");
+        System.out.println(u.toString());
+
 
 
     }
