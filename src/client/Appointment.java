@@ -28,6 +28,10 @@ public class Appointment {
     int roomId;
     int appointmentId;
 
+    public Appointment(){
+
+    }
+
 
 
     public Appointment(Timestamp start, Timestamp end,
@@ -78,6 +82,35 @@ public class Appointment {
                 ", roomId=" + roomId +
                 ", appointmentId=" + appointmentId +
                 '}';
+    }
+
+
+
+    public static Appointment getAppointment(int appointmentId){
+        Database db = new Database();
+        Appointment appointment = new Appointment();
+        try {
+
+            db.connectDb("all_s_gruppe40", "qwerty");
+            String sql = "select * from appointment where appointmentId = " + appointmentId +";";
+            ResultSet rs = db.readQuery(sql);
+            while (rs.next()){
+                appointment.setSubject(rs.getString("subject"));
+                appointment.setAppointmentId(appointmentId);
+                appointment.setDescription(rs.getString("description"));
+                appointment.setStart(rs.getTimestamp("start"));
+                appointment.setEnd(rs.getTimestamp("end"));
+                appointment.setRoomId(rs.getInt("roomId"));
+            }
+            db.closeConnection();
+            return appointment;
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+        throw new IllegalArgumentException("Something went haywire!");
+
+
     }
 
     public void createAppointmentInDB(Appointment appointment, Database db) {
