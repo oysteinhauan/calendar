@@ -66,8 +66,9 @@ public class User {
 
             Database db = new Database();
             db.connectDb("all_s_gruppe40", "qwerty");
-            String sql = "select appointmentId from userAppointment where username = '" + user.getUsername()
-                    + "';";
+            String sql = "select appointment.appointmentId, start from userAppointment, appointment " +
+                    "where username = '" + user.getUsername() + "' and appointment.appointmentId = userAppointment.appointmentId " +
+                            "order by start;";
             ResultSet rs = db.readQuery(sql);
             while (rs.next()) {
                 appIdList.add(rs.getInt("appointmentId"));
