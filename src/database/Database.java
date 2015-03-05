@@ -26,16 +26,16 @@ public class Database {
 
     public void connectDb(String username, String password) {
         try {
-            System.out.println("Loading driver...");
+            //System.out.println("Loading driver...");
             Class.forName("com.mysql.jdbc.Driver");
-            System.out.println("Driver loaded!");
+            //System.out.println("Driver loaded!");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Cannot locate the driver!", e);
         }
         try {
-            System.out.println("Connecting database...");
+            //System.out.println("Connecting database...");
             connection = DriverManager.getConnection(url, username, password);
-            System.out.println("Database connected! :)");
+            //System.out.println("Database connected! :)");
             connected = true;
         } catch (SQLException e) {
             throw new RuntimeException("Cannot connect the database! :(", e);
@@ -45,16 +45,16 @@ public class Database {
     public void connectDb(){
 
         try {
-            System.out.println("Loading driver...");
+            //System.out.println("Loading driver...");
             Class.forName("com.mysql.jdbc.Driver");
-            System.out.println("Driver loaded!");
+            //System.out.println("Driver loaded!");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Cannot locate the driver!", e);
         }
         try {
-            System.out.println("Connecting database...");
+            //System.out.println("Connecting database...");
             connection = DriverManager.getConnection(url, "all_s_gruppe40", "qwerty");
-            System.out.println("Database connected! :)");
+            //System.out.println("Database connected! :)");
             connected = true;
         } catch (SQLException e) {
             throw new RuntimeException("Cannot connect the database! :(", e);
@@ -64,7 +64,7 @@ public class Database {
 
     public void closeConnection(){
 
-        System.out.println("Closing connection.");
+        //System.out.println("Closing connection.");
         if (connected) try {
             connection.close();
         } catch (SQLException ignore) {

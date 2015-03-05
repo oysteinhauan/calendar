@@ -10,7 +10,7 @@ public class LoginTester {
 
     public static void main(String[] args) {
         Scanner scn = new Scanner(System.in);
-        System.out.println("Wilkommen! Bitte schreiben sie ihren Name!");
+        System.out.println("Wilkommen! Bitte schreiben sie Ihren Name!");
         Login login = new Login();
         User user = new User();
         String username = "";
