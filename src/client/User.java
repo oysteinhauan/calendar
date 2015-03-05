@@ -5,6 +5,7 @@ import database.Database;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 
 /**
@@ -20,6 +21,7 @@ public class User implements AppointmentListener{
     private String position;
     database.Database db;
     String sql;
+    private ArrayList<Appointment> appointmentNotifications = new ArrayList<Appointment>();
 
     public User(){
 
@@ -106,14 +108,9 @@ public class User implements AppointmentListener{
             db.closeConnection();
             rs.close();
 
+        } catch (SQLException e){
         }
-        catch (SQLException e){
-
-        }
-
-
         return this;
-
     }
 
     public void updateUserInfoInDB(String columnToUpdate, String updatedInfo){
@@ -191,9 +188,45 @@ public class User implements AppointmentListener{
         db.closeConnection();
     }
 
-
+//NOTIFICATION
     @Override
     public void appointmentNotification(Appointment appointment) {
-        //send varsling om møte
+        appointmentNotifications.add(appointment);
+    }
+
+    public int getNumberOfNotifications(){
+        return appointmentNotifications.size();
+    }
+
+    public void removeAppointmentNotification(Appointment appointment){
+        appointmentNotifications.remove(appointment);
+    }
+
+    public boolean replyToNotification(Appointment appointment){
+        Scanner sc = new Scanner(System.in);
+        String appointmentInfo = appointment.toString();
+        char replyFromUser;
+        boolean replied = false;
+        Boolean replyToAppointer = null;
+        do{
+            System.out.println("You have bee invited to attend the appointment" + appointmentInfo + "." );
+            System.out.println("RSVP (y/n)");
+            replyFromUser = sc.findInLine(".").charAt(0);
+
+            switch (replyFromUser){
+                case 'y':
+                    replied = true;
+                    replyToAppointer = true;
+                    break;
+                case 'n':
+                    replied = true;
+                    replyToAppointer = false;
+                    break;
+                default:
+                    System.out.println("Invalid answer, please reply 'y' or 'n'.");
+            }
+        }  while (!replied);
+        removeAppointmentNotification(appointment);
+        return replyToAppointer;
     }
 }
