@@ -1,14 +1,43 @@
 package client;
 
+import java.util.IllegalFormatCodePointException;
+import java.util.Scanner;
+
 /**
  * Created by oysteinhauan on 24/02/15.
  */
 public class LoginTester {
 
     public static void main(String[] args) {
-        Login login = new Login("henloef");
-        login.login("qwerty");
-        System.out.println("Logget inn: " + login.loggedin);
-        login.db.closeConnection();
+        Scanner scn = new Scanner(System.in);
+        System.out.println("Wilkommen! Bitte schreiben sie ihren Name!");
+        Login login = new Login();
+        User user = new User();
+        String username = "";
+
+        while (scn.hasNext()) {
+            try{
+                username = scn.nextLine();
+                login = new Login(username);
+
+                break;
+            }
+            catch (IllegalArgumentException e) {
+                System.out.println("\nInvalid usrname. Try again plz\n\n");
+            }
+        }
+        System.out.println("\nPlease give me ur passwd!");
+
+        while (scn.hasNext()) {
+            String password = scn.next();
+            try {
+                login.login(password);
+                user.getUserFromDB(username);
+                System.out.println("Welcome to our fantastic calendar, " + user.getFullName());
+                break;
+            } catch (IllegalArgumentException e) {
+                System.out.println("Wrong password!");
+            }
+        }
     }
 }
