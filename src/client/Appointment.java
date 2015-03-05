@@ -4,12 +4,9 @@ import database.Database;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import java.sql.Timestamp;
 import java.util.ArrayList;
-
-import java.sql.Date;
-import java.util.Collections;
+import java.util.Collection;
 
 
 /**
@@ -22,6 +19,7 @@ public class Appointment {
 
     int size;
     ArrayList<String> attendingPeople;
+    Collection<AppointmentListener> appointmentListeners = new ArrayList<AppointmentListener>();
     String subject;
     String description;
     Room room;
@@ -241,6 +239,24 @@ public class Appointment {
         db.closeConnection();
         }
     }
+
+    //NOTIFICATION
+
+    public void addAppointmentlistener(AppointmentListener appointmentListener){
+        appointmentListeners.add(appointmentListener);
+    }
+
+    public void setAppointmentListeners(AppointmentListener appointmentListener) {
+        appointmentListeners.remove(appointmentListener);
+    }
+
+    private void fireAppointmentNotification(){
+        for (AppointmentListener appointmentListener: appointmentListeners){
+            appointmentListener.appointmentNotification(this);
+        }
+    }
+
+    //GET N' SET
 
     public String getSubject() {
         return subject;
