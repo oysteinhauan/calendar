@@ -10,7 +10,7 @@ import java.util.ArrayList;
 /**
  * Created by oysteinhauan on 24/02/15.
  */
-public class User {
+public class User implements AppointmentListener{
 
     private String username;
     private String password;
@@ -192,4 +192,8 @@ public class User {
     }
 
 
+    @Override
+    public void appointmentNotification(Appointment appointment) {
+        //send varsling om møte
+    }
 }
