@@ -57,31 +57,12 @@ public class Room {
 
     public void createRoom(Room room){
 
-            db = new Database("all_s_gruppe40_calendar");
-            db.connectDb("all_s_gruppe40", "qwerty");
-        try {
-            String sql = "SELECT max(roomId) FROM room";
-            ResultSet rs = db.readQuery(sql);
-            int id = -1;
-            while (rs.next()) {
-                id = rs.getInt("max(roomId)") + 1;
-            }
+        db = new Database("all_s_gruppe40_calendar");
+        db.connectDb("all_s_gruppe40", "qwerty");
+        sql = ("INSERT INTO room (size, roomName) values  (" + room.seats  +  ", '" + room.roomName + "');");
+        db.updateQuery(sql);
+        db.closeConnection();
 
-            if (id == -1) {
-                throw new IllegalArgumentException("fuck up fra DB ID");
-            }
-
-            room.setRoomID(id);
-
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            sql = ("INSERT INTO room values(" + room.roomID + "," + room.seats  +  ", '" + room.roomName + "');");
-            db.updateQuery(sql);
-            db.closeConnection();
-
-        }
     }
 
     //bor kanskje sjekke om roomID finnes
