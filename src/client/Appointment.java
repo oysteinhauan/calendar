@@ -176,6 +176,10 @@ public class Appointment {
 
     }
 
+    public void inviteAttendant(String username){
+
+    }
+
 
     public void setId(int id) {
         this.appointmentId = id;
