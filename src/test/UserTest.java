@@ -36,6 +36,7 @@ public class UserTest {
                 String pos = scn.nextLine();
                 System.out.println("Please type in your e-mail. (examplename@exampleserver.com");
                 String mail = scn.nextLine();
+
                 user.setFirstname(first);
                 user.setLastname(last);
                 user.setPassword(pswd);
@@ -49,11 +50,15 @@ public class UserTest {
                 System.out.println("Something went to shit. >:( Try again.");
             }
         }
-        System.out.printf("Do you want to delete some n00bz?");
+        System.out.println("User must be added to at least one group. \nPlz type groupIds for groups. \nWhen finished press enter.");
+        while (scn.hasNext()){
+
+        }
+        System.out.printf("Do you want to delete some n00bz?\n");
         while(scn.hasNext()){
             String usr = scn.nextLine();
             user.deleteUserFromDb(usr);
-            break;
+
         }
 
 

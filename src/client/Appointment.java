@@ -91,7 +91,9 @@ public class Appointment {
 
             db.connectDb("all_s_gruppe40", "qwerty");
             String sql = "select * from appointment where appointmentId = " + appointmentId +";";
+            String sql2 = "select username from userAppointment where appointmentId = " + appointmentId +";";
             ResultSet rs = db.readQuery(sql);
+            ResultSet rs2 = db.readQuery(sql2);
             while (rs.next()){
                 appointment.setSubject(rs.getString("subject"));
                 appointment.setAppointmentId(appointmentId);
@@ -101,6 +103,10 @@ public class Appointment {
                 appointment.setRoomId(rs.getInt("roomId"));
             }
             rs.close();
+            while (rs2.next()){
+                appointment.attendingPeople.add(rs2.getString("username"));
+            }
+            rs2.close();
             db.closeConnection();
             return appointment;
         } catch (SQLException e) {
@@ -212,16 +218,23 @@ public class Appointment {
         db.connectDb();
         String sql1 = "select count(*) as no_of_attendants from userAppointment where appointmentId = " + this.appointmentId + ";";
         String sql2 = "select username from userAppointment where username = '" + username + "' and appointmentId = " + this.appointmentId + ";";
+        String sql3 = "select size from room, appointment where room.roomId = appointment.roomId" +
+                " and appointmentId = " + appointmentId +";";
         ResultSet rs1 = db.readQuery(sql1);
         ResultSet rs2 = db.readQuery(sql2);
+        ResultSet rs3 = db.readQuery(sql3);
         int attendants = -1;
         boolean alreadyRegistered = false;
+        int roomsize = 0;
         try {
             while (rs1.next()) {
                 attendants = rs1.getInt("no_of_attendants");
             }
             if(rs2.next()){
                 alreadyRegistered = true;
+            }
+            while(rs3.next()){
+                roomsize = rs3.getInt("size");
             }
 
         } catch (SQLException e) {
@@ -230,7 +243,7 @@ public class Appointment {
 
 
 
-        if (attendingPeople.size() >= this.size || attendingPeople.size() >= attendants){
+        if (attendingPeople.size() >= roomsize /*|| attendingPeople.size() >= attendants*/){
             throw new IllegalArgumentException("Meeting is full.");
         }
         if (attendingPeople.contains(username) || alreadyRegistered){
