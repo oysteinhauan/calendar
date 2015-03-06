@@ -40,7 +40,7 @@ public class AppointmentTest {
 
         Appointment test = Appointment.getAppointment(9);
 
-        test.addAttendant("andrealr");
+        test.addAttendant("tuvaeri");
 
 
 

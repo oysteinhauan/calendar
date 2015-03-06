@@ -230,17 +230,18 @@ public class Appointment {
             while (rs1.next()) {
                 attendants = rs1.getInt("no_of_attendants");
             }
-            rs1.close();
+            //rs1.close();
             if(rs2.next()){
                 throw new IllegalArgumentException("User is already registered.");
             }
             rs2.close();
             while(rs3.next()) {
-                if (rs1.getInt("size") <= attendants) {
+                if (rs3.getInt("size") <= attendants) {
                     throw new IllegalArgumentException("Room is full, you must book a new room if you wish to add attendants.");
                 }
             }
             rs3.close();
+            rs1.close();
 
         } catch (SQLException e) {
             e.printStackTrace();
