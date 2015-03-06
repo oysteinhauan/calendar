@@ -13,7 +13,7 @@ public class UserTest {
 
         User user = new User();
         Scanner scn = new Scanner(System.in);
-        System.out.println("Skriv inn nytt brukernavn:\n");
+        System.out.println("Type in username:\n");
         while (scn.hasNext()){
             String usr = scn.nextLine();
             if(!User.usernameTaken(usr)){
@@ -21,8 +21,7 @@ public class UserTest {
                 user.setUsername(usr);
                 break;
             } else {
-                throw new IllegalArgumentException("Username taken! " +
-                        "Come up with something new plz.\n");
+                System.out.println("Username taken! Try again:\n");
             }
         }
         System.out.println("Please type firstname: \n");
@@ -43,12 +42,15 @@ public class UserTest {
                 user.setPosition(pos);
                 user.setEmail(mail);
                 user.addUserToDB();
-                System.out.println("User added to database succesfully");
+                System.out.println("User added succesfully!");
                 break;
 
             } catch (Exception e) {
-                System.out.println("Something went to shit. Try again");
+                System.out.println("Something went to shit. >:( Try again.");
             }
         }
+        System.out.printf("Do you want ");
+
+
     }
 }
