@@ -242,8 +242,6 @@ public class Appointment {
 
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            db.closeConnection();
         }
         attendingPeople.add(username);
         db.updateQuery("insert into userAppointment values( '" + username + "', " + this.appointmentId + ");");
