@@ -49,7 +49,12 @@ public class UserTest {
                 System.out.println("Something went to shit. >:( Try again.");
             }
         }
-        System.out.printf("Do you want ");
+        System.out.printf("Do you want to delete some n00bz?");
+        while(scn.hasNext()){
+            String usr = scn.nextLine();
+            user.deleteUserFromDb(usr);
+            break;
+        }
 
 
     }
