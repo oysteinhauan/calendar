@@ -14,7 +14,7 @@ public class AppointmentTest {
 
         //kjører et enkelt program  i consollen som lar deg legge til en ny appointment.
 
-        System.out.println("skriv inn ny appointment:");
+        /*System.out.println("skriv inn ny appointment:");
         Scanner sc = new Scanner(System.in);
         String subject = "", description = "";
         Timestamp start = null, end = null;
@@ -36,7 +36,11 @@ public class AppointmentTest {
 
 
         Appointment test = Appointment.createAppointment(start, end, subject, description, 20);
-        test.toString();
+        test.toString();*/
+
+        Appointment test = Appointment.getAppointment(9);
+
+        test.addAttendant("andrealr");
 
 
 

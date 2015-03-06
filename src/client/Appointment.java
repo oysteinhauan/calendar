@@ -18,7 +18,7 @@ public class Appointment {
     Timestamp start, end;
 
     int size;
-    ArrayList<String> attendingPeople;
+    ArrayList<String> attendingPeople = new ArrayList<String>();
     Collection<AppointmentListener> appointmentListeners = new ArrayList<AppointmentListener>();
     String subject;
     String description;
@@ -251,7 +251,7 @@ public class Appointment {
         }
 
         attendingPeople.add(username);
-        db.updateQuery("insert into userAppointment values( '" + username + "', " + this.appointmentId + ";");
+        db.updateQuery("insert into userAppointment values( '" + username + "', " + this.appointmentId + ");");
 
         db.closeConnection();
         }
