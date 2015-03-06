@@ -14,23 +14,30 @@ public class Login {
     String password, sql;
     boolean loggedin = false;
 
+    public Login(){
+
+    }
+
     public Login(String username){
+        db = new Database("all_s_gruppe40_calendar");
+        db.connectDb("all_s_gruppe40", "qwerty");
+        sql = "SELECT password FROM user WHERE username = '" + username + "';";
+        ResultSet rs = db.readQuery(sql);
         try {
-            db = new Database("all_s_gruppe40_calendar");
-            db.connectDb("all_s_gruppe40", "qwerty");
-            sql = "SELECT password FROM users WHERE username = '" + username + "';";
-            ResultSet rs = db.readQuery(sql);
-            while(rs.next()) {
-                if (rs.getString("password") == null) {
-                    throw new IllegalArgumentException("Invalid username");
-                } else {
-                    this.password = rs.getString("password");
-                    rs.close();
-                }
+            if(rs.next()) {
+                this.password = rs.getString("password");
+                rs.close();
+            }
+
+            else {
+                throw new IllegalArgumentException();
             }
 
         } catch (SQLException e){
+            e.printStackTrace();
 
+        } finally{
+            db.closeConnection();
         }
 
     }
@@ -40,6 +47,15 @@ public class Login {
             throw new IllegalArgumentException("Incorrect password");
         }
         else loggedin = true;
+    }
+
+    public void logout(){
+        if(loggedin){
+            loggedin = false;
+        }
+        else {
+            throw new IllegalStateException("Already logged out!");
+        }
     }
 
 
