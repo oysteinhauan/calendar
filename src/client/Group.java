@@ -37,11 +37,6 @@ public class Group implements AppointmentListener {
         db.closeConnection();
     }
 
-    //public getGroupnameFromDB() {
-
-
-    //public getGroupIDFromDB() {
-
 
     public static void addMember(User user, int groupID) {
         Database db2 = new Database("all_s_gruppe40_calendar");
@@ -108,6 +103,7 @@ public class Group implements AppointmentListener {
 
         }
         catch (SQLException e){
+            e.printStackTrace();
 
         }
         return this.groupID;
@@ -129,6 +125,7 @@ public class Group implements AppointmentListener {
             db.closeConnection();
             rs.close();
         } catch (SQLException e) {
+            e.printStackTrace();
 
         }
         return members;
@@ -150,6 +147,7 @@ public class Group implements AppointmentListener {
             db.closeConnection();
             rs.close();
         } catch (SQLException e) {
+            e.printStackTrace();
 
         }
         return members;

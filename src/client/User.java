@@ -113,6 +113,25 @@ public class User implements AppointmentListener{
         return this;
     }
 
+    public static boolean usernameTaken(String username){
+        Database db = new Database();
+        db.connectDb();
+        String sql = "select username from user where username = '" + username +"';";
+        ResultSet rs = db.readQuery(sql);
+        try {
+            if(rs.next()){
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        } finally {
+            db.closeConnection();
+        }
+        return false;
+
+    }
+
     public void updateUserInfoInDB(String columnToUpdate, String updatedInfo){
         //skriv inn hvilken kolonne som skal få sin informasjon oppdatert, og hva den nye informasjonen skal være
         db = new Database("all_s_gruppe40_calendar");
