@@ -235,8 +235,10 @@ public class Appointment {
                 throw new IllegalArgumentException("User is already registered.");
             }
             rs2.close();
-            if(rs3.next()){
-                throw new IllegalArgumentException("Room is full, you must book a new room if you wish to add attendants.");
+            while(rs3.next()) {
+                if (rs1.getInt("size") <= attendants) {
+                    throw new IllegalArgumentException("Room is full, you must book a new room if you wish to add attendants.");
+                }
             }
             rs3.close();
 
