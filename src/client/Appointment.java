@@ -224,37 +224,31 @@ public class Appointment {
         ResultSet rs2 = db.readQuery(sql2);
         ResultSet rs3 = db.readQuery(sql3);
         int attendants = -1;
-        boolean alreadyRegistered = false;
+
         int roomsize = 0;
         try {
             while (rs1.next()) {
                 attendants = rs1.getInt("no_of_attendants");
             }
+            rs1.close();
             if(rs2.next()){
-                alreadyRegistered = true;
+                throw new IllegalArgumentException("User is already registered.");
             }
-            while(rs3.next()){
-                roomsize = rs3.getInt("size");
+            rs2.close();
+            if(rs3.next()){
+                throw new IllegalArgumentException("Room is full, you must book a new room if you wish to add attendants.");
             }
+            rs3.close();
 
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-
-
-
-        if (attendingPeople.size() >= roomsize /*|| attendingPeople.size() >= attendants*/){
-            throw new IllegalArgumentException("Meeting is full.");
+            db.closeConnection();
         }
-        if (attendingPeople.contains(username) || alreadyRegistered){
-            throw new IllegalArgumentException("User is already partaking in this event.");
-        }
-
         attendingPeople.add(username);
         db.updateQuery("insert into userAppointment values( '" + username + "', " + this.appointmentId + ");");
-
         db.closeConnection();
-        }
+
     }
 
     //NOTIFICATION
