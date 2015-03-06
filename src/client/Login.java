@@ -49,6 +49,15 @@ public class Login {
         else loggedin = true;
     }
 
+    public void logout(){
+        if(loggedin){
+            loggedin = false;
+        }
+        else {
+            throw new IllegalStateException("Already logged out!");
+        }
+    }
+
 
 
 
