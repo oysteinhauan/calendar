@@ -134,6 +134,62 @@ public class Appointment {
 
     }
 
+    public void updateAppointmentInDB(String columnToUpdate, String updatedInfo){
+
+
+
+        Database db = new Database();
+        db.connectDb("all_s_gruppe40", "qwerty");
+
+        //sjekker om ny slutt ikke er før nåværende start
+        if (columnToUpdate == "slutt"){
+
+            String sql = "Select start from appointment where appointmentId ='" + this.appointmentId + "';";
+            ResultSet rs = db.readQuery(sql);
+            Timestamp currentStart = null;
+            try {
+                while (rs.next()){
+                    currentStart = rs.getTimestamp("start");
+
+            }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            if (Timestamp.valueOf(updatedInfo).before(currentStart)){
+                throw new IllegalArgumentException("sluttid må være etter starttid!!");
+            }
+
+        }
+
+        if (columnToUpdate  == "start"){
+
+            String sql = "Select slutt from appointment where appointmentId ='" + this.appointmentId + "';";
+            ResultSet rs = db.readQuery(sql);
+            Timestamp currentEnd = null;
+
+            try {
+                while (rs.next()){
+                    currentEnd = rs.getTimestamp("start");
+
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            if (Timestamp.valueOf(updatedInfo).after(currentEnd)){
+                throw new IllegalArgumentException("Starttid må være før sluttid!!!!");
+            }
+
+
+        }
+        String sql =  "UPDATE appointment SET " + columnToUpdate + "='" + updatedInfo + "' WHERE appointmentId = '" + this.appointmentId + "';";
+        db.updateQuery(sql);
+        db.closeConnection();
+
+
+    }
+
 
 
     public void findRoom() {

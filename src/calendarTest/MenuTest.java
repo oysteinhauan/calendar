@@ -140,6 +140,59 @@ public class MenuTest {
 
                         case 12:
 
+                            int idToChange = KeyIn.inInt("Skriv inn avtaleID:");
+
+                            System.out.println("1. Endre starttid" +
+                                    "2. Endre sluttid" +
+                                    "3. legg til deltaker" +
+                                    "4. fjern deltaker" +
+                                    "5. endre description" +
+                                    "6. endre rom" +
+                                    "7. gå tilbake" +
+                                    "8. Logg ut");
+
+                            int a = Integer.valueOf((12 + "") + KeyIn.inInt("Select option"));
+
+                            Appointment appointmentToChange = Appointment.getAppointment(idToChange);
+
+
+                            switch (a) {
+
+                                case 121:
+
+                                    String newStartTime = KeyIn.inString("skriv inn nytt tidspunkt: (YYYY-MM-DD HH:MM)" + ":00");
+                                    appointmentToChange.updateAppointmentInDB("start", newStartTime);
+
+                                    //hvor sendes brukeren nå?
+                                    break;
+
+                                case 122:
+
+                                    String newEndTime = KeyIn.inString("skriv inn nytt tidspunkt: (YYYY-MM-DD HH:MM)" + ":00");
+                                    try {
+                                        appointmentToChange.updateAppointmentInDB("slutt", newEndTime);
+                                    } catch (IllegalArgumentException e){
+                                        System.out.println(e);
+                                    }
+
+
+                                    break;
+
+                                case 123:
+
+                                    break;
+
+                                case 124:
+
+                                    break;
+                                case 125:
+
+                                    break;
+                                case 126:
+
+                                    break;
+                            }
+
 
                             break;
 
