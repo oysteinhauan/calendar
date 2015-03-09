@@ -16,6 +16,7 @@ public abstract class Notification {
 //1 <=> Invite
 //2 <=> ReplyFromInvitedUser
 //3 <=> AppointmenUpdate
+//4 <=> AttendanceCanceled
 
     abstract public void setNotificationType();
     public int getNotificationType() {
