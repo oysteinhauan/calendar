@@ -154,7 +154,7 @@ public class Appointment {
         Database db = new Database();
         db.connectDb("all_s_gruppe40", "qwerty");
 
-        //sjekker om ny slutt ikke er før nåværende start
+        //sjekker om ny slutt ikke er før nåværende start eller omvendt
         if (columnToUpdate == "slutt"){
 
             String sql = "Select start from appointment where appointmentId ='" + this.appointmentId + "';";

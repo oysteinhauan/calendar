@@ -9,11 +9,21 @@ public class Calendar {
 
     private User user = new User();
     private ArrayList<Appointment> appointments;
+    private Group group;
 
     public Calendar(String username) {
         this.user = user.getUserFromDB(username);
         appointments = user.getAppointmentsForUser(user);
+        group = null;
     }
+
+   /* public Calendar(Group group){
+
+        //ny konstruktør som skal hente ut avtalene til en gruppe.
+        user = null;
+        appointments = group.getAppointmentsForGroup(group);
+
+    }*/
 
     public void viewCalendar(){
         System.out.println("**** Welcome! ****");

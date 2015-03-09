@@ -2,7 +2,9 @@ package calendarTest;
 
 import client.Appointment;
 import client.Calendar;
+import client.Group;
 import client.Login;
+import database.Database;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -62,15 +64,17 @@ public class MenuTest {
         while (loggedIn) {
 
             int swValue;
+            Database db = new Database();
+            db.connectDb("all_s_gruppe40", "qwerty");
 
             System.out.println("hva vil du gjøre? bruk tallene for å navigere i menyene \n" +
 
-                            "1. Vis min kalender \n" +
-                            "2. Vis min(e) gruppekalender(e)\n" +
-                            "3. Se noen andres kalender\n" +
+                            "1. Vis min kalender og opprett / endre avtaler \n" +
+                            "2. Vis en gruppekalender\n" +
+                            "3. Se en annens private kalender\n" +
                             "4. Endre min brukerinfo\n" +
                             "5.  \n" +
-                            "6. Logg ut"
+                            "6. Logg ut\n\n"
             );
 
             swValue = KeyIn.inInt(" Select Option ");
@@ -163,8 +167,8 @@ public class MenuTest {
                                     String newStartTime = KeyIn.inString("skriv inn nytt tidspunkt: (YYYY-MM-DD HH:MM)" + ":00");
                                     appointmentToChange.updateAppointmentInDB("start", newStartTime);
 
-                                    //hvor sendes brukeren nå?
-                                    break;
+
+                                    continue;
 
                                 case 122:
 
@@ -175,24 +179,46 @@ public class MenuTest {
                                         System.out.println(e);
                                     }
 
-
-                                    break;
+                                    continue;
 
                                 case 123:
 
-                                    break;
+                                    String newAttendant = KeyIn.inString("Hvilken deltaker vil du legge til? skriv inn username");
+                                    appointmentToChange.addAttendant(newAttendant);
+                                    continue;
 
                                 case 124:
 
-                                    break;
+                                    String attendantToRemove = KeyIn.inString("Hvilken deltaker vil du fjerne? skriv inn username");
+                                    //remove tuple from userAppointment
+
+
+
+                                    String sql = "DELETE from userAppointment WHERE username ='" + attendantToRemove +
+                                            ", AND appointmentId =" + appointmentToChange.getAppointmentId() + ";";
+                                    db.updateQuery(sql);
+                                    db.closeConnection();
+
+                                    continue;
+
                                 case 125:
 
-                                    break;
+                                    String newDescription = KeyIn.inString("Skriv inn ny description:");
+                                    appointmentToChange.updateAppointmentInDB("description", newDescription);
+                                    continue;
+
                                 case 126:
 
+                                    System.out.println("denne funksjonen er ikke implementert ennuuu");
+                                    continue;
+
+                                case 127:
+
+                                    continue;
+
+                                case 128:
                                     break;
                             }
-
 
                             break;
 
@@ -203,9 +229,12 @@ public class MenuTest {
 
                 case 2:
 
-                    String groupCalendar = KeyIn.inString("Hvilken gruppekalender vil du se?");
+                    /*int groupId = KeyIn.inInt("Hvilken gruppekalender vil du se? skriv inn gruppeId");
+                    Group group = Group.getGroup(groupId);
 
-                    //må implementere en generateGroupCalendar i Calendarklasen
+                    Calendar calendar = new Calendar(group);
+                    calendar.viewCalendar();*/
+
 
                     break;
 
@@ -218,16 +247,47 @@ public class MenuTest {
                     break;
 
                 case 4:
+                    //endre brukerinfo
+                    System.out.println("du er innlogget som:" + username + "\n");
+
+                    System.out.println("1. Endre Email\n" +
+                            "2. Endre passord\n" +
+                            "3. Tilbake\n");
+
+
+                    int option = KeyIn.inInt("hvilken profildata vil du endre\n");
+
+                    int b = Integer.valueOf((4 + "") + option);
+
+                    switch (b){
+
+                        case 41:
+
+                            String newEmail = KeyIn.inString("skriv inn ny email");
+                            String sql = "UPDATE  all_s_gruppe40_calendar.user SET email='" + newEmail + "WHERE username ='" + username + "';";
+                            db.updateQuery(sql);
+                            continue;
+
+                        case 42:
+
+                            String newPassword = KeyIn.inString("skriv inn nytt passord");
+                            String sql2 = "UPDATE all_s_gruppe40_calendar.user SET password='" + newPassword + "WHERE username ='" + username + "';";
+                            db.updateQuery(sql2);
+                            continue;
+
+                    }
 
                     break;
 
                 case 5:
 
+                    //hva skjer her
+
                     break;
 
                 case 6:
 
-
+                    db.closeConnection();
                     loggedIn = false;
                     break;
 
