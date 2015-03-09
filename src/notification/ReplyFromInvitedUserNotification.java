@@ -7,16 +7,14 @@ import client.Appointment;
  */
 public class ReplyFromInvitedUserNotification extends Notification{
 
-
-
     boolean replyFromInvitedUser;
 
     ReplyFromInvitedUserNotification(String recieverUsername, String senderUsername, int appointmentId, boolean replyFromInvitedUser){
         setNotificationType();
         setRecieverUsername(recieverUsername);
         setAppointmentId(appointmentId);
-        setMessage();
         setSenderUsername(senderUsername);
+        setMessage();
         this.replyFromInvitedUser = replyFromInvitedUser;
     }
 
@@ -29,7 +27,6 @@ public class ReplyFromInvitedUserNotification extends Notification{
     public void setMessage() {
         Appointment appointment = Appointment.getAppointment(appointmentId);
         message = ("" + senderUsername + " has " + replyFromInvitedUserToString() + " your invite to attend the appointment: " + appointment.toString() + "");
-
     }
 
     String replyFromInvitedUserToString() {
