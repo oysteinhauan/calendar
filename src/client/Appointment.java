@@ -143,6 +143,63 @@ public class Appointment {
         db.updateQuery(sql1);
         db.updateQuery(sql2);
         db.closeConnection();
+    }
+
+
+
+    public void updateAppointmentInDB(String columnToUpdate, String updatedInfo){
+
+
+
+        Database db = new Database();
+        db.connectDb("all_s_gruppe40", "qwerty");
+
+        //sjekker om ny slutt ikke er før nåværende start
+        if (columnToUpdate == "slutt"){
+
+            String sql = "Select start from appointment where appointmentId ='" + this.appointmentId + "';";
+            ResultSet rs = db.readQuery(sql);
+            Timestamp currentStart = null;
+            try {
+                while (rs.next()){
+                    currentStart = rs.getTimestamp("start");
+
+            }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            if (Timestamp.valueOf(updatedInfo).before(currentStart)){
+                throw new IllegalArgumentException("sluttid må være etter starttid!!");
+            }
+
+        }
+
+        if (columnToUpdate  == "start"){
+
+            String sql = "Select slutt from appointment where appointmentId ='" + this.appointmentId + "';";
+            ResultSet rs = db.readQuery(sql);
+            Timestamp currentEnd = null;
+
+            try {
+                while (rs.next()){
+                    currentEnd = rs.getTimestamp("start");
+
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            if (Timestamp.valueOf(updatedInfo).after(currentEnd)){
+                throw new IllegalArgumentException("Starttid må være før sluttid!!!!");
+            }
+
+
+        }
+        String sql =  "UPDATE appointment SET " + columnToUpdate + "='" + updatedInfo + "' WHERE appointmentId = '" + this.appointmentId + "';";
+        db.updateQuery(sql);
+        db.closeConnection();
+
 
     }
 
@@ -236,37 +293,32 @@ public class Appointment {
         ResultSet rs2 = db.readQuery(sql2);
         ResultSet rs3 = db.readQuery(sql3);
         int attendants = -1;
-        boolean alreadyRegistered = false;
+
         int roomsize = 0;
         try {
             while (rs1.next()) {
                 attendants = rs1.getInt("no_of_attendants");
             }
+            //rs1.close();
             if(rs2.next()){
-                alreadyRegistered = true;
+                throw new IllegalArgumentException("User is already registered.");
             }
-            while(rs3.next()){
-                roomsize = rs3.getInt("size");
+            rs2.close();
+            while(rs3.next()) {
+                if (rs3.getInt("size") <= attendants) {
+                    throw new IllegalArgumentException("Room is full, you must book a new room if you wish to add attendants.");
+                }
             }
+            rs3.close();
+            rs1.close();
 
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-
-
-
-        if (attendingPeople.size() >= roomsize /*|| attendingPeople.size() >= attendants*/){
-            throw new IllegalArgumentException("Meeting is full.");
         }
-        if (attendingPeople.contains(username) || alreadyRegistered){
-            throw new IllegalArgumentException("User is already partaking in this event.");
-        }
-
         attendingPeople.add(username);
         db.updateQuery("insert into userAppointment values( '" + username + "', " + this.appointmentId + ");");
-
         db.closeConnection();
-        }
+
     }
 
     //NOTIFICATION

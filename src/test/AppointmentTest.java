@@ -50,6 +50,7 @@ public class AppointmentTest {
         a.addAttendingGroup(g);
 
 
+        test.addAttendant("tuvaeri");
 
 
 
