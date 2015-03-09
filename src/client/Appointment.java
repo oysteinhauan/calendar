@@ -25,6 +25,7 @@ public class Appointment {
     Room room;
     int roomId;
     int appointmentId;
+    int attendingGroup;
 
     public Appointment(){
 
@@ -131,6 +132,17 @@ public class Appointment {
         db.updateQuery(sql);
         db.closeConnection();
 
+
+    }
+
+    public static void removeAppointmentInDB(int appointmentID) {
+        Database db = new Database("all_s_gruppe40_calendar");
+        db.connectDb("all_s_gruppe40", "qwerty");
+        String sql1 = "DELETE from userAppointment where appointmentId = " + appointmentID + ";";
+        String sql2 = "DELETE from appointment where appointmentId = " + appointmentID + ";";
+        db.updateQuery(sql1);
+        db.updateQuery(sql2);
+        db.closeConnection();
 
     }
 
@@ -314,5 +326,67 @@ public class Appointment {
     public void setAppointmentId(int appointmentId) {
         this.appointmentId = appointmentId;
     }
+
+    // GROUP: Metoder for å knytte grupper til avtaler
+
+    public void addAttendingGroup(Group group) {
+        Database db = new Database();
+        db.connectDb();
+
+        //ArrayList<String> members = group.getMembers(group.getGroupID());
+        //int no_of_members = members.size();
+
+        String sql1 = "select count(*) as no_of_attendants from userGroup where groupId = " + group.getGroupID() + ";";
+        String sql2 = "select groupId from groupAppointment where groupId = '" + group.getGroupID() + "' and appointmentId = " + this.appointmentId + ";";
+        String sql3 = "select size from room, appointment where room.roomId = appointment.roomId" +
+                " and appointmentId = " + appointmentId +";";
+        String sql4 = "select username from userGroup where groupId = " + group.getGroupID();
+        ResultSet rs1 = db.readQuery(sql1);
+        ResultSet rs2 = db.readQuery(sql2);
+        ResultSet rs3 = db.readQuery(sql3);
+        ResultSet rs4 = db.readQuery(sql4);
+
+
+        int attendants = -1;
+        boolean alreadyRegistered = false;
+        int roomsize = 0;
+        try {
+            while (rs1.next()) {
+                attendants = rs1.getInt("no_of_attendants");
+            }
+            if(rs2.next()){
+                alreadyRegistered = true;
+            }
+            while(rs3.next()){
+                roomsize = rs3.getInt("size");
+            }
+            while(rs4.next()) {
+                String username = rs4.getString("username");
+                addAttendant(username);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+
+
+            if (attendants >= roomsize /*|| attendingPeople.size() >= attendants*/){
+                throw new IllegalArgumentException("Meeting is full or rom is too small.");
+            }
+            if (attendingGroup == group.getGroupID() || alreadyRegistered) {
+                throw new IllegalArgumentException("Group is already partaking in this event.");
+
+                }
+            }
+
+
+            //attendingPeople.add(username);
+            attendingGroup = group.getGroupID();
+            db.updateQuery("INSERT INTO groupAppointment (groupId, appointmentId) values (" + group.getGroupID() + ", " + this.appointmentId + ");");
+
+            db.closeConnection();
+        }
+
+
 
 }

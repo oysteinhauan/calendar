@@ -14,14 +14,17 @@ public class GroupTest {
 
         //User u = new User();
         //u = u.getUserFromDB("oddmrog");
-        Group group = new Group();
+        //Group group = new Group();
         //String test = group.getGroupNameFromDB(3);
         //System.out.println(test);
         //int test2 = group.getGroupIDFromDB("Power Puff");
         //System.out.println(test2);
 
-        ArrayList<String> members = group.getMembers("Power Puff");
-        System.out.println(members);
+        //ArrayList<String> members = group.getMembers("Power Puff");
+        //System.out.println(members);
+
+        System.out.println(Group.getGroup(3));
+
 
 
 

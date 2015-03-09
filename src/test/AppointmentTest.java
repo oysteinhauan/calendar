@@ -1,6 +1,7 @@
 package test;
 
 import client.Appointment;
+import client.Group;
 
 import java.sql.Timestamp;
 import java.util.Scanner;
@@ -38,9 +39,17 @@ public class AppointmentTest {
         Appointment test = Appointment.createAppointment(start, end, subject, description, 20);
         test.toString();*/
 
-        Appointment test = Appointment.getAppointment(9);
+        //Appointment test = Appointment.getAppointment(7);
 
-        test.addAttendant("andrealr");
+        //test.addAttendant("henloef");
+        //test.addAttendant("oddmrog");
+
+        Group g = Group.getGroup(3);
+        Appointment a = Appointment.getAppointment(7);
+
+        a.addAttendingGroup(g);
+
+
 
 
 

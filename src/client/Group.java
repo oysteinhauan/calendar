@@ -66,13 +66,34 @@ public class Group implements AppointmentListener {
         return groupID;
     }
 
+    public static Group getGroup(int groupID) {
+        Database db = new Database();
+        Group group = new Group();
+        try {
+
+            db.connectDb("all_s_gruppe40", "qwerty");
+            String sql = "select * from group_1 where groupId = " + groupID + ";";
+            ResultSet rs = db.readQuery(sql);
+
+            while (rs.next()) {
+                group.setGroupID(rs.getInt("groupId"));
+                group.setGroupname(rs.getString("name"));
+            }
+            db.closeConnection();
+            rs.close();
+        } catch (SQLException e) {
+        }
+        return group;
+    }
+
     public void setGroupID(int groupID) {
         this.groupID = groupID;
     }
 
-    public String getGroupNameFromDB(int groupID) {
+    public  String getGroupNameFromDB(int groupID) {
+
         try {
-            db = new Database("all_s_gruppe40_calendar");
+            Database db = new Database("all_s_gruppe40_calendar");
             db.connectDb("all_s_gruppe40", "qwerty");
             String sql = ("SELECT name FROM group_1 WHERE groupID = " + groupID +" ;");
             ResultSet rs = db.readQuery(sql);
@@ -154,4 +175,42 @@ public class Group implements AppointmentListener {
 
     }
 
+    public ArrayList<Appointment> getAppointmentsForGroup(Group group) {
+
+        try {
+            ArrayList<Integer> appIdList = new ArrayList<Integer>();
+            ArrayList<Appointment> appList = new ArrayList<Appointment>();
+
+            Database db = new Database();
+            db.connectDb("all_s_gruppe40", "qwerty");
+            String sql = "select appointment.appointmentId, start from groupAppointment, appointment " +
+                    "where groupId = " + group.getGroupID() + " and appointment.appointmentId = groupAppointment.appointmentId " +
+                    "order by start;";
+
+            ResultSet rs = db.readQuery(sql);
+            while (rs.next()) {
+                appIdList.add(rs.getInt("appointmentId"));
+            }
+            db.closeConnection();
+
+            for (Integer id: appIdList){
+                appList.add(Appointment.getAppointment(id));
+            }
+            return appList;
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
+    @Override
+    public String toString() {
+        return "Group{" +
+                "groupname='" + groupname + '\'' +
+                ", groupID=" + groupID +
+                '}';
+    }
 }
