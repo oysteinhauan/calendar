@@ -1,0 +1,28 @@
+package notification;
+
+import client.Appointment;
+
+/**
+ * Created by Henrik on 09.03.2015.
+ */
+public class InviteNotification extends Notification {
+
+    InviteNotification(String recieverUsername, String senderUsername, int appointmentId ){
+        setNotificationType();
+        setSenderUsername(senderUsername);
+        setRecieverUsername(recieverUsername);
+        setAppointmentId(appointmentId);
+        setMessage();
+    }
+
+    @Override
+    public void setNotificationType() {
+        notificationType = 1;
+    }
+
+    @Override
+    public void setMessage() {
+        Appointment appointment = Appointment.getAppointment(appointmentId);
+        message = ("" + senderUsername + " has invited you to attend " + appointment.toString() + "");
+    }
+}

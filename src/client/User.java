@@ -5,7 +5,6 @@ import database.Database;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 
 /**
@@ -207,7 +206,7 @@ public class User implements AppointmentListener{
         db.closeConnection();
     }
 
-//NOTIFICATION
+    //NOTIFICATION
     @Override
     public void appointmentNotification(Appointment appointment) {
         appointmentNotifications.add(appointment);
@@ -221,31 +220,50 @@ public class User implements AppointmentListener{
         appointmentNotifications.remove(appointment);
     }
 
-    public boolean replyToNotification(Appointment appointment){
+/*    public boolean replyToNotification(Appointment appointment){
         Scanner sc = new Scanner(System.in);
-        String appointmentInfo = appointment.toString();
-        char replyFromUser;
-        boolean replied = false;
         Boolean replyToAppointer = null;
-        do{
-            System.out.println("You have bee invited to attend the appointment" + appointmentInfo + "." );
-            System.out.println("RSVP (y/n)");
-            replyFromUser = sc.findInLine(".").charAt(0);
 
-            switch (replyFromUser){
-                case 'y':
-                    replied = true;
-                    replyToAppointer = true;
-                    break;
-                case 'n':
-                    replied = true;
-                    replyToAppointer = false;
-                    break;
-                default:
-                    System.out.println("Invalid answer, please reply 'y' or 'n'.");
+        int choiceEntry = -1;
+        System.out.println("You have bee invited to attend the appointment:");
+        System.out.println("****************************************************");
+        System.out.println(" You have been invited to attend the appointment: ");
+        System.out.println("      Subject: " + appointment.getSubject() + "         ");
+        System.out.println("      Description: " + appointment.getDescription());
+        System.out.println("      Room: " + appointment.getRoomId());
+        System.out.println("      Start: " + appointment.getStart());
+        System.out.println("      End: " + appointment.getEnd());
+        System.out.println("****************************************************");
+        do {
+            System.out.println("============================");
+            System.out.println("|       YOUR OPTIONS       |");
+            System.out.println("============================");
+            System.out.println("|        1. Accept         |");
+            System.out.println("|        2. Decline        |");
+            System.out.println("============================");
+            try {
+                choiceEntry = sc.nextInt();
+            } catch (InputMismatchException e) {
+                choiceEntry = -1;
             }
-        }  while (!replied);
+
+
+                switch (choiceEntry) {
+                    case 1:
+                        replyToAppointer = true;
+                        break;
+                    case 2:
+                        replyToAppointer = false;
+                        break;
+                    default:
+                        System.out.println("(╯°□°）╯︵ ┻━┻ Invalid reply.");
+                        break;
+                }
+
+        }while (choiceEntry != 1 && choiceEntry != 2);
+
+
         removeAppointmentNotification(appointment);
-        return replyToAppointer;
-    }
+        return replyToAppointer;*/
 }
+

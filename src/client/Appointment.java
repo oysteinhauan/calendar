@@ -323,19 +323,24 @@ public class Appointment {
 
     //NOTIFICATION
 
+
+
+/*
+
     public void addAppointmentlistener(AppointmentListener appointmentListener){
         appointmentListeners.add(appointmentListener);
     }
 
-    public void setAppointmentListeners(AppointmentListener appointmentListener) {
+    public void removeAppointmentListeners(AppointmentListener appointmentListener) {
         appointmentListeners.remove(appointmentListener);
     }
 
-    private void fireAppointmentNotification(){
+    public void fireAppointmentNotification(){
         for (AppointmentListener appointmentListener: appointmentListeners){
             appointmentListener.appointmentNotification(this);
         }
     }
+*/
 
     //GET N' SET
 
