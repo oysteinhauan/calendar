@@ -241,14 +241,14 @@ public class MenuTest {
                         case 41:
 
                             String newEmail = KeyIn.inString("skriv inn ny email");
-                            String sql = "UPDATE  all_s_gruppe40_calendar.user SET email='" + newEmail + "WHERE username ='" + username + "';";
+                            String sql = "UPDATE  all_s_gruppe40_calendar.user SET email='" + newEmail + "' WHERE username ='" + username + "';";
                             db.updateQuery(sql);
                             continue;
 
                         case 42:
 
                             String newPassword = KeyIn.inString("skriv inn nytt passord");
-                            String sql2 = "UPDATE all_s_gruppe40_calendar.user SET password='" + newPassword + "WHERE username ='" + username + "';";
+                            String sql2 = "UPDATE all_s_gruppe40_calendar.user SET password='" + newPassword + "' WHERE username ='" + username + "';";
                             db.updateQuery(sql2);
                             continue;
                     }

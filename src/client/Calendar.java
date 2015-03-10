@@ -12,6 +12,8 @@ public class Calendar {
     private Group group;
 
     public Calendar(String username) {
+
+
         this.user = user.getUserFromDB(username);
         appointments = user.getAppointmentsForUser(user);
         group = null;
