@@ -106,6 +106,7 @@ public class MenuTest {
                             antall = KeyIn.inInt("Legg inn antall møtedeltakere");
                             System.out.println(username);
                             Appointment appointment = Appointment.createAppointment(start, slutt, subject, description, antall, username);
+                            appointment.addAttendant(username);
 
                             while (appointment.attendingPeople.size() < antall) {
 
