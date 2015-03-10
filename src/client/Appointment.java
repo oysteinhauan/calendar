@@ -20,7 +20,7 @@ public class Appointment {
     int size;
     ArrayList<String> attendingPeople = new ArrayList<String>();
     Collection<AppointmentListener> appointmentListeners = new ArrayList<AppointmentListener>();
-    String subject;
+    String subject, owner;
     String description;
     Room room;
     int roomId;
@@ -34,26 +34,27 @@ public class Appointment {
 
 
     public Appointment(Timestamp start, Timestamp end,
-                       String subject, String description, int size) {
+                       String subject, String description, int size, String owner) {
 
         this.start = start;
         this.end = end;
         this.subject = subject;
         this.description = description;
         this.size = size;
+        this.owner = owner;
 
 
 
     }
 
-    public static Appointment createAppointment(Timestamp start, Timestamp end, String subject, String description, int size) {
+    public static Appointment createAppointment(Timestamp start, Timestamp end, String subject, String description, int size, String owner) {
 
 
         Database db = new Database();
         db.connectDb("all_s_gruppe40", "qwerty");
 
         try {
-            Appointment appointment = new Appointment(start, end, subject, description, size);
+            Appointment appointment = new Appointment(start, end, subject, description, size, owner);
             appointment.findRoom();
             appointment.createAppointmentInDB(appointment, db);
             return appointment;
@@ -123,10 +124,10 @@ public class Appointment {
 
 
         //tar en appointment og legger til i databasen
-        String sql = "insert into appointment (start, end, subject, description, roomId) values( '"+ String.valueOf(appointment.getStart()) + "', '" +
+        String sql = "insert into appointment (start, end, subject, description, roomId, owner) values( '"+ String.valueOf(appointment.getStart()) + "', '" +
                 String.valueOf(appointment.getEnd()) + "', '" + appointment.getSubject() + "', '"
                 + appointment.getDescription() + "', "
-                + (appointment.getRoomId() + "") + ");";
+                + (appointment.getRoomId() + "") + appointment.owner  + ");";
 
         System.out.println(sql);
         db.updateQuery(sql);
@@ -396,7 +397,7 @@ public class Appointment {
         //int no_of_members = members.size();
 
         String sql1 = "select count(*) as no_of_attendants from userGroup where groupId = " + group.getGroupID() + ";";
-        String sql2 = "select groupId from groupAppointment where groupId = '" + group.getGroupID() + "' and appointmentId = " + this.appointmentId + ";";
+        String sql2 = "select groupId from groupAppointment where groupId = " + group.getGroupID() + " and appointmentId = " + this.appointmentId + ";";
         String sql3 = "select size from room, appointment where room.roomId = appointment.roomId" +
                 " and appointmentId = " + appointmentId +";";
         String sql4 = "select username from userGroup where groupId = " + group.getGroupID();
