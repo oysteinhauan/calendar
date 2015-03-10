@@ -7,10 +7,10 @@ import client.Appointment;
  */
 public class AttendanceCanceledNotification extends Notification{
 
-    AttendanceCanceledNotification(String recieverUsername, String senderUsername, int appointmentId){
+    public AttendanceCanceledNotification(String recieverUsername, String senderUsername, int appointmentId){
         setNotificationType();
         setAppointmentId(appointmentId);
-        setRecieverUsername(recieverUsername);
+        setRecipientUsername(recieverUsername);
         setSenderUsername(senderUsername);
         setMessage();
     }

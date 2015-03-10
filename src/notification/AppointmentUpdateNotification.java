@@ -7,10 +7,10 @@ import client.Appointment;
  */
 public class AppointmentUpdateNotification extends Notification {
 
-    AppointmentUpdateNotification(String senderUsername, String recieverUsername, int appointmentId){
+    public AppointmentUpdateNotification(String senderUsername, String recieverUsername, int appointmentId){
         setNotificationType();
         setAppointmentId(appointmentId);
-        setRecieverUsername(recieverUsername);
+        setRecipientUsername(recieverUsername);
         setSenderUsername(senderUsername);
         setMessage();
     }

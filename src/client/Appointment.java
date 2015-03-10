@@ -1,14 +1,13 @@
 package client;
 
 import database.Database;
+import notification.InviteNotification;
+import notification.Notification;
 
-import javax.xml.transform.Result;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Collection;
 
 
 /**
@@ -21,7 +20,7 @@ public class Appointment {
 
     int size;
     public ArrayList<String> attendingPeople = new ArrayList<String>();
-    Collection<AppointmentListener> appointmentListeners = new ArrayList<AppointmentListener>();
+    ArrayList<String> invitedUsers = new ArrayList<String>();
     String subject;
     String description;
     Room room;
@@ -89,15 +88,7 @@ public class Appointment {
     @Override
     public String toString() {
 
-        return "Appointment{" +
-                "start='" + start + '\'' +
-                ", end='" + end + '\'' +
-                ", subject='" + subject + '\'' +
-                ", description='" + description + '\'' +
-                //", room=" + room +
-                ", roomId=" + roomId +
-                ", appointmentId=" + appointmentId +
-                '}';
+        return ("\nSubject: " + subject + "\nDescription: " + description + "\nRoom: " + room + "\nStart: " + start + "\nEnd: " + end +"");
     }
 
     public static boolean checkIfOwner(String owner, Appointment appointment, int id){
@@ -291,10 +282,6 @@ public class Appointment {
 
     }
 
-    public void inviteAttendant(String username){
-
-    }
-
 
     public void setId(int id) {
         this.appointmentId = id;
@@ -371,23 +358,14 @@ public class Appointment {
     //NOTIFICATION
 
 
-
-/*
-
-    public void addAppointmentlistener(AppointmentListener appointmentListener){
-        appointmentListeners.add(appointmentListener);
+    public void inviteAttendant(String username){
+        invitedUsers.add(username);
+        Notification invite = new InviteNotification(username, this.getOwner(), getAppointmentId());
     }
 
-    public void removeAppointmentListeners(AppointmentListener appointmentListener) {
-        appointmentListeners.remove(appointmentListener);
-    }
 
-    public void fireAppointmentNotification(){
-        for (AppointmentListener appointmentListener: appointmentListeners){
-            appointmentListener.appointmentNotification(this);
-        }
-    }
-*/
+
+
 
     //GET N' SET
 

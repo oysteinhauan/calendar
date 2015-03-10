@@ -9,9 +9,9 @@ public class ReplyFromInvitedUserNotification extends Notification{
 
     boolean replyFromInvitedUser;
 
-    ReplyFromInvitedUserNotification(String recieverUsername, String senderUsername, int appointmentId, boolean replyFromInvitedUser){
+    public ReplyFromInvitedUserNotification(String recieverUsername, String senderUsername, int appointmentId, boolean replyFromInvitedUser){
         setNotificationType();
-        setRecieverUsername(recieverUsername);
+        setRecipientUsername(recieverUsername);
         setAppointmentId(appointmentId);
         setSenderUsername(senderUsername);
         setMessage();
