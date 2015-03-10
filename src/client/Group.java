@@ -110,14 +110,17 @@ public class Group implements AppointmentListener {
         return this.groupname;
     }
 
-    public int getGroupIDFromDB(String groupname) {
+    public static int getGroupIDFromDB(String groupname) {
+        int groupId = -1;
         try {
+
+            Database db = new Database();
             db = new Database("all_s_gruppe40_calendar");
             db.connectDb("all_s_gruppe40", "qwerty");
             String sql = ("SELECT groupID FROM group_1 WHERE name = '" + groupname +"' ;");
             ResultSet rs = db.readQuery(sql);
             while(rs.next()) {
-                this.groupID = rs.getInt("groupID");
+                groupId = rs.getInt("groupID");
             }
             db.closeConnection();
             rs.close();
@@ -127,7 +130,7 @@ public class Group implements AppointmentListener {
             e.printStackTrace();
 
         }
-        return this.groupID;
+        return groupId;
     }
 
 

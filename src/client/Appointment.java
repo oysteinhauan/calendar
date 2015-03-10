@@ -252,11 +252,6 @@ public class Appointment {
 
     public void findRoom() {
 
-        /*
-        søke gjennom alle rom og avtaler for å finne ledig rom til møtet
-        antar all dataen i databasen er ferdig uthentet og generert som objekter
-        returnerer rommet som er best egnet plassmessig.
-        */
 
         try {
             Database db = new Database("all_s_gruppe40_calendar");

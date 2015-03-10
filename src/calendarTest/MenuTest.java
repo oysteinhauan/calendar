@@ -212,6 +212,11 @@ public class MenuTest {
 
                 case 2:
 
+                    String groupname = KeyIn.inString("vennligst skriv inn navnet på gruppe du vil se");
+                    int id = Group.getGroupIDFromDB(groupname);
+                    Group group = Group.getGroup(id);
+                    Calendar groupCalendar = new Calendar(group);
+                    groupCalendar.viewCalendar();
                     break;
 
                 case 3:

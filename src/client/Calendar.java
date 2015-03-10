@@ -17,13 +17,13 @@ public class Calendar {
         group = null;
     }
 
-   /* public Calendar(Group group){
+    public Calendar(Group group){
 
         //ny konstruktør som skal hente ut avtalene til en gruppe.
         user = null;
         appointments = group.getAppointmentsForGroup(group);
 
-    }*/
+    }
 
     public void viewCalendar(){
         System.out.println("**** Welcome! ****");
