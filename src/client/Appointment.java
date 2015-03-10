@@ -207,12 +207,18 @@ public class Appointment {
             if (Timestamp.valueOf(updatedInfo).before(currentStart)){
                 throw new IllegalArgumentException("sluttid må være etter starttid!!");
             }
+            Timestamp timeNow = new Timestamp((new java.util.Date()).getTime());
+
+            if( Timestamp.valueOf(updatedInfo).before(timeNow)){
+
+                throw new IllegalArgumentException("Du må velge et fremtidig tidspunkt!!");
+            }
 
         }
 
         if (columnToUpdate  == "start"){
 
-            String sql = "Select slutt from appointment where appointmentId ='" + this.appointmentId + "';";
+            String sql = "Select end from appointment where appointmentId ='" + this.appointmentId + "';";
             ResultSet rs = db.readQuery(sql);
             Timestamp currentEnd = null;
 
@@ -229,7 +235,11 @@ public class Appointment {
                 throw new IllegalArgumentException("Starttid må være før sluttid!!!!");
             }
 
+            Timestamp timeNow = new Timestamp((new java.util.Date()).getTime());
+            if( Timestamp.valueOf(updatedInfo).before(timeNow)){
 
+                throw new IllegalArgumentException("Du må velge et fremtidig tidspunkt!!");
+            }
         }
         String sql =  "UPDATE appointment SET " + columnToUpdate + "='" + updatedInfo + "' WHERE appointmentId = '" + this.appointmentId + "';";
         db.updateQuery(sql);

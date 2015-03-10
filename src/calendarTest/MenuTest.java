@@ -5,7 +5,6 @@ import database.Database;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 
@@ -24,20 +23,11 @@ public class MenuTest {
 
         init();
         run();
-        //koble til db
-        //lage et menysystem, kjøres fra cmd (kjøre main filen?)
-        ////lage nye bruker eller logge inn
-        //valg for funksjonalitet som er implementert
 
     }
 
 
     public static void init() {
-
-        //rett etter loggin må en vise om vedkommende har nye notifikasjoner
-        // svare nå eller senere
-
-
 
         Scanner scn = new Scanner(System.in);
         System.out.println("Wilkommen! Bitte schreiben sie Ihren Name!");
@@ -49,7 +39,6 @@ public class MenuTest {
             try{
                 username = scn.nextLine();
                 login = new Login(username);
-
                 break;
             }
             catch (IllegalArgumentException e) {
@@ -72,11 +61,6 @@ public class MenuTest {
         calendar = new Calendar(username);
     }
 
-
-
-
-
-
     public static void run() {
 
         boolean loggedIn = true;
@@ -86,107 +70,65 @@ public class MenuTest {
             int swValue;
             Database db = new Database();
             db.connectDb("all_s_gruppe40", "qwerty");
-
             System.out.println("hva vil du gjøre? bruk tallene for å navigere i menyene \n" +
 
-                            "1. Vis min kalender og opprett / endre avtaler \n" +
+                            "1. opprett / endre avtaler \n" +
                             "2. Vis en gruppekalender\n" +
                             "3. Se en annens private kalender\n" +
                             "4. Endre min brukerinfo\n" +
-                            "5.  \n" +
+                            "5. Vis min personlige kalender\n" +
                             "6. Logg ut\n\n"
             );
 
             swValue = KeyIn.inInt(" Select Option \n");
-
-
             Timestamp start, slutt;
             String subject, description;
-            //ArrayList<String> attendants = new ArrayList<String>();
             int antall;
 
             switch (swValue) {
-
                 case 1:
 
 
-
-                    calendar.viewCalendar();
-
                     System.out.println("hva vil du gjøre? bruk tallene for å navigere i menyene \n" +
-
                                     "1. Opprett ny avtale \n" +
                                     "2. Endre eksisterende avtale\n" +
                                     "3. Gå tilbake\n\n\n"
-
                     );
-
                     swValue = Integer.valueOf((1 + "") + KeyIn.inInt(" Select Option \n"));
-
-
                     switch (swValue) {
 
                         case 11:
 
-
                             start = Timestamp.valueOf((KeyIn.inString("Legg inn avtaleinformasjon: starttidspunkt (YYYY-MM-DD HH:MM)")) + ":00");
-
-
                             slutt = Timestamp.valueOf((KeyIn.inString("Legg inn avtaleinformasjon: slutttidspunkt (YYYY-MM-DD HH:MM)")) + ":00");
-
-
                             subject = KeyIn.inString("Legg inn subject:");
-
-
                             description = KeyIn.inString("Legg inn description:");
-
-
                             antall = KeyIn.inInt("Legg inn antall møtedeltakere");
                             System.out.println(username);
-
-
-
                             Appointment appointment = Appointment.createAppointment(start, slutt, subject, description, antall, username);
-
 
                             while (appointment.attendingPeople.size() < antall) {
 
                                 String bruker = KeyIn.inString("skriv inn username");
                                 appointment.addAttendant(bruker);
-
-
-
                             }
-                            //blabla generer appointment fra denne inputen
-
-                            //legges i en liste med usernames
-                            //kall thisAppointment.addAttendent() for hver bruker
-
                             break;
 
                         case 12:
 
-                            //print ut avtalene man kan endre på.
                             boolean bol = true;
                             int idToChange = -1;
                             while (bol) {
-
-
                                 try {
                                     idToChange = KeyIn.inInt("Skriv inn avtaleID:\n");
-
                                     Appointment app = Appointment.getAppointment(idToChange);
-
                                     if (!app.hasRecord(idToChange)) {
                                         System.out.println("id'en finnes ikke, prøv igjen!!");
                                     }
                                     else if (!(Appointment.checkIfOwner(username, app, idToChange))) {
-
                                         bol = false;
                                     }
-
                                     else {
-
                                         System.out.println("du må være eieren av en avtale for å endre på den!! prøv igjen!!!" + idToChange);
                                     }
                                 } catch (SQLException e) {
@@ -198,9 +140,6 @@ public class MenuTest {
                                 }
                             }
 
-
-                            // her må det være en sjekk for at kun den som har opprettet avtalen kan endre den.
-
                             System.out.println("1. Endre starttid\n" +
                                     "2. Endre sluttid\n" +
                                     "3. legg til deltaker\n" +
@@ -211,9 +150,7 @@ public class MenuTest {
                                     "8. Logg ut\n");
 
                             int a = Integer.valueOf((12 + "") + KeyIn.inInt("Select option\n"));
-
                             Appointment appointmentToChange = Appointment.getAppointment(idToChange);
-
 
                             switch (a) {
 
@@ -221,8 +158,6 @@ public class MenuTest {
 
                                     String newStartTime = KeyIn.inString("skriv inn nytt tidspunkt: (YYYY-MM-DD HH:MM)") + ":00";
                                     appointmentToChange.updateAppointmentInDB("start", newStartTime);
-
-
                                     continue;
 
                                 case 122:
@@ -233,7 +168,6 @@ public class MenuTest {
                                     } catch (IllegalArgumentException e){
                                         System.out.println(e);
                                     }
-
                                     continue;
 
                                 case 123:
@@ -245,15 +179,10 @@ public class MenuTest {
                                 case 124:
 
                                     String attendantToRemove = KeyIn.inString("Hvilken deltaker vil du fjerne? skriv inn username");
-                                    //remove tuple from userAppointment
-
-
-
                                     String sql = "DELETE from userAppointment WHERE username ='" + attendantToRemove +
                                             ", AND appointmentId =" + appointmentToChange.getAppointmentId() + ";";
                                     db.updateQuery(sql);
                                     db.closeConnection();
-
                                     continue;
 
                                 case 125:
@@ -281,15 +210,7 @@ public class MenuTest {
                             continue;
                     }
 
-
                 case 2:
-
-                    /*int groupId = KeyIn.inInt("Hvilken gruppekalender vil du se? skriv inn gruppeId");
-                    Group group = Group.getGroup(groupId);
-
-                    Calendar calendar = new Calendar(group);
-                    calendar.viewCalendar();*/
-
 
                     break;
 
@@ -302,16 +223,12 @@ public class MenuTest {
                     break;
 
                 case 4:
-                    //endre brukerinfo
-                    System.out.println("du er innlogget som:" + username + "\n");
 
+                    System.out.println("du er innlogget som:" + username + "\n");
                     System.out.println("1. Endre Email\n" +
                             "2. Endre passord\n" +
                             "3. Tilbake\n");
-
-
                     int option = KeyIn.inInt("hvilken profildata vil du endre\n");
-
                     int b = Integer.valueOf((4 + "") + option);
 
                     switch (b){
@@ -329,33 +246,32 @@ public class MenuTest {
                             String sql2 = "UPDATE all_s_gruppe40_calendar.user SET password='" + newPassword + "WHERE username ='" + username + "';";
                             db.updateQuery(sql2);
                             continue;
-
                     }
 
                     break;
 
                 case 5:
 
-                    //hva skjer her
+                    calendar.viewCalendar();
+                    System.out.println("1. Gå tilbake");
 
-                    break;
+                    int c = Integer.valueOf((5 + "") + KeyIn.inInt("Select option"));
+
+                    switch (c){
+
+                        case 51:
+                            continue;
+                    }
+
 
                 case 6:
 
                     db.closeConnection();
                     loggedIn = false;
                     break;
-
-
-
             }
-
-
         }
-
-
     }
-
 }
 
 
