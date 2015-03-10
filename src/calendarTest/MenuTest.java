@@ -42,8 +42,8 @@ public class MenuTest {
         Scanner scn = new Scanner(System.in);
         System.out.println("Wilkommen! Bitte schreiben sie Ihren Name!");
         Login login = new Login();
-
-        String username = "";
+        User user;
+        username = "";
 
         while (scn.hasNext()) {
             try{
@@ -129,10 +129,10 @@ public class MenuTest {
                         case 11:
 
 
-                            start = Timestamp.valueOf((KeyIn.inString("Legg inn avtaleinformasjon: starttidspunkt (YYYY-MM-DD HH:MM")) + ":00");
+                            start = Timestamp.valueOf((KeyIn.inString("Legg inn avtaleinformasjon: starttidspunkt (YYYY-MM-DD HH:MM)")) + ":00");
 
 
-                            slutt = Timestamp.valueOf((KeyIn.inString("Legg inn avtaleinformasjon: slutttidspunkt (YYYY-MM-DD HH:MM")) + ":00");
+                            slutt = Timestamp.valueOf((KeyIn.inString("Legg inn avtaleinformasjon: slutttidspunkt (YYYY-MM-DD HH:MM)")) + ":00");
 
 
                             subject = KeyIn.inString("Legg inn subject:");
