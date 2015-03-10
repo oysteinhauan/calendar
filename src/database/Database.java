@@ -104,5 +104,8 @@ public class Database {
     }
 
 
+    public Connection getConnction(){
 
+        return connection;
+    }
 }

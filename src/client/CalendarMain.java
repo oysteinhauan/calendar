@@ -125,7 +125,7 @@ public class CalendarMain {
                                 //attendants = new ArrayList<String>();
                                 //attendants.add(sc.next());
 
-                                Appointment appointment = Appointment.createAppointment(start,slutt, subject, description, antall);
+                                Appointment appointment = Appointment.createAppointment(start,slutt, subject, description, antall, username);
                                 appointment.addAttendant(sc.next());
 
 

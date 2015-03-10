@@ -1,13 +1,12 @@
 package calendarTest;
 
-import client.Appointment;
-import client.Calendar;
-import client.Group;
-import client.Login;
+import client.*;
 import database.Database;
 
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 
 /**
@@ -38,23 +37,43 @@ public class MenuTest {
         // svare nå eller senere
 
 
-            username = KeyIn.inString("Skriv inn brukernavn\n\n");
 
-            try {
+        Scanner scn = new Scanner(System.in);
+        System.out.println("Wilkommen! Bitte schreiben sie Ihren Name!");
+        Login login = new Login();
+        User user;
+        String username = "";
 
-                Login login = new Login(username);
-                String password = KeyIn.inString("skriv inn passord\n\n");
-                login.login(password);
+        while (scn.hasNext()) {
+            try{
+                username = scn.nextLine();
+                login = new Login(username);
 
-
-
-            } catch (IllegalArgumentException e) {
-                System.out.println("ugyldig brukernavn eller passord, prøv på nytt\n\n");
+                break;
             }
+            catch (IllegalArgumentException e) {
+                System.out.println("\nInvalid usrname. Try again plz\n\n");
+            }
+        }
+        System.out.println("\nPlease give me ur passwd!");
 
+        while (scn.hasNext()) {
+            String password = scn.next();
+            try {
+                login.login(password);
+                user = User.getUserFromDB(username);
+                System.out.println("Welcome to our fantastic calendar, " + user.getFullName());
+                break;
+            } catch (IllegalArgumentException e) {
+                System.out.println("Wrong password!");
+            }
+        }
         calendar = new Calendar(username);
-
     }
+
+
+
+
 
 
     public static void run() {
@@ -77,7 +96,7 @@ public class MenuTest {
                             "6. Logg ut\n\n"
             );
 
-            swValue = KeyIn.inInt(" Select Option ");
+            swValue = KeyIn.inInt(" Select Option \n");
 
 
             Timestamp start, slutt;
@@ -101,7 +120,7 @@ public class MenuTest {
 
                     );
 
-                    swValue = Integer.valueOf((1 + "") + KeyIn.inInt(" Select Option "));
+                    swValue = Integer.valueOf((1 + "") + KeyIn.inInt(" Select Option \n"));
 
 
                     switch (swValue) {
@@ -124,7 +143,7 @@ public class MenuTest {
                             antall = KeyIn.inInt("Legg inn antall møtedeltakere");
 
 
-                            Appointment appointment = Appointment.createAppointment(start, slutt, subject, description, antall);
+                            Appointment appointment = Appointment.createAppointment(start, slutt, subject, description, antall, username);
 
                             while (attendants.size() < antall) {
 
@@ -144,18 +163,47 @@ public class MenuTest {
 
                         case 12:
 
-                            int idToChange = KeyIn.inInt("Skriv inn avtaleID:");
+                            boolean bol = true;
+                            int idToChange = -1;
+                            while (bol) {
 
-                            System.out.println("1. Endre starttid" +
-                                    "2. Endre sluttid" +
-                                    "3. legg til deltaker" +
-                                    "4. fjern deltaker" +
-                                    "5. endre description" +
-                                    "6. endre rom" +
-                                    "7. gå tilbake" +
-                                    "8. Logg ut");
 
-                            int a = Integer.valueOf((12 + "") + KeyIn.inInt("Select option"));
+                                try {
+                                    idToChange = KeyIn.inInt("Skriv inn avtaleID:\n");
+
+                                    Appointment app = Appointment.getAppointment(idToChange);
+
+                                    if (!(Appointment.checkIfOwner(username, app, idToChange))) {
+
+                                        bol = false;
+
+                                    } else if (!app.hasRecord(idToChange)) {
+                                        System.out.println("id'en finnes ikke, prøv igjen!!");
+                                    }
+
+                                    else {
+
+                                        System.out.println("du må være eieren av en avtale for å endre på den!! prøv igjen!!!" + idToChange);
+                                    }
+                                } catch (SQLException e) {
+                                    System.out.println("blabla");
+                                    //e.printStackTrace();
+                                }
+                            }
+
+
+                            // her må det være en sjekk for at kun den som har opprettet avtalen kan endre den.
+
+                            System.out.println("1. Endre starttid\n" +
+                                    "2. Endre sluttid\n" +
+                                    "3. legg til deltaker\n" +
+                                    "4. fjern deltaker\n" +
+                                    "5. endre description\n" +
+                                    "6. endre rom\n" +
+                                    "7. gå tilbake\n" +
+                                    "8. Logg ut\n");
+
+                            int a = Integer.valueOf((12 + "") + KeyIn.inInt("Select option\n"));
 
                             Appointment appointmentToChange = Appointment.getAppointment(idToChange);
 
@@ -164,7 +212,7 @@ public class MenuTest {
 
                                 case 121:
 
-                                    String newStartTime = KeyIn.inString("skriv inn nytt tidspunkt: (YYYY-MM-DD HH:MM)" + ":00");
+                                    String newStartTime = KeyIn.inString("skriv inn nytt tidspunkt: (YYYY-MM-DD HH:MM)") + ":00";
                                     appointmentToChange.updateAppointmentInDB("start", newStartTime);
 
 
@@ -172,7 +220,7 @@ public class MenuTest {
 
                                 case 122:
 
-                                    String newEndTime = KeyIn.inString("skriv inn nytt tidspunkt: (YYYY-MM-DD HH:MM)" + ":00");
+                                    String newEndTime = KeyIn.inString("skriv inn nytt tidspunkt: (YYYY-MM-DD HH:MM)") + ":00";
                                     try {
                                         appointmentToChange.updateAppointmentInDB("slutt", newEndTime);
                                     } catch (IllegalArgumentException e){

@@ -2,6 +2,7 @@ package client;
 
 import database.Database;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -26,6 +27,7 @@ public class Appointment {
     int roomId;
     int appointmentId;
     int attendingGroup;
+    String owner;
 
     public Appointment(){
 
@@ -84,6 +86,13 @@ public class Appointment {
                 '}';
     }
 
+    public static boolean checkIfOwner(String owner, Appointment appointment, int id){
+
+        if (!(owner == appointment.getOwner() && appointment.getAppointmentId() == id )){ return false;}
+
+        return true;
+    }
+
 
 
     public static Appointment getAppointment(int appointmentId){
@@ -118,6 +127,23 @@ public class Appointment {
         throw new IllegalArgumentException("Something went haywire!");
 
 
+    }
+
+
+
+    public static boolean hasRecord(int id) throws SQLException {
+        PreparedStatement ps = null;
+        Database db = new Database();
+        db.connectDb("all_s_gruppe40", "qwerty");
+
+        String sql = "Select 1 from appointment where appointmentId =" + String.valueOf(id) + ";";
+
+        ps = db.getConnction().prepareStatement(sql);
+        ps.setString(1,String.valueOf(id));
+        ResultSet rs = ps.executeQuery();
+        System.out.println(rs.toString());
+
+        return rs.next();
     }
 
     public void createAppointmentInDB(Appointment appointment, Database db) {
@@ -276,6 +302,11 @@ public class Appointment {
     public void setEnd(Timestamp end) {
         this.end = end;
     }
+
+    public String getOwner(){return owner;};
+
+    public void setOwnner(String owner){ this.owner = owner; }
+
 
 
     public ArrayList<String> getAttendingPeople() {
