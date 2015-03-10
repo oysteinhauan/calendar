@@ -3,9 +3,11 @@ package calendarTest;
 import client.*;
 import database.Database;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -26,6 +28,12 @@ public class MenuTest {
 
     }
 
+    public final static void clearConsole() {
+        for (int i = 0; i < 50; i++) {
+            System.out.println();
+        }
+    }
+
 
     public static void init() {
 
@@ -36,12 +44,12 @@ public class MenuTest {
         username = "";
 
         while (scn.hasNext()) {
-            try{
+            try {
                 username = scn.nextLine();
                 login = new Login(username);
+                clearConsole();
                 break;
-            }
-            catch (IllegalArgumentException e) {
+            } catch (IllegalArgumentException e) {
                 System.out.println("\nInvalid usrname. Try again plz\n\n");
             }
         }
@@ -52,10 +60,17 @@ public class MenuTest {
             try {
                 login.login(password);
                 user = User.getUserFromDB(username);
-                System.out.println("Welcome to our fantastic calendar, " + user.getFullName());
+                clearConsole();
+
+                System.out.println("Welcome to our fantastic calendar, " + user.getFullName() + "\n\n\n\n");
+                TimeUnit.SECONDS.sleep(2);
+                clearConsole();
+
                 break;
             } catch (IllegalArgumentException e) {
                 System.out.println("Wrong password!");
+            } catch (InterruptedException e) {
+
             }
         }
         calendar = new Calendar(username);
@@ -70,6 +85,7 @@ public class MenuTest {
             int swValue;
             Database db = new Database();
             db.connectDb("all_s_gruppe40", "qwerty");
+
             System.out.println("hva vil du gjøre? bruk tallene for å navigere i menyene \n" +
 
                             "1. opprett / endre avtaler \n" +
@@ -87,6 +103,7 @@ public class MenuTest {
 
             switch (swValue) {
                 case 1:
+                    clearConsole();
 
 
                     System.out.println("hva vil du gjøre? bruk tallene for å navigere i menyene \n" +
@@ -125,17 +142,15 @@ public class MenuTest {
                                     Appointment app = Appointment.getAppointment(idToChange);
                                     if (!app.hasRecord(idToChange)) {
                                         System.out.println("id'en finnes ikke, prøv igjen!!");
-                                    }
-                                    else if (!(Appointment.checkIfOwner(username, app, idToChange))) {
+                                    } else if (!(Appointment.checkIfOwner(username, app, idToChange))) {
                                         bol = false;
-                                    }
-                                    else {
+                                    } else {
                                         System.out.println("du må være eieren av en avtale for å endre på den!! prøv igjen!!!" + idToChange);
                                     }
                                 } catch (SQLException e) {
                                     System.out.println("blabla");
                                     e.printStackTrace();
-                                } catch (IllegalArgumentException e){
+                                } catch (IllegalArgumentException e) {
                                     System.out.println("dritt");
                                     e.printStackTrace();
                                 }
@@ -166,7 +181,7 @@ public class MenuTest {
                                     String newEndTime = KeyIn.inString("skriv inn nytt tidspunkt: (YYYY-MM-DD HH:MM)") + ":00";
                                     try {
                                         appointmentToChange.updateAppointmentInDB("slutt", newEndTime);
-                                    } catch (IllegalArgumentException e){
+                                    } catch (IllegalArgumentException e) {
                                         System.out.println(e);
                                     }
                                     continue;
@@ -212,15 +227,21 @@ public class MenuTest {
                     }
 
                 case 2:
+                    clearConsole();
 
-                    String groupname = KeyIn.inString("vennligst skriv inn navnet på gruppe du vil se");
-                    int id = Group.getGroupIDFromDB(groupname);
-                    Group group = Group.getGroup(id);
-                    Calendar groupCalendar = new Calendar(group);
-                    groupCalendar.viewCalendar();
+                    String groupname = KeyIn.inString("Vennligst skriv inn navnet paa gruppen du vil utforske!");
+                    try {
+                        int id = Group.getGroupIDFromDB(groupname);
+                        Group group = Group.getGroup(id);
+                        Calendar groupCalendar = new Calendar(group);
+                        groupCalendar.viewCalendar();
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("Invalid groupname. Try again.");
+                    }
                     break;
 
                 case 3:
+                    clearConsole();
 
                     String otherUser = KeyIn.inString("hvem sin kalender vil du se? skriv inn brukernavnet\n\n");
                     Calendar otherCalendar = new Calendar(otherUser);
@@ -229,6 +250,7 @@ public class MenuTest {
                     break;
 
                 case 4:
+                    clearConsole();
 
                     System.out.println("du er innlogget som:" + username + "\n");
                     System.out.println("1. Endre Email\n" +
@@ -237,7 +259,7 @@ public class MenuTest {
                     int option = KeyIn.inInt("hvilken profildata vil du endre\n");
                     int b = Integer.valueOf((4 + "") + option);
 
-                    switch (b){
+                    switch (b) {
 
                         case 41:
 
@@ -257,13 +279,14 @@ public class MenuTest {
                     break;
 
                 case 5:
+                    clearConsole();
 
                     calendar.viewCalendar();
                     System.out.println("1. Gå tilbake");
 
                     int c = Integer.valueOf((5 + "") + KeyIn.inInt("Select option"));
 
-                    switch (c){
+                    switch (c) {
 
                         case 51:
                             continue;
@@ -271,9 +294,12 @@ public class MenuTest {
 
 
                 case 6:
+                    clearConsole();
+                    System.out.printf("snx m8s!!!!1!");
 
                     db.closeConnection();
                     loggedIn = false;
+
                     break;
             }
         }

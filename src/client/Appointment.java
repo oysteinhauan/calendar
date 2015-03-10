@@ -64,11 +64,10 @@ public class Appointment {
             appointment.findRoom();
             appointment.createAppointmentInDB(appointment, db);
 
-            ResultSet rs = db.readQuery("select max(appointmentId)" +
-                    "from appointment where subject = '" + appointment.getSubject() + "';");
+            ResultSet rs = db.readQuery("select last_insert_id();");
             int id = -1;
             while (rs.next()){
-                id = rs.getInt("max(appointmentId)");
+                id = rs.getInt("last_insert_id()");
             }
             appointment.setAppointmentId(id);
 

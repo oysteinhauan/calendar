@@ -105,6 +105,7 @@ public class Group implements AppointmentListener {
 
             }
         catch (SQLException e){
+            throw new IllegalArgumentException("Something is not the way it should be.");
 
         }
         return this.groupname;
