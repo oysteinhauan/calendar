@@ -7,10 +7,10 @@ import client.Appointment;
  */
 public class InviteNotification extends Notification {
 
-    InviteNotification(String recieverUsername, String senderUsername, int appointmentId ){
+    public InviteNotification(String recieverUsername, String senderUsername, int appointmentId ){
         setNotificationType();
         setSenderUsername(senderUsername);
-        setRecieverUsername(recieverUsername);
+        setRecipientUsername(recieverUsername);
         setAppointmentId(appointmentId);
         setMessage();
     }

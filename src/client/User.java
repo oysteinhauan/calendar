@@ -1,6 +1,8 @@
 package client;
 
+import calendarTest.KeyIn;
 import database.Database;
+import notification.Notification;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,7 +12,7 @@ import java.util.ArrayList;
 /**
  * Created by oysteinhauan on 24/02/15.
  */
-public class User implements AppointmentListener{
+public class User{
 
     public String username;
     private String password;
@@ -20,7 +22,7 @@ public class User implements AppointmentListener{
     private String position;
     database.Database db;
     String sql;
-    private ArrayList<Appointment> appointmentNotifications = new ArrayList<Appointment>();
+    private ArrayList<Notification> notifications = new ArrayList<Notification>();
 
     public User(){
 
@@ -233,17 +235,63 @@ public class User implements AppointmentListener{
     }
 
     //NOTIFICATION
-    @Override
-    public void appointmentNotification(Appointment appointment) {
-        appointmentNotifications.add(appointment);
+
+    public void fetchNotifications(){
+
+    }
+
+    public void addNotification(Notification notification){
+        notifications.add(notification);
+    }
+
+    public Notification getFirstNotification(){
+        return notifications.get(0);
     }
 
     public int getNumberOfNotifications(){
-        return appointmentNotifications.size();
+        return notifications.size();
     }
 
     public void removeAppointmentNotification(Appointment appointment){
-        appointmentNotifications.remove(appointment);
+        notifications.remove(appointment);
+    }
+
+    public void replyToInvite(Notification inviteNotification){
+        int swValue;
+        Boolean reply = null;
+        Appointment ap = Appointment.getAppointment(inviteNotification.getAppointmentId());
+
+        System.out.println(inviteNotification.getMessage());
+
+        // Display menu graphics
+        System.out.println("============================");
+        System.out.println("|       YOUR OPTIONS       |");
+        System.out.println("============================");
+        System.out.println("|        1. Accept         |");
+        System.out.println("|        2. Decline        |");
+        System.out.println("============================");
+        swValue = KeyIn.inInt(" Select option: ");
+
+        // Switch construct
+        switch (swValue) {
+            case 1:
+                System.out.println("Option 1 selected: You have accepted the invitation.");
+                reply = true;
+                //ap.addAttendant(username);
+                inviteNotification.handle();
+                break;
+            case 2:
+                System.out.println("Option 2 selected: You have declined the invitation");
+                reply = false;
+                inviteNotification.handle();
+                break;
+            default:
+                System.out.println("Invalid selection");
+                break; // This break is not really necessary
+        }
+//        ReplyFromInvitedUserNotification rFIUN = new ReplyFromInvitedUserNotification(ap.getOwner(),
+//                username, ap.getAppointmentId(), reply);
+
     }
 
 /*    public boolean replyToNotification(Appointment appointment){

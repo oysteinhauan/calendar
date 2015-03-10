@@ -1,22 +1,41 @@
 package notification;
 
+import database.Database;
+
 /**
  * Created by Henrik on 09.03.2015.
  */
 public abstract class Notification {
 
     String senderUsername;
-    String recieverUsername;
+
+    String recipientUsername;
     int notificationId;
     int appointmentId;
     String message;
     int notificationType;
+    boolean handled = false;
+    Database db;
+    String sql;
+    String sql2;
 
 //NOTIFICATION TYPE
 //1 <=> Invite
 //2 <=> ReplyFromInvitedUser
 //3 <=> AppointmenUpdate
 //4 <=> AttendanceCanceled
+
+    public void createNotificationInDB(){
+        db = new Database("all_s_gruppe40_calendar");
+        sql = "INSERT INTO notification (message, type, sender, recipient, handled) VALUES('" + getMessage() +"', '"
+                + getNotificationType() + "', '" + getSenderUsername() + "', '" + getRecipientUsername() + "', " + handledToString() + ");";
+
+        db.connectDb("all_s_gruppe40", "qwerty");
+        db.updateQuery(sql);
+        db.closeConnection();
+    }
+
+
 
     abstract public void setNotificationType();
     public int getNotificationType() {
@@ -31,12 +50,12 @@ public abstract class Notification {
         this.senderUsername = senderUsername;
     }
 
-    public void setRecieverUsername(String recieverUsername) {
-        this.recieverUsername = recieverUsername;
+    public void setRecipientUsername(String recipientUsername) {
+        this.recipientUsername = recipientUsername;
     }
 
-    public String getRecieverUsername() {
-        return recieverUsername;
+    public String getRecipientUsername() {
+        return recipientUsername;
     }
 
     public void setNotificationId(int notificationId) {
@@ -59,5 +78,14 @@ public abstract class Notification {
 
     public int getAppointmentId() {
         return appointmentId;
+    }
+
+    public void handle(){
+        handled = true;
+    }
+
+    public String handledToString(){
+        String handledStr = handled ? "1" : "0";
+        return handledStr;
     }
 }
