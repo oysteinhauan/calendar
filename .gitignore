@@ -46,3 +46,4 @@ crashlytics.properties
 crashlytics-build.properties
 .idea/misc.xml
 calendar.iml
+*.MF
