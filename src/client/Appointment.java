@@ -2,6 +2,7 @@ package client;
 
 import database.Database;
 
+import javax.xml.transform.Result;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,7 +20,7 @@ public class Appointment {
     Timestamp start, end;
 
     int size;
-    ArrayList<String> attendingPeople = new ArrayList<String>();
+    public ArrayList<String> attendingPeople = new ArrayList<String>();
     Collection<AppointmentListener> appointmentListeners = new ArrayList<AppointmentListener>();
     String subject;
     String description;
@@ -49,17 +50,28 @@ public class Appointment {
 
     }
 
-    public static Appointment createAppointment(Timestamp start, Timestamp end, String subject, String description, int size, String owner) {
+    public static Appointment createAppointment(Timestamp start, Timestamp end,
+                                                String subject, String description, int size,
+                                                String owner) {
 
 
         Database db = new Database();
         db.connectDb("all_s_gruppe40", "qwerty");
+        Appointment appointment = null;
 
         try {
-            Appointment appointment = new Appointment(start, end, subject, description, size, owner);
+            appointment = new Appointment(start, end, subject, description, size, owner);
             appointment.findRoom();
             appointment.createAppointmentInDB(appointment, db);
-            return appointment;
+
+            ResultSet rs = db.readQuery("select max(appointmentId)" +
+                    "from appointment where subject = '" + appointment.getSubject() + "';");
+            int id = -1;
+            while (rs.next()){
+                id = rs.getInt("max(appointmentId)");
+            }
+            appointment.setAppointmentId(id);
+
 
 
         } catch (Exception e) {
@@ -67,8 +79,10 @@ public class Appointment {
         } finally {
 
             db.closeConnection();
+
+            return appointment;
         }
-        return null;
+
     }
 
 
@@ -147,11 +161,11 @@ public class Appointment {
         String sql = "insert into appointment (start, end, subject, description, roomId, owner) values( '"+ String.valueOf(appointment.getStart()) + "', '" +
                 String.valueOf(appointment.getEnd()) + "', '" + appointment.getSubject() + "', '"
                 + appointment.getDescription() + "', "
-                + (appointment.getRoomId() + "") + appointment.owner  + ");";
+                + (appointment.getRoomId() + "")+ ", '" + appointment.owner  + "');";
 
-        System.out.println(sql);
+        //System.out.println(sql);
         db.updateQuery(sql);
-        db.closeConnection();
+
 
 
     }
@@ -263,7 +277,7 @@ public class Appointment {
             }
 
 
-            System.out.println(sql);
+            //System.out.println(sql);
             db.closeConnection();
 
         } catch (SQLException e) {
@@ -343,7 +357,7 @@ public class Appointment {
             e.printStackTrace();
         }
         attendingPeople.add(username);
-        db.updateQuery("insert into userAppointment values( '" + username + "', " + this.appointmentId + ");");
+        db.updateQuery("insert into userAppointment values('" + username + "', " + this.appointmentId + ");");
         db.closeConnection();
         System.out.println("User added to event.");
 

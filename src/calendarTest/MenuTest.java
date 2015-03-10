@@ -17,6 +17,7 @@ public class MenuTest {
 
     public static Calendar calendar;
     public static String username;
+    public static User user;
 
 
     public static void main(String[] args) {
@@ -41,7 +42,7 @@ public class MenuTest {
         Scanner scn = new Scanner(System.in);
         System.out.println("Wilkommen! Bitte schreiben sie Ihren Name!");
         Login login = new Login();
-        User user;
+
         String username = "";
 
         while (scn.hasNext()) {
@@ -101,7 +102,7 @@ public class MenuTest {
 
             Timestamp start, slutt;
             String subject, description;
-            ArrayList<String> attendants = new ArrayList<String>();
+            //ArrayList<String> attendants = new ArrayList<String>();
             int antall;
 
             switch (swValue) {
@@ -141,18 +142,19 @@ public class MenuTest {
 
 
                             antall = KeyIn.inInt("Legg inn antall møtedeltakere");
+                            System.out.println(username);
 
 
 
-                            Appointment appointment = Appointment.createAppointment(start, slutt, subject, description, antall, username);
+                            Appointment appointment = Appointment.createAppointment(start, slutt, subject, description, antall, user.username);
 
-                            while (attendants.size() < antall) {
+
+                            while (appointment.attendingPeople.size() < antall) {
 
                                 String bruker = KeyIn.inString("skriv inn username");
                                 appointment.addAttendant(bruker);
 
-                                // FIKS addAttendant
-                                attendants.add(bruker);
+
 
                             }
                             //blabla generer appointment fra denne inputen
@@ -164,6 +166,7 @@ public class MenuTest {
 
                         case 12:
 
+                            //print ut avtalene man kan endre på.
                             boolean bol = true;
                             int idToChange = -1;
                             while (bol) {

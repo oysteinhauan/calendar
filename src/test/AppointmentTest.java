@@ -36,6 +36,7 @@ public class AppointmentTest {
 
 
 
+
         Appointment test = Appointment.createAppointment(start, end, subject, description, 20);
         test.toString();*/
 
@@ -44,13 +45,17 @@ public class AppointmentTest {
         //test.addAttendant("henloef");
         //test.addAttendant("oddmrog");
 
-        Group g = Group.getGroup(3);
-        Appointment a = Appointment.getAppointment(7);
-
-        a.addAttendingGroup(g);
+//        Group g = Group.getGroup(3);
+//        Appointment a = Appointment.getAppointment(7);
+//
+//        a.addAttendingGroup(g);
 
 
         //test.addAttendant("tuvaeri");
+
+        Appointment app = Appointment.createAppointment(Timestamp.valueOf("1122-12-12 12:12:00"), Timestamp.valueOf("1133-12-12 12:12:00"), "asfsadf", "asfsdaf", 16, "oysteibh");
+        System.out.println(app.getAppointmentId());
+        app.addAttendant("tuvaeri");
 
 
 
