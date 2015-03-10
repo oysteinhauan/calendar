@@ -101,8 +101,7 @@ public class KeyIn {
             }
 
             catch (NumberFormatException e) {
-                System.out
-                        .println("Invalid input. Not a floating point number");
+                System.out.println("Invalid input. Not a floating point number");
             }
         }
     }

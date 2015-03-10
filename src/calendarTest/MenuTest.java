@@ -143,11 +143,12 @@ public class MenuTest {
                             antall = KeyIn.inInt("Legg inn antall møtedeltakere");
 
 
+
                             Appointment appointment = Appointment.createAppointment(start, slutt, subject, description, antall, username);
 
                             while (attendants.size() < antall) {
 
-                                String bruker = KeyIn.inString("skriv in username");
+                                String bruker = KeyIn.inString("skriv inn username");
                                 appointment.addAttendant(bruker);
 
                                 // FIKS addAttendant
@@ -173,12 +174,12 @@ public class MenuTest {
 
                                     Appointment app = Appointment.getAppointment(idToChange);
 
-                                    if (!(Appointment.checkIfOwner(username, app, idToChange))) {
+                                    if (!app.hasRecord(idToChange)) {
+                                        System.out.println("id'en finnes ikke, prøv igjen!!");
+                                    }
+                                    else if (!(Appointment.checkIfOwner(username, app, idToChange))) {
 
                                         bol = false;
-
-                                    } else if (!app.hasRecord(idToChange)) {
-                                        System.out.println("id'en finnes ikke, prøv igjen!!");
                                     }
 
                                     else {
@@ -187,7 +188,10 @@ public class MenuTest {
                                     }
                                 } catch (SQLException e) {
                                     System.out.println("blabla");
-                                    //e.printStackTrace();
+                                    e.printStackTrace();
+                                } catch (IllegalArgumentException e){
+                                    System.out.println("dritt");
+                                    e.printStackTrace();
                                 }
                             }
 

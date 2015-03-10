@@ -7,7 +7,7 @@ import java.util.ArrayList;
  */
 public class Calendar {
 
-    private User user = new User();
+    public User user = new User();
     private ArrayList<Appointment> appointments;
     private Group group;
 

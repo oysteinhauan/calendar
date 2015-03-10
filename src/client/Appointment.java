@@ -21,7 +21,7 @@ public class Appointment {
     int size;
     ArrayList<String> attendingPeople = new ArrayList<String>();
     Collection<AppointmentListener> appointmentListeners = new ArrayList<AppointmentListener>();
-    String subject, owner;
+    String subject;
     String description;
     Room room;
     int roomId;
@@ -88,9 +88,7 @@ public class Appointment {
 
     public static boolean checkIfOwner(String owner, Appointment appointment, int id){
 
-        if (!(owner == appointment.getOwner() && appointment.getAppointmentId() == id )){ return false;}
-
-        return true;
+        return(owner == appointment.getOwner() && appointment.getAppointmentId() == id );
     }
 
 
@@ -132,18 +130,14 @@ public class Appointment {
 
 
     public static boolean hasRecord(int id) throws SQLException {
-        PreparedStatement ps = null;
         Database db = new Database();
-        db.connectDb("all_s_gruppe40", "qwerty");
-
-        String sql = "Select 1 from appointment where appointmentId =" + String.valueOf(id) + ";";
-
-        ps = db.getConnction().prepareStatement(sql);
-        ps.setString(1,String.valueOf(id));
-        ResultSet rs = ps.executeQuery();
-        System.out.println(rs.toString());
-
-        return rs.next();
+        db.connectDb();
+        String sql = "select appointmentId from appointment where appointmentId = " + id +";";
+        ResultSet rs = db.readQuery(sql);
+        if(!rs.next()){
+            throw new IllegalArgumentException("Appointment doesnt exist.");
+        }
+        return true;
     }
 
     public void createAppointmentInDB(Appointment appointment, Database db) {

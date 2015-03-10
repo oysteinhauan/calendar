@@ -12,7 +12,7 @@ import java.util.ArrayList;
  */
 public class User implements AppointmentListener{
 
-    private String username;
+    public String username;
     private String password;
     private String firstname;
     private String lastname;
