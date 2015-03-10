@@ -13,7 +13,7 @@ public class AppointmentTest {
 
     public static void main(String[] args) {
 
-        //kjører et enkelt program  i consollen som lar deg legge til en ny appointment.
+        //kjrer et enkelt program  i consollen som lar deg legge til en ny appointment.
 
         /*System.out.println("skriv inn ny appointment:");
         Scanner sc = new Scanner(System.in);

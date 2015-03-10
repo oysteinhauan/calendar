@@ -146,7 +146,7 @@ public class MenuTest {
 
 
 
-                            Appointment appointment = Appointment.createAppointment(start, slutt, subject, description, antall, user.username);
+                            Appointment appointment = Appointment.createAppointment(start, slutt, subject, description, antall, username);
 
 
                             while (appointment.attendingPeople.size() < antall) {
