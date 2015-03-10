@@ -6,6 +6,7 @@ import database.Database;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
@@ -163,7 +164,8 @@ public class MenuTest {
                                     "5. endre description\n" +
                                     "6. endre rom\n" +
                                     "7. gå tilbake\n" +
-                                    "8. Logg ut\n");
+                                    "8. Logg ut\n" +
+                                    "9. Sjekk deltakere");
 
                             int a = Integer.valueOf((12 + "") + KeyIn.inInt("Select option\n"));
                             Appointment appointmentToChange = Appointment.getAppointment(idToChange);
@@ -218,7 +220,17 @@ public class MenuTest {
 
                                 case 128:
                                     break;
-                            }
+
+                                case 129:
+                                    ArrayList<String> applist = appointmentToChange.getAttendingPeople();
+                                    int index = 1;
+                                    for (String usr: applist){
+                                        System.out.println((index + "") + ". " + User.getUserFromDB(usr).getFullName() + "\n");
+                                        index++;
+
+                                    }
+                                    continue;
+                                }
 
                             break;
 

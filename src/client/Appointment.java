@@ -354,6 +354,18 @@ public class Appointment {
 
     }
 
+    public void removeAttendant(String username){
+        Database db = new Database();
+        db.connectDb();
+        try{
+            String sql = "delete from userAppointment where username = '" + username +"' and appointmentId = " + this.getAppointmentId()+";";
+            db.updateQuery(sql);
+        } catch(RuntimeException e){
+            System.out.println("User not in event");
+        }
+        this.attendingPeople.remove(username);
+    }
+
     //NOTIFICATION
 
 
