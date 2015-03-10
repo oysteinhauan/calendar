@@ -89,27 +89,53 @@ public class User implements AppointmentListener{
 
     }
 
-    public User getUserFromDB(String username){
+//    public User getUserFromDB(String username){
+//        //henter ut informasjonen om en bruker fra databasen, basert på burkernavnet som skrives
+//        try {
+//            db = new Database("all_s_gruppe40_calendar");
+//            db.connectDb("all_s_gruppe40", "qwerty");
+//            sql = "SELECT * FROM user WHERE username='" + username + "';";
+//            ResultSet rs = db.readQuery(sql);
+//
+//            while (rs.next()){
+//                setUsername(username);
+//                this.firstname = rs.getString("firstname");
+//                this.lastname = rs.getString("lastname");
+//                this.position = rs.getString("position");
+//                this.email =rs.getString("email");
+//            }
+//            db.closeConnection();
+//            rs.close();
+//
+//        } catch (SQLException e){
+//        }
+//        return this;
+//    }
+
+    public static User getUserFromDB(String username){
         //henter ut informasjonen om en bruker fra databasen, basert på burkernavnet som skrives
+
+        Database db = new Database();
+        User user = new User();
         try {
             db = new Database("all_s_gruppe40_calendar");
             db.connectDb("all_s_gruppe40", "qwerty");
-            sql = "SELECT * FROM user WHERE username='" + username + "';";
+            String sql = "SELECT * FROM user WHERE username='" + username + "';";
             ResultSet rs = db.readQuery(sql);
 
             while (rs.next()){
-                setUsername(username);
-                this.firstname = rs.getString("firstname");
-                this.lastname = rs.getString("lastname");
-                this.position = rs.getString("position");
-                this.email =rs.getString("email");
+                user.username = username;
+                user.firstname = rs.getString("firstname");
+                user.lastname = rs.getString("lastname");
+                user.position = rs.getString("position");
+                user.email =rs.getString("email");
             }
             db.closeConnection();
             rs.close();
 
         } catch (SQLException e){
         }
-        return this;
+        return user;
     }
 
     public static boolean usernameTaken(String username){

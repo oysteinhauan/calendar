@@ -303,14 +303,15 @@ public class Appointment {
             if(rs2.next()){
                 throw new IllegalArgumentException("User is already registered.");
             }
-            rs2.close();
             while(rs3.next()) {
                 if (rs3.getInt("size") <= attendants) {
                     throw new IllegalArgumentException("Room is full, you must book a new room if you wish to add attendants.");
                 }
             }
+            rs2.close();
             rs3.close();
             rs1.close();
+
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -318,6 +319,7 @@ public class Appointment {
         attendingPeople.add(username);
         db.updateQuery("insert into userAppointment values( '" + username + "', " + this.appointmentId + ");");
         db.closeConnection();
+        System.out.println("User added to event.");
 
     }
 

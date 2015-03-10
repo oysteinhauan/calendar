@@ -12,7 +12,7 @@ public class LoginTester {
         Scanner scn = new Scanner(System.in);
         System.out.println("Wilkommen! Bitte schreiben sie Ihren Name!");
         Login login = new Login();
-        User user = new User();
+        User user;
         String username = "";
 
         while (scn.hasNext()) {
@@ -32,7 +32,7 @@ public class LoginTester {
             String password = scn.next();
             try {
                 login.login(password);
-                user.getUserFromDB(username);
+                user = User.getUserFromDB(username);
                 System.out.println("Welcome to our fantastic calendar, " + user.getFullName());
                 break;
             } catch (IllegalArgumentException e) {
