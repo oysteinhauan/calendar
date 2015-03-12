@@ -191,17 +191,27 @@ public class MenuTest {
                                 case 123:
 
                                     String newAttendant = KeyIn.inString("Hvilken deltaker vil du legge til? skriv inn username");
-                                    appointmentToChange.addAttendant(newAttendant);
+                                    if (User.existsCheck(newAttendant)){
+                                        appointmentToChange.addAttendant(newAttendant);
+                                    } else {
+                                        System.out.println("brukeren eksisterer ikke!");
+                                    }
                                     continue;
 
                                 case 124:
 
                                     String attendantToRemove = KeyIn.inString("Hvilken deltaker vil du fjerne? skriv inn username");
-                                    String sql = "DELETE from userAppointment WHERE username ='" + attendantToRemove +
-                                            ", AND appointmentId =" + appointmentToChange.getAppointmentId() + ";";
-                                    db.updateQuery(sql);
-                                    db.closeConnection();
-                                    continue;
+                                    if (User.existsCheck(attendantToRemove)) {
+                                        String sql = "DELETE from userAppointment WHERE username ='" + attendantToRemove +
+                                                ", AND appointmentId =" + appointmentToChange.getAppointmentId() + ";";
+
+                                        db.updateQuery(sql);
+                                        db.closeConnection();
+                                    } else {
+                                        System.out.println("brukeren eksisterer ikke!");
+                                        continue;
+                                    }
+
 
                                 case 125:
 
@@ -256,9 +266,13 @@ public class MenuTest {
                     clearConsole();
 
                     String otherUser = KeyIn.inString("hvem sin kalender vil du se? skriv inn brukernavnet\n\n");
-                    //User.checkIfUserExists
-                    Calendar otherCalendar = new Calendar(otherUser);
-                    otherCalendar.viewCalendar();
+                    if (User.existsCheck(otherUser)) {
+                        Calendar otherCalendar = new Calendar(otherUser);
+                        otherCalendar.viewCalendar();
+                    } else {
+                        System.out.println("ugyldig brukernavn");
+                        continue;
+                    }
 
                     break;
 
