@@ -23,7 +23,14 @@ public class GroupTest {
         //ArrayList<String> members = group.getMembers("Power Puff");
         //System.out.println(members);
 
-        System.out.println(Group.getGroup(3));
+        //System.out.println(Group.getGroup(3));
+
+        User u = User.getUserFromDB("tuvaeri");
+
+        User u2 = User.getUserFromDB("andrealr");
+
+        Group.addMember(u, 1);
+        Group.addMember(u2, 1);
 
 
 

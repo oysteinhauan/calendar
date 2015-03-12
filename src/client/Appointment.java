@@ -455,7 +455,11 @@ public class Appointment {
             }
             while(rs4.next()) {
                 String username = rs4.getString("username");
-                addAttendant(username);
+                String sql5 = "select * from user where username = '" + username + "';";
+                ResultSet rs5 = db.readQuery(sql5);
+                if (!(rs5.next())) {
+                    addAttendant(username);
+                }
             }
 
         } catch (SQLException e) {
