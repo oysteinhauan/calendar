@@ -114,11 +114,16 @@ public class User{
 //        return this;
 //    }
 
+    public static boolean existsCheck(String username){
+       User user = getUserFromDB(username);
+        return (user != null);
+    }
+
     public static User getUserFromDB(String username){
         //henter ut informasjonen om en bruker fra databasen, basert på burkernavnet som skrives
 
-        Database db = new Database();
-        User user = new User();
+        Database db;
+        User user = null;
         try {
             db = new Database("all_s_gruppe40_calendar");
             db.connectDb("all_s_gruppe40", "qwerty");
@@ -126,11 +131,8 @@ public class User{
             ResultSet rs = db.readQuery(sql);
 
             while (rs.next()){
-                user.username = username;
-                user.firstname = rs.getString("firstname");
-                user.lastname = rs.getString("lastname");
-                user.position = rs.getString("position");
-                user.email =rs.getString("email");
+                user = new User(username, rs.getString("password"), rs.getString("firstname"), rs.getString("lastname"),
+                        rs.getString("email"), rs.getString("position"));
             }
             db.closeConnection();
             rs.close();

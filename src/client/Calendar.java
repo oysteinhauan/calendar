@@ -23,6 +23,7 @@ public class Calendar {
 
         //ny konstruktør som skal hente ut avtalene til en gruppe.
         user = null;
+        this.group = group;
         appointments = group.getAppointmentsForGroup(group);
 
     }

@@ -256,6 +256,7 @@ public class MenuTest {
                     clearConsole();
 
                     String otherUser = KeyIn.inString("hvem sin kalender vil du se? skriv inn brukernavnet\n\n");
+                    //User.checkIfUserExists
                     Calendar otherCalendar = new Calendar(otherUser);
                     otherCalendar.viewCalendar();
 

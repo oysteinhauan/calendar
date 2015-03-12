@@ -2,19 +2,63 @@ package main;
 
 import calendarTest.KeyIn;
 import client.Appointment;
+import client.Calendar;
+import client.Login;
 import client.User;
+import database.Database;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by oysteinhauan on 10/03/15.
  */
 public class CalendarProgram {
 
+    public static Calendar calendar;
+    public static String username;
+    public static User user;
+
     public void init(){
 
+        Scanner scn = new Scanner(System.in);
+        System.out.println("Wilkommen! Bitte schreiben sie Ihren Name!");
+        Login login = new Login();
+        User user;
+        username = "";
+
+        while (scn.hasNext()) {
+            try {
+                username = scn.nextLine();
+                login = new Login(username);
+                //clearConsole();
+                break;
+            } catch (IllegalArgumentException e) {
+                System.out.println("\nInvalid usrname. Try again plz\n\n");
+            }
+        }
+
+        System.out.println("\nPlease give me ur passwd!");
+
+        while (scn.hasNext()) {
+            String password = scn.next();
+            try {
+                login.login(password);
+                user = User.getUserFromDB(username);
+                //clearConsole();
+                System.out.println("Welcome to our fantastic calendar, " + user.getFullName() + "\n\n\n\n");
+                TimeUnit.SECONDS.sleep(2);
+                //clearConsole();
+                break;
+            } catch (IllegalArgumentException e) {
+                System.out.println("Wrong password!");
+            } catch (InterruptedException e) {
+            }
+        }
+        calendar = new Calendar(username);
     }
 
     public void run(){
@@ -125,7 +169,6 @@ public class CalendarProgram {
                     for (String usr: applist){
                         System.out.println((index + "") + ". " + User.getUserFromDB(usr).getFullName() + "\n");
                         index++;
-
                     }
                     continue;
                 case 9:
@@ -137,8 +180,6 @@ public class CalendarProgram {
 
             }
         }
-
-
     }
 
     public void appNav(String username){
@@ -154,12 +195,40 @@ public class CalendarProgram {
                 break;
             default:
 
-
-
-
-
         }
 
     }
 
+    public void editUserInfo(String username){
+
+        Database db = new Database();
+        db.connectDb();
+
+        while (true) {
+            System.out.println("du er innlogget som:" + username + "\n");
+            System.out.println("1. Endre Email\n" +
+                    "2. Endre passord\n" +
+                    "3. Tilbake\n");
+            int option = KeyIn.inInt("hvilken profildata vil du endre\n");
+
+            switch (option) {
+
+                case 1:
+                    String newEmail = KeyIn.inString("skriv inn ny email");
+                    String sql = "UPDATE  all_s_gruppe40_calendar.user SET email='" + newEmail + "' WHERE username ='" + username + "';";
+                    db.updateQuery(sql);
+                    continue;
+                case 2:
+                    String newPassword = KeyIn.inString("skriv inn nytt passord");
+                    String sql2 = "UPDATE all_s_gruppe40_calendar.user SET password='" + newPassword + "' WHERE username ='" + username + "';";
+                    db.updateQuery(sql2);
+                    continue;
+                case 3:
+                    break;
+                default:
+                    System.out.println("skriv et gyldig valg!!");
+                    continue;
+            }
+        }
+    }
 }

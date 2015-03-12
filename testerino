@@ -8,3 +8,5 @@ krasjer hvis:
 prøver å se en privat kalender til en ugyldig username.
 opprette nye avtale og invitere noen som ikke finnes.
 nyopprettede avtaler vises ikke.
+gruppe som finnes da krasjer den
+avtaler som starter / slutter i fortiden blir fortsatt godtatt uten feilmelding.
