@@ -10,3 +10,6 @@ opprette nye avtale og invitere noen som ikke finnes. check
 nyopprettede avtaler vises ikke.
 gruppe som finnes da krasjer den
 avtaler som starter / slutter i fortiden blir fortsatt godtatt uten feilmelding.
+legge inn valg om systemet skal velge rom for deg.
+
+i createAppointment finnes det enda funksjon for å inkrementere id selv om kolonnen står som auto-increment.

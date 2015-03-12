@@ -6,6 +6,7 @@ import notification.Notification;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
@@ -49,38 +50,67 @@ public class Appointment {
 
     }
 
+    public Appointment(Timestamp start, Timestamp end, String subject, String description, String owner, Room room){
+
+        this.start = start;
+        this.end = end;
+        this.subject = subject;
+        this.description = description;
+        this.size = -1;
+        this.owner = owner;
+        this.room = room;
+
+    }
+
     public static Appointment createAppointment(Timestamp start, Timestamp end,
                                                 String subject, String description, int size,
-                                                String owner) {
+                                                String owner, boolean useSystem ) {
 
 
         Database db = new Database();
         db.connectDb("all_s_gruppe40", "qwerty");
         Appointment appointment = null;
+        if(useSystem) {
+            try {
+                appointment = new Appointment(start, end, subject, description, size, owner);
+                appointment.findRoom();
+                appointment.createAppointmentInDB(appointment, db);
 
-        try {
-            appointment = new Appointment(start, end, subject, description, size, owner);
-            appointment.findRoom();
-            appointment.createAppointmentInDB(appointment, db);
+                ResultSet rs = db.readQuery("select last_insert_id();");
+                int id = -1;
+                while (rs.next()) {
+                    id = rs.getInt("last_insert_id()");
+                }
+                appointment.setAppointmentId(id);
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+
+                db.closeConnection();
+
+
+            }
+        } else {
+
+            try{
+            appointment = new Appointment(start, end, subject, description, owner, null);
 
             ResultSet rs = db.readQuery("select last_insert_id();");
             int id = -1;
-            while (rs.next()){
+            while (rs.next()) {
                 id = rs.getInt("last_insert_id()");
             }
+
             appointment.setAppointmentId(id);
-
-
-
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-
             db.closeConnection();
-
-            return appointment;
+            }
         }
-
+        return appointment;
     }
 
 

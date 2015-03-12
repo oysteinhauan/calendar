@@ -125,7 +125,27 @@ public class CalendarProgram {
         String description = KeyIn.inString("Legg inn description:");
         int antall = KeyIn.inInt("Legg inn antall møtedeltakere");
         System.out.println(username);
-        Appointment appointment = Appointment.createAppointment(start, slutt, subject, description, antall, username);
+
+        int roomChoice = KeyIn.inInt("1. La systemet finne rom\n" +
+                "2. Avtalen er et annet sted\n");
+
+        boolean useSystem;
+        Appointment appointment;
+
+        while (true) {
+            if (roomChoice == 1) {
+                useSystem = true;
+                appointment = Appointment.createAppointment(start, slutt, subject, description, antall, username, useSystem);
+                break;
+
+            } else if (roomChoice == 2) {
+                useSystem = false;
+                appointment = Appointment.createAppointment(start, slutt, subject, description, antall, username, useSystem);
+                break;
+
+            }
+        }
+
         appointment.addAttendant(username);
 
         while (appointment.attendingPeople.size() < antall) {
