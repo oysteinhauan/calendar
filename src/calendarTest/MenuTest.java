@@ -122,7 +122,7 @@ public class MenuTest {
                             description = KeyIn.inString("Legg inn description:");
                             antall = KeyIn.inInt("Legg inn antall møtedeltakere");
                             System.out.println(username);
-                            Appointment appointment = Appointment.createAppointment(start, slutt, subject, description, antall, username);
+                            Appointment appointment = Appointment.createAppointment(start, slutt, subject, description, antall, username, true);
                             appointment.addAttendant(username);
 
                             while (appointment.attendingPeople.size() < antall) {

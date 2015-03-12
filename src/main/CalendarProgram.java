@@ -126,13 +126,16 @@ public class CalendarProgram {
         int antall = KeyIn.inInt("Legg inn antall møtedeltakere");
         System.out.println(username);
 
-        int roomChoice = KeyIn.inInt("1. La systemet finne rom\n" +
-                "2. Avtalen er et annet sted\n");
+
 
         boolean useSystem;
         Appointment appointment;
 
         while (true) {
+
+            int roomChoice = KeyIn.inInt("1. La systemet finne rom\n" +
+                    "2. Avtalen er et annet sted\n");
+
             if (roomChoice == 1) {
                 useSystem = true;
                 appointment = Appointment.createAppointment(start, slutt, subject, description, antall, username, useSystem);
@@ -144,13 +147,14 @@ public class CalendarProgram {
                 break;
 
             }
+            System.out.println("prøv igjen!");
         }
 
         appointment.addAttendant(username);
 
         while (appointment.attendingPeople.size() < antall) {
 
-            String bruker = KeyIn.inString("skriv inn username");
+            String bruker = KeyIn.inString("skriv inn username på folk du vil invitere");
             appointment.addAttendant(bruker);
         }
     }
