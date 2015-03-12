@@ -74,7 +74,7 @@ public class CalendarProgram {
                             "3. Se en annens private kalender\n" +
                             "4. Endre min brukerinfo\n" +
                             "5. Vis min personlige kalender\n" +
-                            "6. Vis en gruppekalender" +
+                            "6. Vis en gruppekalender\n" +
                             "7. Logg ut\n\n"
             );
 
@@ -97,10 +97,14 @@ public class CalendarProgram {
                     this.viewUser(username);
                     continue;
                 case 6:
-
+                    this.viewGroup();
+                    continue;
+                case 7:
+                    loggedIn = false;
 
             }
         }
+        System.out.println("hadeBRA!");
     }
 
     public static void main(String[] args) {

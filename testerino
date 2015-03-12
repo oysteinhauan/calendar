@@ -13,3 +13,6 @@ avtaler som starter / slutter i fortiden blir fortsatt godtatt uten feilmelding.
 legge inn valg om systemet skal velge rom for deg.
 
 i createAppointment finnes det enda funksjon for å inkrementere id selv om kolonnen står som auto-increment.
+
+counter på hvor mange du har igjen å adde
+vis avtalen etter den er opprettet.
