@@ -114,11 +114,16 @@ public class User{
 //        return this;
 //    }
 
+    public static boolean existsCheck(String username){
+       User user = getUserFromDB(username);
+        return (user != null);
+    }
+
     public static User getUserFromDB(String username){
         //henter ut informasjonen om en bruker fra databasen, basert på burkernavnet som skrives
 
-        Database db = new Database();
-        User user = new User();
+        Database db;
+        User user = null;
         try {
             db = new Database("all_s_gruppe40_calendar");
             db.connectDb("all_s_gruppe40", "qwerty");
@@ -126,11 +131,8 @@ public class User{
             ResultSet rs = db.readQuery(sql);
 
             while (rs.next()){
-                user.username = username;
-                user.firstname = rs.getString("firstname");
-                user.lastname = rs.getString("lastname");
-                user.position = rs.getString("position");
-                user.email =rs.getString("email");
+                user = new User(username, rs.getString("password"), rs.getString("firstname"), rs.getString("lastname"),
+                        rs.getString("email"), rs.getString("position"));
             }
             db.closeConnection();
             rs.close();
@@ -258,37 +260,45 @@ public class User{
 
     public void replyToInvite(Notification inviteNotification){
         int swValue;
+        boolean replied = false;
         Boolean reply = null;
         Appointment ap = Appointment.getAppointment(inviteNotification.getAppointmentId());
 
         System.out.println(inviteNotification.getMessage());
 
-        // Display menu graphics
-        System.out.println("============================");
-        System.out.println("|       YOUR OPTIONS       |");
-        System.out.println("============================");
-        System.out.println("|        1. Accept         |");
-        System.out.println("|        2. Decline        |");
-        System.out.println("============================");
-        swValue = KeyIn.inInt(" Select option: ");
+            // Display menu graphics
+            System.out.println("============================");
+            System.out.println("|       YOUR OPTIONS       |");
+            System.out.println("============================");
+            System.out.println("|        1. Accept         |");
+            System.out.println("|        2. Decline        |");
+            System.out.println("============================");
 
-        // Switch construct
-        switch (swValue) {
-            case 1:
-                System.out.println("Option 1 selected: You have accepted the invitation.");
-                reply = true;
-                //ap.addAttendant(username);
-                inviteNotification.handle();
-                break;
-            case 2:
-                System.out.println("Option 2 selected: You have declined the invitation");
-                reply = false;
-                inviteNotification.handle();
-                break;
-            default:
-                System.out.println("Invalid selection");
-                break; // This break is not really necessary
+
+           // Switch construct
+        while(!replied){
+            swValue = KeyIn.inInt("Select option: ");
+            switch (swValue) {
+                case 1:
+                    System.out.println("Option 1 selected: You have accepted the invitation.");
+                    reply = true;
+                    //ap.addAttendant(username);
+                    replied = true;
+                    inviteNotification.handle();
+                    break;
+                case 2:
+                    System.out.println("Option 2 selected: You have declined the invitation.");
+                    reply = false;
+                    replied = true;
+                    inviteNotification.handle();
+                    break;
+                default:
+                    System.out.println("Invalid selection");
+                    break;
+                    // This break is not really necessary
+            }
         }
+
 //        ReplyFromInvitedUserNotification rFIUN = new ReplyFromInvitedUserNotification(ap.getOwner(),
 //                username, ap.getAppointmentId(), reply);
 

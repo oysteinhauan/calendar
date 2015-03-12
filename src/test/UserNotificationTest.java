@@ -17,7 +17,7 @@ public class UserNotificationTest {
 
         ap.inviteAttendant(participant.getUsername());
         Notification n = new InviteNotification("henloef", "oddmrog" , 9);
-        participant.addNotification(n);
+        participant.addNotification(Notification.getNotificationFromDB(0));
 
 
         System.out.println("\t♪┏(°.°)┛┗(°.°)┓┗(°.°)┛┏(°.°)┓ ♪ ");
