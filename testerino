@@ -5,6 +5,8 @@ mysql -A -h mysql.stud.ntnu.no -u all_s_gruppe40 -p all_s_gruppe40_calendar;
 
 krasjer hvis:
 
+TODO:
+
 prøver å se en privat kalender til en ugyldig username. check
 opprette nye avtale og invitere noen som ikke finnes. check
 nyopprettede avtaler vises ikke.
@@ -16,3 +18,5 @@ i createAppointment finnes det enda funksjon for å inkrementere id selv om kolo
 
 counter på hvor mange du har igjen å adde
 vis avtalen etter den er opprettet.
+
+legge til  while-løkker slik at programmet lar deg prøve på ny istedet for å krasje.
