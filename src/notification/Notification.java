@@ -1,14 +1,20 @@
 package notification;
 
+import client.User;
 import database.Database;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  * Created by Henrik on 09.03.2015.
  */
 public abstract class Notification {
 
-    String senderUsername;
 
+
+    String senderUsername;
     String recipientUsername;
     int notificationId;
     int appointmentId;
@@ -27,12 +33,77 @@ public abstract class Notification {
 
     public void createNotificationInDB(){
         db = new Database("all_s_gruppe40_calendar");
-        sql = "INSERT INTO notification (message, type, sender, recipient, handled) VALUES('" + getMessage() +"', '"
-                + getNotificationType() + "', '" + getSenderUsername() + "', '" + getRecipientUsername() + "', " + handledToString() + ");";
+        sql = "INSERT INTO notification (message, type, sender, recipient, handled, appointmentId) VALUES('" + getMessage() +"', '"
+                + getNotificationType() + "', '" + getSenderUsername() + "', '" + getRecipientUsername() + "', " + handledToString() + ", '" +getAppointmentId()+ "');";
 
         db.connectDb("all_s_gruppe40", "qwerty");
         db.updateQuery(sql);
         db.closeConnection();
+    }
+
+    public static Notification getNotificationFromDB(int notificationId){
+        //henter ut informasjonen om en varsling fra databasen, basert på varsleidentifikatoren som skrives
+
+        Database db = new Database();
+        Notification notification = new Notification() {
+
+            @Override
+            public void setNotificationType() {
+
+            }
+
+            @Override
+            public void setMessage() {
+
+            }
+        };
+        try {
+            db = new Database("all_s_gruppe40_calendar");
+            db.connectDb("all_s_gruppe40", "qwerty");
+            String sql = "SELECT * FROM notification WHERE notificationId='" + notificationId + "';";
+            ResultSet rs = db.readQuery(sql);
+
+            while (rs.next()){
+                notification.notificationId = notificationId;
+                notification.senderUsername = ("sender");
+                notification.recipientUsername = rs.getString("recipient");
+                notification.appointmentId = rs.getInt("appointmentId");
+                notification.message =rs.getString("message");
+                notification.notificationType= rs.getInt("type");
+                notification.handled = rs.getBoolean("handled");
+            }
+            db.closeConnection();
+            rs.close();
+
+        } catch (SQLException e){
+        }
+        return notification;
+    }
+
+    public ArrayList<Notification> getNotificationsForUser(User user){
+        try{
+            ArrayList<Notification> notifications = new ArrayList<Notification>();
+            ArrayList<Integer> notificationIds = new ArrayList<Integer>();
+
+            Database db = new Database();
+            db.connectDb("all_s_gruppe40", "qwerty");
+            String sql = "SELECT notificationId FROM notification" +
+                    "WHERE recipient = '" + user.getUsername() + "';";
+            ResultSet rs = db.readQuery(sql);
+            while (rs.next()) {
+                notificationIds.add(rs.getInt("notificationId"));
+            }
+            db.closeConnection();
+
+            for (Integer id: notificationIds){
+                notifications.add(Notification.getNotificationFromDB(id));
+            }
+            return notifications;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 
