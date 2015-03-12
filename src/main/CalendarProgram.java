@@ -1,10 +1,6 @@
 package main;
 
-import calendarTest.KeyIn;
-import client.Appointment;
-import client.Calendar;
-import client.Login;
-import client.User;
+import client.*;
 import database.Database;
 
 import java.sql.SQLException;
@@ -22,7 +18,7 @@ public class CalendarProgram {
     public static String username;
     public static User user;
 
-    public void init(){
+    public void init() {
 
         Scanner scn = new Scanner(System.in);
         System.out.println("Wilkommen! Bitte schreiben sie Ihren Name!");
@@ -61,8 +57,50 @@ public class CalendarProgram {
         calendar = new Calendar(username);
     }
 
-    public void run(){
+    public void run() {
 
+        boolean loggedIn = true;
+
+        while (loggedIn) {
+
+            int swValue;
+            Database db = new Database();
+            db.connectDb("all_s_gruppe40", "qwerty");
+
+            System.out.println("hva vil du gjøre? bruk tallene for å navigere i menyene \n" +
+
+                            "1. Opprett avtale \n" +
+                            "2. Endre avtale \n" +
+                            "3. Se en annens private kalender\n" +
+                            "4. Endre min brukerinfo\n" +
+                            "5. Vis min personlige kalender\n" +
+                            "6. Vis en gruppekalender" +
+                            "7. Logg ut\n\n"
+            );
+
+            swValue = KeyIn.inInt("Choose wisely, young grasshopper!");
+            switch (swValue) {
+                case 1:
+                    this.createAppointment();
+                    continue;
+                case 2:
+                    this.editAppointment();
+                    continue;
+                case 3:
+                    String otherUser = KeyIn.inString("hvem sin kalender vil du se? skriv inn brukernavnet\n\n");
+                    this.viewUser(otherUser);
+                    continue;
+                case 4:
+                    this.editUserInfo(username);
+                    continue;
+                case 5:
+                    this.viewUser(username);
+                    continue;
+                case 6:
+
+
+            }
+        }
     }
 
     public static void main(String[] args) {
@@ -71,9 +109,18 @@ public class CalendarProgram {
         cp.run();
     }
 
-    public static void createAppointment(String username){
+    public static void createAppointment() {
         Timestamp start = Timestamp.valueOf((KeyIn.inString("Legg inn avtaleinformasjon: starttidspunkt (YYYY-MM-DD HH:MM)")) + ":00");
+        //kjør sjekk her
+        Timestamp timeNow = new Timestamp((new java.util.Date()).getTime());
+        if (start.before(timeNow)) {
+            throw new IllegalArgumentException("for tidlig!!!");
+        }
         Timestamp slutt = Timestamp.valueOf((KeyIn.inString("Legg inn avtaleinformasjon: slutttidspunkt (YYYY-MM-DD HH:MM)")) + ":00");
+        //kjør sjekk her
+        if (slutt.before(timeNow) || slutt.before(start)) {
+            throw new IllegalArgumentException("for TIDLIG SA JEG!!");
+        }
         String subject = KeyIn.inString("Legg inn subject:");
         String description = KeyIn.inString("Legg inn description:");
         int antall = KeyIn.inInt("Legg inn antall møtedeltakere");
@@ -88,7 +135,7 @@ public class CalendarProgram {
         }
     }
 
-    public void editAppointment(String username) {
+    public void editAppointment() {
 
 
         boolean bol = true;
@@ -128,7 +175,7 @@ public class CalendarProgram {
                     "6. endre rom\n" +
                     "7. gå tilbake\n" +
                     "8. Sjekk deltakere\n" +
-                    "9. Slett event" +
+                    "9. Slett event\n" +
                     "10 Logg ut");
 
             int value = KeyIn.inInt("Select option.\n ");
@@ -145,7 +192,8 @@ public class CalendarProgram {
                         appointmentToChange.updateAppointmentInDB("slutt", newEndTime);
                     } catch (IllegalArgumentException e) {
                         System.out.println(e);
-                    }continue;
+                    }
+                    continue;
                 case 3:
                     String newAttendant = KeyIn.inString("Hvilken deltaker vil du legge til? skriv inn username");
                     appointmentToChange.addAttendant(newAttendant);
@@ -166,7 +214,7 @@ public class CalendarProgram {
                 case 8:
                     ArrayList<String> applist = appointmentToChange.getAttendingPeople();
                     int index = 1;
-                    for (String usr: applist){
+                    for (String usr : applist) {
                         System.out.println((index + "") + ". " + User.getUserFromDB(usr).getFullName() + "\n");
                         index++;
                     }
@@ -181,12 +229,12 @@ public class CalendarProgram {
             }
         }
     }
-
-    public void appNav(String username){
+/*
+    public void appNav(String username) {
 
         int value = KeyIn.inInt("Select option. \n ");
 
-        switch (value){
+        switch (value) {
             case 1:
                 createAppointment(username);
             case 2:
@@ -197,9 +245,9 @@ public class CalendarProgram {
 
         }
 
-    }
+    }*/
 
-    public void editUserInfo(String username){
+    public void editUserInfo(String username) {
 
         Database db = new Database();
         db.connectDb();
@@ -230,5 +278,30 @@ public class CalendarProgram {
                     continue;
             }
         }
+    }
+
+    public void viewUser(String username) {
+
+
+        if (User.existsCheck(username)) {
+            Calendar otherCalendar = new Calendar(username);
+            otherCalendar.viewCalendar();
+        } else {
+            throw new IllegalArgumentException("ugyldig bruker");
+
+        }
+    }
+    public void viewGroup(){
+
+        String groupname = KeyIn.inString("Vennligst skriv inn navnet paa gruppen du vil utforske!");
+        try {
+            int id = Group.getGroupIDFromDB(groupname);
+            Group group = Group.getGroup(id);
+            Calendar groupCalendar = new Calendar(group);
+            groupCalendar.viewCalendar();
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid groupname. Try again.");
+        }
+
     }
 }

@@ -3,7 +3,6 @@ package calendarTest;
 import client.*;
 import database.Database;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;

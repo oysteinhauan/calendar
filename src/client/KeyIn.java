@@ -1,4 +1,4 @@
-package calendarTest;
+package client;
 
 import java.io.*;
 

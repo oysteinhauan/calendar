@@ -141,6 +141,7 @@ public class Appointment {
         if(!rs.next()){
             throw new IllegalArgumentException("Appointment doesnt exist.");
         }
+        db.closeConnection();
         return true;
     }
 
@@ -163,12 +164,21 @@ public class Appointment {
     public static void removeAppointmentInDB(int appointmentID) {
         Database db = new Database("all_s_gruppe40_calendar");
         db.connectDb("all_s_gruppe40", "qwerty");
-        String sql1 = "DELETE from userAppointment where appointmentId = " + appointmentID + ";";
-        String sql2 = "DELETE from appointment where appointmentId = " + appointmentID + ";";
-        db.updateQuery(sql1);
-        db.updateQuery(sql2);
-        db.closeConnection();
+        try {
+            if (hasRecord(appointmentID)) {
+                String sql1 = "DELETE from userAppointment where appointmentId = " + appointmentID + ";";
+                String sql2 = "DELETE from appointment where appointmentId = " + appointmentID + ";";
+                db.updateQuery(sql1);
+                db.updateQuery(sql2);
+                db.closeConnection();
+            } else
+                throw new IllegalArgumentException("denne avtalen finnes ikke");
+        }   catch (SQLException e){
+            e.printStackTrace();
+        }
     }
+
+
 
 
 

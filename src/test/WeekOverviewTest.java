@@ -1,4 +1,6 @@
-package client;
+package test;
+
+import client.WeekOverview;
 
 /**
  * Created by andrealouise on 12.03.15.
