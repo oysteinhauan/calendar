@@ -22,7 +22,7 @@ public class User{
     private String position;
     database.Database db;
     String sql;
-    private ArrayList<Notification> notifications = new ArrayList<Notification>();
+    public ArrayList<Notification> notifications = new ArrayList<Notification>();
 
     public User(){
 
@@ -174,6 +174,8 @@ public class User{
         db.updateQuery(sql);
         db.closeConnection();
     }
+
+
 
 
     public String getPassword() {

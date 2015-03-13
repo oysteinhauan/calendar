@@ -3,6 +3,7 @@ package main;
 import client.*;
 import com.sun.xml.internal.bind.v2.TODO;
 import database.Database;
+import notification.Notification;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -73,6 +74,15 @@ public class CalendarProgram {
             Database db = new Database();
             db.connectDb("all_s_gruppe40", "qwerty");
 
+            this.user.fetchNotifications();
+
+            for (Notification not: this.user.notifications) {
+                if(!not.isHandled()) {
+                    System.out.println("\n" + not.getMessage() + "\n\n");
+                }
+            }
+
+
             System.out.println("hva vil du gjøre? bruk tallene for å navigere i menyene \n" +
 
                             "1. opprett / endre avtaler \n" +
@@ -80,12 +90,12 @@ public class CalendarProgram {
                             "3. Se en annens private kalender\n" +
                             "4. Endre min brukerinfo\n" +
                             "5. Vis min personlige kalender\n" +
-                            //"6. Oprett ny bruker\n" +
-                            "6. Logg ut\n\n"
+                            "6. Oprett ny bruker\n" +
+                            "7. Logg ut\n\n"
             );
 
             if(this.user.isAdmin()){
-                System.out.println("7. ADMIN");
+                System.out.println("8. ADMIN");
 
             }
 
@@ -148,8 +158,10 @@ public class CalendarProgram {
                         case 51:
                             continue;
                     }
+                case 6:
+                    //respond to notifications
 
-                case 7:
+                case 8:
 
                     if(!this.user.isAdmin()){
                         continue;
@@ -157,7 +169,7 @@ public class CalendarProgram {
                     admin();
                     continue;
 
-                case 6:
+                case 7:
                     clearConsole();
                     System.out.printf("snx m8s!!!!1!\n\n\n\n");
 
@@ -460,7 +472,7 @@ public class CalendarProgram {
     }
 
     public void admin(){
-        System.out.println("ADMIN: \n1: Lag ny bruker\n 2. Slett bruker\n 3. Opprett rom\n 4" +
+        System.out.println("ADMIN: \n1: Lag ny bruker\n2. Slett bruker\n3. Opprett rom\n4" +
                 ". Slett rom\n5. Gå tilbake\n6. Gjør bruker til admin\n");
 
         int value = KeyIn.inInt("Select option:\n");
