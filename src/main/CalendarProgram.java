@@ -227,13 +227,13 @@ public class CalendarProgram {
     }
 
     public static void createAppointment() {
-        Timestamp start = Timestamp.valueOf((KeyIn.inString("Legg inn avtaleinformasjon: starttidspunkt (YYYY-MM-DD HH:MM)")) + ":00");
+        Timestamp start = Timestamp.valueOf(( "2015-" + KeyIn.inString("Legg inn avtaleinformasjon: starttidspunkt (MM-DD HH:MM)")) + ":00");
         //kjør sjekk her
         Timestamp timeNow = new Timestamp((new java.util.Date()).getTime());
         if (start.before(timeNow)) {
             throw new IllegalArgumentException("for tidlig!!!");
         }
-        Timestamp slutt = Timestamp.valueOf((KeyIn.inString("Legg inn avtaleinformasjon: slutttidspunkt (YYYY-MM-DD HH:MM)")) + ":00");
+        Timestamp slutt = Timestamp.valueOf(("2015-" + KeyIn.inString("Legg inn avtaleinformasjon: slutttidspunkt (MM-DD HH:MM)")) + ":00");
         //kjør sjekk her
         if (slutt.before(timeNow) || slutt.before(start)) {
             throw new IllegalArgumentException("for TIDLIG SA JEG!!");
@@ -267,16 +267,16 @@ public class CalendarProgram {
             System.out.println("prøv igjen!");
         }
 
-        appointment.inviteAttendant(username);
+        appointment.addAttendant(username);
 
-        while (appointment.attendingPeople.size() < antall) {
+        while (appointment.invitedUsers.size() + 1 < antall) {
 
             String bruker = KeyIn.inString("skriv inn username. 'cancel' to cancel");
             if (bruker.compareToIgnoreCase("cancel") == 0){
                 break;
             }
             try {
-                appointment.addAttendant(bruker);
+                appointment.inviteAttendant(bruker);
                 System.out.println(bruker + "ble lagt til");
             } catch (IllegalArgumentException e){
                 //dritt
@@ -411,9 +411,11 @@ public class CalendarProgram {
             switch (value1) {
                 case 1:
                     createAppointment();
+                    stay = false;
                     break;
                 case 2:
                     editAppointment();
+                    stay = false;
                     break;
                 case 3:
                     stay = false;

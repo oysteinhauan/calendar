@@ -20,7 +20,7 @@ public class Appointment {
 
     int size;
     public ArrayList<String> attendingPeople = new ArrayList<String>();
-    ArrayList<String> invitedUsers = new ArrayList<String>();
+    public ArrayList<String> invitedUsers = new ArrayList<String>();
     String subject;
     String description;
     Room room;
@@ -88,8 +88,6 @@ public class Appointment {
             } finally {
 
                 db.closeConnection();
-
-
             }
         } else {
 
@@ -117,7 +115,7 @@ public class Appointment {
     @Override
     public String toString() {
 
-        return ("\nSubject: " + subject + "\nDescription: " + description + "\nRoom: " + room + "\nStart: " + start + "\nEnd: " + end +"");
+        return ("\nSubject: " + subject + "\nDescription: " + description + "\nRoom: " + room.getRoomName() + "\nStart: " + start + "\nEnd: " + end +"");
     }
 
     public static boolean checkIfOwner(String owner, Appointment appointment, int id){
