@@ -258,6 +258,7 @@ public class CalendarProgram {
             }
             try {
                 appointment.addAttendant(bruker);
+                System.out.println(bruker + "ble lagt til");
             } catch (IllegalArgumentException e){
                 //dritt
                 System.out.println("Try again.");
@@ -391,10 +392,10 @@ public class CalendarProgram {
             switch (value1) {
                 case 1:
                     createAppointment();
-                    continue;
+                    break;
                 case 2:
                     editAppointment();
-                    continue;
+                    break;
                 case 3:
                     stay = false;
                     break;
