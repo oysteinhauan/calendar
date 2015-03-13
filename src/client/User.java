@@ -56,8 +56,13 @@ public class User{
                 + getLastname() + "', '" + getPosition() + "', '" + getEmail() + "');";
 
         db.connectDb("all_s_gruppe40", "qwerty");
-        db.updateQuery(sql);
-        db.closeConnection();
+        try {
+            db.updateQuery(sql);
+        } catch(RuntimeException e){
+            System.out.println("Something went haywire!");
+        } finally {
+            db.closeConnection();
+        }
     }
 
     public ArrayList<Appointment> getAppointmentsForUser(User user){

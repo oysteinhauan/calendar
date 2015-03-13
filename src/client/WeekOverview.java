@@ -53,7 +53,7 @@ public class WeekOverview {
     }
 
     public String toString() {
-        this.getAppointmentsInWeek();
+        getAppointmentsInWeek();
         String returnstring = "";
         for (Appointment appointment : weekAppointments) {
             returnstring += ("\nSubject: " + appointment.subject + "\nDescription: " + appointment.description + "\nRoom: " + appointment.room + "\nStart: " + appointment.start + "\nEnd: " + appointment.end + "\n\n");

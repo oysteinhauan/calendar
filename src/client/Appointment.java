@@ -354,6 +354,9 @@ public class Appointment {
 
     public void addAttendant(String username) {
         Database db = new Database();
+        if(!User.existsCheck(username)){
+            throw new IllegalArgumentException("User doesnt exist.");
+        }
 
         db.connectDb();
         String sql1 = "select count(*) as no_of_attendants from userAppointment where appointmentId = " + this.appointmentId + ";";
