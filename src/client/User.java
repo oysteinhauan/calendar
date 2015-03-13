@@ -4,6 +4,7 @@ import database.Database;
 import notification.Notification;
 import notification.ReplyFromInvitedUserNotification;
 
+import javax.management.NotificationFilter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -339,6 +340,7 @@ public class User{
         boolean replied = false;
         Boolean reply = null;
         Appointment ap = Appointment.getAppointment(inviteNotification.getAppointmentId());
+        Notification replyToInviteNotification;
 
         System.out.println(inviteNotification.getMessage());
 
@@ -354,6 +356,7 @@ public class User{
            // Switch construct
         while(!replied){
             swValue = KeyIn.inInt("Select option: ");
+
             switch (swValue) {
                 case 1:
                     System.out.println("Option 1 selected: You have accepted the invitation.");
@@ -361,7 +364,7 @@ public class User{
                     ap.addAttendant(username);
                     replied = true;
                     inviteNotification.handle();
-                    Notification replyToInviteNotification = new ReplyFromInvitedUserNotification(ap.getOwner(), username, ap.appointmentId, reply);
+                    replyToInviteNotification = new ReplyFromInvitedUserNotification(ap.getOwner(), username, ap.appointmentId, reply);
                     replyToInviteNotification.createNotificationInDB();
                     System.out.println("" + ap.getOwner() + " will now be notified about your reply.");
                     break;
@@ -370,7 +373,7 @@ public class User{
                     reply = false;
                     replied = true;
                     inviteNotification.handle();
-                    Notification replyToInviteNotification = new ReplyFromInvitedUserNotification(ap.getOwner(), username, ap.appointmentId, reply);
+                    replyToInviteNotification = new ReplyFromInvitedUserNotification(ap.getOwner(), username, ap.appointmentId, reply);
                     replyToInviteNotification.createNotificationInDB();
                     System.out.println("" + ap.getOwner() + " will now be notified about your reply.");
                     break;

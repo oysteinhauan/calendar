@@ -24,7 +24,7 @@ public class Appointment {
     String subject;
     String description;
     Room room;
-    int roomId;
+    public int roomId;
     int appointmentId;
     int attendingGroup;
     String owner;
@@ -74,6 +74,7 @@ public class Appointment {
                 appointment = new Appointment(start, end, subject, description, size, owner);
                 appointment.findRoom();
                 appointment.createAppointmentInDB(appointment, db);
+                appointment.room = Room.getRoom(appointment.roomId);
 
                 ResultSet rs = db.readQuery("select last_insert_id();");
                 int id = -1;
@@ -94,6 +95,7 @@ public class Appointment {
             try{
             appointment = new Appointment(start, end, subject, description, owner, null);
                 appointment.createAppointmentInDB(appointment, db);
+                appointment.room = null;
             ResultSet rs = db.readQuery("select last_insert_id();");
             int id = -1;
             while (rs.next()) {

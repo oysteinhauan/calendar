@@ -76,16 +76,18 @@ public class Room {
     }
 
 
-    public Room getRoom(int roomID) {
+    public static Room getRoom(int roomID) {
+        Room room = new Room();
         try {
+            Database db;
             db = new Database("all_s_gruppe40_calendar");
             db.connectDb("all_s_gruppe40", "qwerty");
-            sql = "SELECT * FROM room where roomID = " + String.valueOf(roomID) + ";";
+            String sql = "SELECT * FROM room where roomID = " + String.valueOf(roomID) + ";";
             ResultSet rs = db.readQuery(sql);
             while(rs.next()) {
-                this.roomID = roomID;
-                this.seats = rs.getInt("size");
-                this.roomName = rs.getString("roomName");
+                room.roomID = roomID;
+                room.seats = rs.getInt("size");
+                room.roomName = rs.getString("roomName");
                 }
             db.closeConnection();
             rs.close();
@@ -96,7 +98,7 @@ public class Room {
 
             }
 
-        return this;
+        return room;
     }
 
 
