@@ -267,7 +267,7 @@ public class CalendarProgram {
             System.out.println("prøv igjen!");
         }
 
-        appointment.addAttendant(username);
+        appointment.inviteAttendant(username);
 
         while (appointment.attendingPeople.size() < antall) {
 
