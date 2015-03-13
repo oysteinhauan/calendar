@@ -117,7 +117,7 @@ public class Appointment {
 
     @Override
     public String toString() {
-
+        System.out.println(room.toString());
         return ("\nSubject: " + subject + "\nDescription: " + description + "\nRoom: " + room.getRoomName() + "\nStart: " + start + "\nEnd: " + end +"");
     }
 
@@ -422,6 +422,9 @@ public class Appointment {
 
 
     //GET N' SET
+    public int getSize(){
+        return this.size;
+    }
 
     public String getSubject() {
         return subject;
