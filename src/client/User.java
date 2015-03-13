@@ -370,7 +370,7 @@ public class User{
                     reply = false;
                     replied = true;
                     inviteNotification.handle();
-                    Notification replyToInviteNotification = new ReplyFromInvitedUserNotification(ap.getOwner(), username, ap.appointmentId, reply);
+                    replyToInviteNotification = new ReplyFromInvitedUserNotification(ap.getOwner(), username, ap.appointmentId, reply);
                     replyToInviteNotification.createNotificationInDB();
                     System.out.println("" + ap.getOwner() + " will now be notified about your reply.");
                     break;
