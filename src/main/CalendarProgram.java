@@ -153,32 +153,8 @@ public class CalendarProgram {
 
                     if(!this.user.isAdmin()){
                         continue;
-
                     }
-                    System.out.println("ADMIN: \n1: Lag ny bruker\n 2. Slett bruker\n 3. Opprett rom\n 4" +
-                            ". Slett rom\n");
-
-                    int value = KeyIn.inInt("Select option:\n");
-
-
-                    clearConsole();
-                    boolean taken = true;
-                    String un = "";
-                    while(taken){
-                        un = KeyIn.inString("Skriv inn nytt brukernavn: ");
-                        if(User.usernameTaken(un)){
-                            System.out.println("Username taken!");
-                            break;
-                        }
-                        taken = false;
-                    }
-                    String fn = KeyIn.inString("Skriv inn fornavn: ");
-                    String en = KeyIn.inString("Skriv inn etternavn: ");
-                    String pswd = KeyIn.inString("Skriv inn nytt passord: ");
-                    String position = KeyIn.inString("Skriv inn stilling ('None' hvis ingen)");
-                    String email = KeyIn.inString("Skriv inn e-post: ");
-                    User user = new User(un, pswd, fn, en, email, position);
-                    user.addUserToDB();
+                    admin();
                     continue;
 
                 case 6:
@@ -485,7 +461,7 @@ public class CalendarProgram {
 
     public void admin(){
         System.out.println("ADMIN: \n1: Lag ny bruker\n 2. Slett bruker\n 3. Opprett rom\n 4" +
-                ". Slett rom\n5. Gå tilbake\n");
+                ". Slett rom\n5. Gå tilbake\n6. Gjør bruker til admin\n");
 
         int value = KeyIn.inInt("Select option:\n");
         boolean stay= true;
@@ -514,6 +490,11 @@ public class CalendarProgram {
                     String email = KeyIn.inString("Skriv inn e-post: ");
                     User user = new User(un, pswd, fn, en, email, position);
                     user.addUserToDB();
+                    String admin = KeyIn.inString("Make user admin? y/n");
+                    if(admin.equalsIgnoreCase("y") || admin.equalsIgnoreCase("yes")) {
+                        User.setAdmin(un);
+                    }
+
                     continue;
 
                 case 2:
@@ -527,8 +508,14 @@ public class CalendarProgram {
                 case 5:
                     stay = false;
                     break;
-
-
+                case 6:
+                    String usr = KeyIn.inString("Type in username for new admin: ");
+                    try{
+                        User.setAdmin(usr);
+                    } catch(RuntimeException e) {
+                        System.out.println("User doesnt exist.");
+                    }
+                    continue;
                 default:
                     continue;
             }

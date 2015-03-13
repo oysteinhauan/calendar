@@ -264,6 +264,16 @@ public class User{
 
     }
 
+    public static void setAdmin(String username){
+        Database db;
+        db = new Database();
+        db.connectDb();
+        String sql = "update user set admin = 1 where username = '" + username +"';";
+
+        db.updateQuery(sql);
+        db.closeConnection();
+    }
+
     //NOTIFICATION
 
     public ArrayList<Notification> getNotificationsForUser(String username){
