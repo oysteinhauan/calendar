@@ -9,9 +9,10 @@ public class WeekOverviewTest {
 
     public static void main(String[] args) {
 
-        WeekOverview wo = new WeekOverview("andrealr", 9, 2015);
+        WeekOverview wo = new WeekOverview("andrealr", 11, 2015);
 
         System.out.println(wo);
+
 
     }
 }
