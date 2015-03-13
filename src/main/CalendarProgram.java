@@ -5,6 +5,7 @@ import com.sun.xml.internal.bind.v2.TODO;
 import database.Database;
 import notification.Notification;
 
+import java.io.Console;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -45,8 +46,9 @@ public class CalendarProgram {
 
         System.out.println("\nPlease give me ur passwd!");
 
-        while (scn.hasNext()) {
+        while (true) {
             String password = scn.next();
+            //String password = passwordMasker();
             try {
                 login.login(password);
                 this.user = User.getUserFromDB(username);
@@ -533,4 +535,17 @@ public class CalendarProgram {
             }
         }
     }
+
+    public String passwordMasker() {
+
+        Console console = System.console();
+        if (console == null) {
+            System.out.println("Couldn't get Console instance");
+            System.exit(0);
+        }
+        char passwordArray[] = console.readPassword();
+        //console.printf("Password entered was: %s%n", new String(passwordArray));
+        return new String(passwordArray);
+    }
 }
+

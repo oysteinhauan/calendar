@@ -11,14 +11,16 @@ prøver å se en privat kalender til en ugyldig username. check
 opprette nye avtale og invitere noen som ikke finnes. check
 nyopprettede avtaler vises ikke.
 gruppe som finnes da krasjer den
-avtaler som starter / slutter i fortiden blir fortsatt godtatt uten feilmelding.
-legge inn valg om systemet skal velge rom for deg.
+avtaler som starter / slutter i fortiden blir fortsatt godtatt uten feilmelding. check
+legge inn valg om systemet skal velge rom for deg. check
+all gruppefunksjonalitet.
 
 
 counter på hvor mange du har igjen å adde
 vis avtalen etter den er opprettet.
 
 legge til  while-løkker slik at programmet lar deg prøve på ny istedet for å krasje.
+
 
 
 si ifra hvilken felt som er feil når man skriver inn noe feil.
