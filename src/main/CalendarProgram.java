@@ -1,6 +1,7 @@
 package main;
 
 import client.*;
+import com.sun.xml.internal.bind.v2.TODO;
 import database.Database;
 
 import java.sql.SQLException;
@@ -154,6 +155,11 @@ public class CalendarProgram {
                         continue;
 
                     }
+                    System.out.println("ADMIN: \n1: Lag ny bruker\n 2. Slett bruker\n 3. Opprett rom\n 4" +
+                            ". Slett rom\n");
+
+                    int value = KeyIn.inInt("Select option:\n");
+
 
                     clearConsole();
                     boolean taken = true;
@@ -475,5 +481,57 @@ public class CalendarProgram {
             System.out.println("Invalid groupname. Try again.");
         }
 
+    }
+
+    public void admin(){
+        System.out.println("ADMIN: \n1: Lag ny bruker\n 2. Slett bruker\n 3. Opprett rom\n 4" +
+                ". Slett rom\n5. Gå tilbake\n");
+
+        int value = KeyIn.inInt("Select option:\n");
+        boolean stay= true;
+        while (stay) {
+
+
+            switch (value) {
+
+                case 1:
+
+                    clearConsole();
+                    boolean taken = true;
+                    String un = "";
+                    while (taken) {
+                        un = KeyIn.inString("Skriv inn nytt brukernavn: ");
+                        if (User.usernameTaken(un)) {
+                            System.out.println("Username taken!");
+                            break;
+                        }
+                        taken = false;
+                    }
+                    String fn = KeyIn.inString("Skriv inn fornavn: ");
+                    String en = KeyIn.inString("Skriv inn etternavn: ");
+                    String pswd = KeyIn.inString("Skriv inn nytt passord: ");
+                    String position = KeyIn.inString("Skriv inn stilling ('None' hvis ingen)");
+                    String email = KeyIn.inString("Skriv inn e-post: ");
+                    User user = new User(un, pswd, fn, en, email, position);
+                    user.addUserToDB();
+                    continue;
+
+                case 2:
+                    //slett bruker
+
+                case 3:
+                    //oprett rom
+
+                case 4:
+                    //slett rom
+                case 5:
+                    stay = false;
+                    break;
+
+
+                default:
+                    continue;
+            }
+        }
     }
 }
