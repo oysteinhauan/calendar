@@ -72,9 +72,10 @@ public class Appointment {
         if(useSystem) {
             try {
                 appointment = new Appointment(start, end, subject, description, size, owner);
-                appointment.findRoom();
+                appointment.findRoomId();
+                appointment.setRoom(Room.getRoom(appointment.getRoomId()));
                 appointment.createAppointmentInDB(appointment, db);
-                appointment.room = Room.getRoom(appointment.roomId);
+
 
                 ResultSet rs = db.readQuery("select last_insert_id();");
                 int id = -1;
@@ -95,7 +96,7 @@ public class Appointment {
             try{
             appointment = new Appointment(start, end, subject, description, owner, null);
                 appointment.createAppointmentInDB(appointment, db);
-                appointment.room = null;
+                appointment.setRoom(null);
             ResultSet rs = db.readQuery("select last_insert_id();");
             int id = -1;
             while (rs.next()) {
@@ -281,7 +282,7 @@ public class Appointment {
 
 
 
-    public void findRoom() {
+    public void findRoomId() {
 
 
         try {

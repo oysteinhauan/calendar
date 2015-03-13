@@ -15,6 +15,7 @@ avtaler som starter / slutter i fortiden blir fortsatt godtatt uten feilmelding.
 legge inn valg om systemet skal velge rom for deg. check
 all gruppefunksjonalitet.
 notifications som kommer fra avtaler man lager selv må fikses / unfixxxes
+Decline / Accept til  avtaleEier må fixxes. Room blir null i notifikation.
 
 
 counter på hvor mange du har igjen å adde
