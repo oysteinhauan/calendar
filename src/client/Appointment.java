@@ -95,7 +95,7 @@ public class Appointment {
 
             try{
             appointment = new Appointment(start, end, subject, description, owner, null);
-
+                appointment.createAppointmentInDB(appointment, db);
             ResultSet rs = db.readQuery("select last_insert_id();");
             int id = -1;
             while (rs.next()) {
@@ -103,6 +103,7 @@ public class Appointment {
             }
 
             appointment.setAppointmentId(id);
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
