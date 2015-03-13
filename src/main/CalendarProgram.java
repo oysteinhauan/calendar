@@ -18,6 +18,10 @@ public class CalendarProgram {
     public static String username;
     public static User user;
 
+    public CalendarProgram(){
+        this.user = null;
+    }
+
     public void init() {
 
         Scanner scn = new Scanner(System.in);
@@ -43,9 +47,9 @@ public class CalendarProgram {
             String password = scn.next();
             try {
                 login.login(password);
-                user = User.getUserFromDB(username);
+                this.user = User.getUserFromDB(username);
                 //clearConsole();
-                System.out.println("Welcome to our fantastic calendar, " + user.getFullName() + "\n\n\n\n");
+                System.out.println("Welcome to our fantastic calendar, " + this.user.getFullName() + "\n\n\n\n");
                 TimeUnit.SECONDS.sleep(2);
                 clearConsole();
                 break;
@@ -75,9 +79,14 @@ public class CalendarProgram {
                             "3. Se en annens private kalender\n" +
                             "4. Endre min brukerinfo\n" +
                             "5. Vis min personlige kalender\n" +
-                            "6. Oprett ny bruker\n" +
-                            "7. Logg ut\n\n"
+                            //"6. Oprett ny bruker\n" +
+                            "6. Logg ut\n\n"
             );
+
+            if(this.user.isAdmin()){
+                System.out.println("7. ADMIN");
+
+            }
 
             swValue = KeyIn.inInt(" Select Option \n");
             Timestamp start, slutt;
@@ -139,7 +148,13 @@ public class CalendarProgram {
                             continue;
                     }
 
-                case 6:
+                case 7:
+
+                    if(!this.user.isAdmin()){
+                        continue;
+
+                    }
+
                     clearConsole();
                     boolean taken = true;
                     String un = "";
@@ -160,7 +175,7 @@ public class CalendarProgram {
                     user.addUserToDB();
                     continue;
 
-                case 7:
+                case 6:
                     clearConsole();
                     System.out.printf("snx m8s!!!!1!\n\n\n\n");
 

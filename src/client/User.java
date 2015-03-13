@@ -241,6 +241,29 @@ public class User{
         db.closeConnection();
     }
 
+    public boolean isAdmin(){
+        db = new Database();
+        db.connectDb();
+        sql = "select admin from user where username = '" + this.getUsername() +"';";
+        ResultSet rs = db.readQuery(sql);
+        try {
+            while(rs.next()){
+                if(rs.getInt(1) == 1){
+                    return true;
+                }
+            }
+            rs.close();
+        } catch (SQLException e) {
+            System.out.println("Oops.");
+            e.printStackTrace();
+        } finally {
+            db.closeConnection();
+
+        }
+        return false;
+
+    }
+
     //NOTIFICATION
 
     public ArrayList<Notification> getNotificationsForUser(String username){
