@@ -1,11 +1,9 @@
 package notification;
 
-import client.User;
 import database.Database;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 /**
  * Created by Henrik on 09.03.2015.
@@ -34,7 +32,7 @@ public abstract class Notification {
     public void createNotificationInDB(){
         db = new Database("all_s_gruppe40_calendar");
         sql = "INSERT INTO notification (message, type, sender, recipient, handled, appointmentId) VALUES('" + getMessage() +"', '"
-                + getNotificationType() + "', '" + getSenderUsername() + "', '" + getRecipientUsername() + "', " + handledToString() + ", '" +getAppointmentId()+ "');";
+                + getNotificationType() + "', '" + getSenderUsername() + "', '" + getRecipientUsername() + "', " + handledToString() + ", '" + getAppointmentId() + "');";
 
         db.connectDb("all_s_gruppe40", "qwerty");
         db.updateQuery(sql);
@@ -65,7 +63,7 @@ public abstract class Notification {
 
             while (rs.next()){
                 notification.notificationId = notificationId;
-                notification.senderUsername = ("sender");
+                notification.senderUsername = rs.getString("sender");
                 notification.recipientUsername = rs.getString("recipient");
                 notification.appointmentId = rs.getInt("appointmentId");
                 notification.message =rs.getString("message");
@@ -80,31 +78,6 @@ public abstract class Notification {
         return notification;
     }
 
-    public ArrayList<Notification> getNotificationsForUser(User user){
-        try{
-            ArrayList<Notification> notifications = new ArrayList<Notification>();
-            ArrayList<Integer> notificationIds = new ArrayList<Integer>();
-
-            Database db = new Database();
-            db.connectDb("all_s_gruppe40", "qwerty");
-            String sql = "SELECT notificationId FROM notification" +
-                    "WHERE recipient = '" + user.getUsername() + "';";
-            ResultSet rs = db.readQuery(sql);
-            while (rs.next()) {
-                notificationIds.add(rs.getInt("notificationId"));
-            }
-            db.closeConnection();
-
-            for (Integer id: notificationIds){
-                notifications.add(Notification.getNotificationFromDB(id));
-            }
-            return notifications;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 
 
 
@@ -139,6 +112,10 @@ public abstract class Notification {
 
     abstract public void setMessage();
 
+    public boolean isHandled(){
+        return handled;
+    }
+
     public String getMessage() {
         return message;
     }
@@ -153,7 +130,15 @@ public abstract class Notification {
 
     public void handle(){
         handled = true;
-    }
+
+        //skriv inn hvilken kolonne som skal få sin informasjon oppdatert, og hva den nye informasjonen skal være
+        db = new Database("all_s_gruppe40_calendar");
+        sql = "UPDATE notification SET handled = 1 WHERE notificationId = '" + notificationId + "';";
+        db.connectDb("all_s_gruppe40", "qwerty");
+        db.updateQuery(sql);
+        db.closeConnection();
+        }
+
 
     public String handledToString(){
         String handledStr = handled ? "1" : "0";
