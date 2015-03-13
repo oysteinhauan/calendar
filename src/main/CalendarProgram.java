@@ -320,13 +320,13 @@ public class CalendarProgram {
                 int value2 = KeyIn.inInt("Select option.\n ");
                 switch (value2) {
                     case 1:
-                        String newStartTime = KeyIn.inString("skriv inn nytt tidspunkt: (YYYY-MM-DD HH:MM)") + ":00";
+                        String newStartTime = "2015-" + KeyIn.inString("skriv inn nytt tidspunkt: (MM-DD HH:MM)") + ":00";
                         appointmentToChange.updateAppointmentInDB("start", newStartTime);
                         continue;
 
                     case 2:
 
-                    String newEndTime = KeyIn.inString("skriv inn nytt tidspunkt: (YYYY-MM-DD HH:MM)") + ":00";
+                    String newEndTime = "2015-" + KeyIn.inString("skriv inn nytt tidspunkt: (MM-DD HH:MM)") + ":00";
                     try {
                         appointmentToChange.updateAppointmentInDB("slutt", newEndTime);
                     } catch (IllegalArgumentException e) {
