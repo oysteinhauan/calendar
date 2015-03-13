@@ -6,7 +6,6 @@ import notification.Notification;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
@@ -96,7 +95,7 @@ public class Appointment {
 
             try{
             appointment = new Appointment(start, end, subject, description, owner, null);
-
+                appointment.createAppointmentInDB(appointment, db);
             ResultSet rs = db.readQuery("select last_insert_id();");
             int id = -1;
             while (rs.next()) {
@@ -104,6 +103,7 @@ public class Appointment {
             }
 
             appointment.setAppointmentId(id);
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -144,6 +144,7 @@ public class Appointment {
                 appointment.setStart(rs.getTimestamp("start"));
                 appointment.setEnd(rs.getTimestamp("end"));
                 appointment.setRoomId(rs.getInt("roomId"));
+                appointment.setOwner(rs.getString("owner"));
             }
             rs.close();
             while (rs2.next()){
@@ -321,7 +322,6 @@ public class Appointment {
 
     }
 
-
     public void setId(int id) {
         this.appointmentId = id;
     }
@@ -344,9 +344,7 @@ public class Appointment {
 
     public String getOwner(){return owner;};
 
-    public void setOwnner(String owner){ this.owner = owner; }
-
-
+    public void setOwner(String owner){ this.owner = owner; }
 
     public ArrayList<String> getAttendingPeople() {
         return attendingPeople;
@@ -354,6 +352,9 @@ public class Appointment {
 
     public void addAttendant(String username) {
         Database db = new Database();
+        if(!User.existsCheck(username)){
+            throw new IllegalArgumentException("User doesnt exist.");
+        }
 
         db.connectDb();
         String sql1 = "select count(*) as no_of_attendants from userAppointment where appointmentId = " + this.appointmentId + ";";
@@ -412,6 +413,7 @@ public class Appointment {
     public void inviteAttendant(String username){
         invitedUsers.add(username);
         Notification invite = new InviteNotification(username, this.getOwner(), getAppointmentId());
+        invite.createNotificationInDB();
     }
 
 

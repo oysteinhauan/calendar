@@ -2,6 +2,7 @@ package client;
 
 import database.Database;
 import notification.Notification;
+import notification.ReplyFromInvitedUserNotification;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,7 +22,7 @@ public class User{
     private String position;
     database.Database db;
     String sql;
-    private ArrayList<Notification> notifications = new ArrayList<Notification>();
+    public ArrayList<Notification> notifications = new ArrayList<Notification>();
 
     public User(){
 
@@ -56,8 +57,13 @@ public class User{
                 + getLastname() + "', '" + getPosition() + "', '" + getEmail() + "');";
 
         db.connectDb("all_s_gruppe40", "qwerty");
-        db.updateQuery(sql);
-        db.closeConnection();
+        try {
+            db.updateQuery(sql);
+        } catch(RuntimeException e){
+            System.out.println("Something went haywire!");
+        } finally {
+            db.closeConnection();
+        }
     }
 
     public ArrayList<Appointment> getAppointmentsForUser(User user){
@@ -170,6 +176,8 @@ public class User{
     }
 
 
+
+
     public String getPassword() {
         return password;
     }
@@ -235,10 +243,70 @@ public class User{
         db.closeConnection();
     }
 
+    public boolean isAdmin(){
+        db = new Database();
+        db.connectDb();
+        sql = "select admin from user where username = '" + this.getUsername() +"';";
+        ResultSet rs = db.readQuery(sql);
+        try {
+            while(rs.next()){
+                if(rs.getInt(1) == 1){
+                    return true;
+                }
+            }
+            rs.close();
+        } catch (SQLException e) {
+            System.out.println("Oops.");
+            e.printStackTrace();
+        } finally {
+            db.closeConnection();
+
+        }
+        return false;
+
+    }
+
+    public static void setAdmin(String username){
+        Database db;
+        db = new Database();
+        db.connectDb();
+        String sql = "update user set admin = 1 where username = '" + username +"';";
+
+        db.updateQuery(sql);
+        db.closeConnection();
+    }
+
     //NOTIFICATION
 
-    public void fetchNotifications(){
+    public ArrayList<Notification> getNotificationsForUser(String username){
+    try{
+        ArrayList<Notification> notifications = new ArrayList<Notification>();
+        ArrayList<Integer> notificationIds = new ArrayList<Integer>();
 
+        Database db = new Database();
+        db.connectDb("all_s_gruppe40", "qwerty");
+        String sql = "SELECT notificationId FROM notification" +
+                " WHERE recipient = '" + username + "';";
+        ResultSet rs = db.readQuery(sql);
+        while (rs.next()) {
+            notificationIds.add(rs.getInt("notificationId"));
+        }
+        db.closeConnection();
+
+        for (Integer id: notificationIds){
+            notifications.add(Notification.getNotificationFromDB(id));
+        }
+        return notifications;
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return null;
+    }
+
+    public void fetchNotifications(){
+        notifications.clear();
+        notifications = getNotificationsForUser(username);
     }
 
     public void addNotification(Notification notification){
@@ -249,13 +317,21 @@ public class User{
         return notifications.get(0);
     }
 
-    public int getNumberOfNotifications(){
+    public int getNumberOfNewNotifications(){
+        int size = 0;
+        for (Notification notification: notifications) {
+            if (!notification.isHandled()){
+                size++;
+            }
+        }
         return notifications.size();
     }
 
     public void removeAppointmentNotification(Appointment appointment){
         notifications.remove(appointment);
     }
+
+
 
     public void replyToInvite(Notification inviteNotification){
         int swValue;
@@ -281,7 +357,7 @@ public class User{
                 case 1:
                     System.out.println("Option 1 selected: You have accepted the invitation.");
                     reply = true;
-                    //ap.addAttendant(username);
+                    ap.addAttendant(username);
                     replied = true;
                     inviteNotification.handle();
                     break;
@@ -292,15 +368,14 @@ public class User{
                     inviteNotification.handle();
                     break;
                 default:
-                    System.out.println("Invalid selection");
+                    System.out.println("Invalid selection (ノಠ益ಠ)ノ彡┻━┻");
                     break;
                     // This break is not really necessary
             }
+            Notification replyToInviteNotification = new ReplyFromInvitedUserNotification(ap.getOwner(), username, ap.appointmentId, reply);
+            replyToInviteNotification.createNotificationInDB();
+            System.out.println("" + ap.getOwner() + " will now be notified about your reply.");
         }
-
-//        ReplyFromInvitedUserNotification rFIUN = new ReplyFromInvitedUserNotification(ap.getOwner(),
-//                username, ap.getAppointmentId(), reply);
-
     }
 
 /*    public boolean replyToNotification(Appointment appointment){
