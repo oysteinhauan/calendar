@@ -1,7 +1,6 @@
 package main;
 
 import client.*;
-import com.sun.xml.internal.bind.v2.TODO;
 import database.Database;
 import notification.Notification;
 
@@ -78,11 +77,11 @@ public class CalendarProgram {
 
             this.user.fetchNotifications();
 
-            for (Notification not: this.user.notifications) {
-                if(!not.isHandled()) {
-                    System.out.println("\n" + not.getMessage() + "\n\n");
-                }
-            }
+            System.out.println("\t♪┏(°.°)┛┗(°.°)┓┗(°.°)┛┏(°.°)┓ ♪ ");
+            System.out.println("   \t\tYou have " + user.getNumberOfNewNotifications() + " new notification(s)!");
+            System.out.println("\t♪┏(°.°)┛┗(°.°)┓┗(°.°)┛┏(°.°)┓ ♪\n ");
+
+
 
 
             System.out.println("hva vil du gjøre? bruk tallene for å navigere i menyene \n" +
@@ -161,7 +160,27 @@ public class CalendarProgram {
                             continue;
                     }
                 case 6:
-                    //respond to notifications
+                    clearConsole();
+                    System.out.println("-----------------------------------------");
+                    for (Notification notification : this.user.notifications){
+                        if (!notification.isHandled()){
+
+                            System.out.println(notification.getMessage());
+                            System.out.println("-----------------------------------------");
+                            switch(notification.getNotificationType()){
+                                case 1:
+                                    this.user.replyToInvite(notification);
+                                    break;
+                                case 3:
+                                    this.user.replyToInvite(notification);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+
+                    }
+                    System.out.println("Do you want to handle your invitations");
 
                 case 8:
 

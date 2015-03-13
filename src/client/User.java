@@ -309,6 +309,7 @@ public class User{
         notifications = getNotificationsForUser(username);
     }
 
+
     public void addNotification(Notification notification){
         notifications.add(notification);
     }
@@ -324,7 +325,7 @@ public class User{
                 size++;
             }
         }
-        return notifications.size();
+        return size;
     }
 
     public void removeAppointmentNotification(Appointment appointment){
