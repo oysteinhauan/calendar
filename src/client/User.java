@@ -361,21 +361,24 @@ public class User{
                     ap.addAttendant(username);
                     replied = true;
                     inviteNotification.handle();
+                    Notification replyToInviteNotification = new ReplyFromInvitedUserNotification(ap.getOwner(), username, ap.appointmentId, reply);
+                    replyToInviteNotification.createNotificationInDB();
+                    System.out.println("" + ap.getOwner() + " will now be notified about your reply.");
                     break;
                 case 2:
                     System.out.println("Option 2 selected: You have declined the invitation.");
                     reply = false;
                     replied = true;
                     inviteNotification.handle();
+                    Notification replyToInviteNotification = new ReplyFromInvitedUserNotification(ap.getOwner(), username, ap.appointmentId, reply);
+                    replyToInviteNotification.createNotificationInDB();
+                    System.out.println("" + ap.getOwner() + " will now be notified about your reply.");
                     break;
                 default:
                     System.out.println("Invalid selection (ノಠ益ಠ)ノ彡┻━┻");
                     break;
                     // This break is not really necessary
             }
-            Notification replyToInviteNotification = new ReplyFromInvitedUserNotification(ap.getOwner(), username, ap.appointmentId, reply);
-            replyToInviteNotification.createNotificationInDB();
-            System.out.println("" + ap.getOwner() + " will now be notified about your reply.");
         }
     }
 
