@@ -175,6 +175,7 @@ public class CalendarProgram {
                                     this.user.replyToInvite(notification);
                                     break;
                                 default:
+                                    notification.handle();
                                     break;
                             }
                         }
