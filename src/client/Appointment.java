@@ -122,7 +122,6 @@ public class Appointment {
     }
 
     public static boolean checkIfOwner(String owner, Appointment appointment, int id){
-
         return(owner == appointment.getOwner() && appointment.getAppointmentId() == id );
     }
 
