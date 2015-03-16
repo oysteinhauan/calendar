@@ -45,7 +45,9 @@ public class AppointmentTest {
 
         //test.addAttendant("henloef");
         //test.addAttendant("oddmrog");
-        test.addAttendant("tuvaeri");
+        //test.addAttendant("tuvaeri");
+        Appointment a = test.getAppointment(2);
+        System.out.println(a);
 
 //        Group g = Group.getGroup(3);
 //        Appointment a = Appointment.getAppointment(7);
@@ -60,6 +62,8 @@ public class AppointmentTest {
         //Appointment app = Appointment.createAppointment(Timestamp.valueOf("1122-12-12 12:12:00"), Timestamp.valueOf("1133-12-12 12:12:00"), "asfsadf", "asfsdaf", 16, "oysteibh");
         //System.out.println(app.getAppointmentId());
         //app.addAttendant("tuvaeri");
+
+
 
 
 

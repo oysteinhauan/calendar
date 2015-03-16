@@ -12,11 +12,22 @@ public class WeekOverview {
     ArrayList<Appointment> weekAppointments = new ArrayList<Appointment>();
     int week;
     int year;
+    ArrayList<Appointment> mondays = new ArrayList<Appointment>();
+    ArrayList<Appointment> tuesdays = new ArrayList<Appointment>();
+    ArrayList<Appointment> wednesdays = new ArrayList<Appointment>();
+    ArrayList<Appointment> thursdays = new ArrayList<Appointment>();
+    ArrayList<Appointment> fridays = new ArrayList<Appointment>();
+    ArrayList<Appointment> saturdays = new ArrayList<Appointment>();
+    ArrayList<Appointment> sundays = new ArrayList<Appointment>();
+
+    ArrayList<ArrayList> weekdays = new ArrayList<ArrayList>();
+
 
 
     public WeekOverview(String username, int week, int year) {
         User u = User.getUserFromDB(username);
         this.appointments = u.getAppointmentsForUser(u);
+        System.out.println(this.appointments);
         this.week = week;
         this.year = year;
     }
@@ -48,20 +59,128 @@ public class WeekOverview {
             }
 
         }
-        System.out.println(weekAppointments);
+        //System.out.println(weekAppointments);
         return weekAppointments;
     }
 
-    public String toString() {
-        getAppointmentsInWeek();
-        String returnstring = "";
-        for (Appointment appointment : weekAppointments) {
-            returnstring += ("\nSubject: " + appointment.subject + "\nDescription: " + appointment.description + "\nRoom: " + appointment.room + "\nStart: " + appointment.start + "\nEnd: " + appointment.end + "\n\n");
+    public int getWeekday(Appointment appointment) {
+        Calendar c = Calendar.getInstance();
+
+        String s = String.valueOf(appointment.getStart());
+        String[] parts = s.split("-");
+        String y = parts[0];
+        String m = parts[1];
+
+        String[] parts2 = parts[2].split(" ");
+        String d = parts2[0];
+
+        int year1 = Integer.valueOf(y);
+        int month1 = Integer.valueOf(m) - 1;
+        int date1 = Integer.valueOf(d);
+
+        Calendar cal = Calendar.getInstance();
+
+        cal.set(year1, month1, date1);
+
+        int dayOfWeek = c.get(Calendar.DAY_OF_WEEK) - 2;
+
+        return dayOfWeek;
+    }
+
+    public void printDay(String day) {
+
+        String leftAlignFormat = "| %-25s | %-4d |%n";
+
+        System.out.format("+--------------------+------+%n");
+        String dayHeadline = String.format(("| %s    %n"), day);
+        System.out.printf(dayHeadline);
+        System.out.format("+--------------------+------+%n");
+
+
+        if (day == "monday") {
+            for (Appointment a : mondays){
+                System.out.println(a);
+            }
         }
 
-        if (weekAppointments.size() == 0) {
-            returnstring += "You don't have any appointments that week.";
+        if (day == "tuesday") {
+            for (Appointment a : tuesdays){
+                System.out.println(a);
+            }
         }
-        return returnstring;
+
+        if (day == "wednesday") {
+            for (Appointment a : wednesdays){
+                System.out.println(a);
+            }
+        }
+
+        if (day == "thursday") {
+            for (Appointment a : thursdays){
+                System.out.println(a);
+            }
+        }
+        if (day == "friday") {
+            for (Appointment a : fridays){
+                System.out.println(a);
+            }
+        }
+
+        if (day == "saturday") {
+            for (Appointment a : saturdays){
+                System.out.println(a);
+            }
+        }
+
+        if (day == "sunday") {
+            for (Appointment a : sundays) {
+                System.out.println(a);
+            }
+        }
+    }
+
+    public String toString() {
+
+        this.getAppointmentsInWeek();
+        this.sortDays();
+
+        this.printDay("monday");
+        this.printDay("tuesday");
+        this.printDay("tuesday");
+        this.printDay("wednesday");
+        this.printDay("thursday");
+        this.printDay("friday");
+        this.printDay("saturday");
+        this.printDay("sunday");
+
+    return "";
+    }
+
+
+    public void sortDays(){
+        for (Appointment a: weekAppointments){
+            int weekday = this.getWeekday(a);
+            if (weekday == 1){
+                mondays.add(a);
+            }
+            else if (weekday == 2){
+                tuesdays.add(a);
+            }
+            else if (weekday == 3){
+                wednesdays.add(a);
+            }
+            else if (weekday == 4){
+                thursdays.add(a);
+            }
+            else if (weekday == 5){
+                fridays.add(a);
+            }
+            else if (weekday == 6){
+                saturdays.add(a);
+            }
+            else if (weekday == 7){
+                sundays.add(a);
+            }
+        }
     }
 }

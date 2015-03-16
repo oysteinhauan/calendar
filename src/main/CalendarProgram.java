@@ -227,7 +227,7 @@ public class CalendarProgram {
         cp.run();
     }
 
-    public static Appointment createAppointment() {
+    public static void createAppointment() {
         Timestamp start = Timestamp.valueOf(( "2015-" + KeyIn.inString("Legg inn avtaleinformasjon: starttidspunkt (MM-DD HH:MM)")) + ":00");
         //kjør sjekk her
         Timestamp timeNow = new Timestamp((new java.util.Date()).getTime());
@@ -267,9 +267,24 @@ public class CalendarProgram {
             }
             System.out.println("prøv igjen!");
         }
-        appointment.addAttendant(username);
-        return appointment;
 
+        appointment.addAttendant(username);
+
+        while (appointment.invitedUsers.size() + 1 < antall) {
+
+            String bruker = KeyIn.inString("skriv inn username. 'cancel' to cancel");
+            if (bruker.compareToIgnoreCase("cancel") == 0){
+                break;
+            }
+            try {
+                appointment.getRoom().getRoomName();
+                appointment.inviteAttendant(bruker);
+                System.out.println(bruker + "ble lagt til");
+            } catch (IllegalArgumentException e){
+                //dritt
+                System.out.println("Try again.");
+            }
+        }
     }
 
     public void editAppointment() {
@@ -397,23 +412,7 @@ public class CalendarProgram {
 
             switch (value1) {
                 case 1:
-                    Appointment appointment = createAppointment();
-
-                    int size = appointment.getSize();
-                    while (appointment.invitedUsers.size() + 1 < size) {
-
-                        String bruker = KeyIn.inString("skriv inn username. 'cancel' to cancel");
-                        if (bruker.compareToIgnoreCase("cancel") == 0){
-                            break;
-                        }
-                        try {
-                            appointment.inviteAttendant(bruker);
-                            System.out.println(bruker + "ble lagt til");
-                        } catch (IllegalArgumentException e){
-                            //dritt
-                            System.out.println("Try again.");
-                        }
-                    }
+                    createAppointment();
                     stay = false;
                     break;
                 case 2:
