@@ -24,7 +24,7 @@ public class Appointment {
     String subject;
     String description;
     Room room;
-    public int roomId;
+    public Integer roomId;
     int appointmentId;
     int attendingGroup;
     String owner;
@@ -49,7 +49,7 @@ public class Appointment {
 
     }
 
-    public Appointment(Timestamp start, Timestamp end, String subject, String description, String owner, Room room){
+    public Appointment(Timestamp start, Timestamp end, String subject, String description, String owner){
 
         this.start = start;
         this.end = end;
@@ -57,7 +57,7 @@ public class Appointment {
         this.description = description;
         this.size = -1;
         this.owner = owner;
-        this.room = room;
+        this.roomId = null;
 
     }
 
@@ -93,24 +93,24 @@ public class Appointment {
             }
         } else {
 
-            try{
-            appointment = new Appointment(start, end, subject, description, owner, null);
-                appointment.createAppointmentInDB(appointment, db);
-                appointment.setRoom(null);
+
+            appointment = new Appointment(start, end, subject, description, owner);
+
+            appointment.createAppointmentInDB(appointment, db);
+
             ResultSet rs = db.readQuery("select last_insert_id();");
             int id = -1;
-            while (rs.next()) {
-                id = rs.getInt("last_insert_id()");
+            try {
+                while (rs.next()) {
+                    id = rs.getInt("last_insert_id()");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-
             appointment.setAppointmentId(id);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            db.closeConnection();
-            }
         }
+
         return appointment;
     }
 
@@ -184,7 +184,7 @@ public class Appointment {
         String sql = "insert into appointment (start, end, subject, description, roomId, owner) values( '"+ String.valueOf(appointment.getStart()) + "', '" +
                 String.valueOf(appointment.getEnd()) + "', '" + appointment.getSubject() + "', '"
                 + appointment.getDescription() + "', "
-                + (appointment.getRoomId() + "")+ ", '" + appointment.owner  + "');";
+                + (appointment.getRoomId() + "") + ", '" + appointment.owner  + "');";
 
         //System.out.println(sql);
         db.updateQuery(sql);
@@ -458,11 +458,11 @@ public class Appointment {
         this.room = room;
     }
 
-    public int getRoomId() {
+    public Integer getRoomId() {
         return roomId;
     }
 
-    public void setRoomId(int roomId) {
+    public void setRoomId(Integer roomId) {
         this.roomId = roomId;
     }
 

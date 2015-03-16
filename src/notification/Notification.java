@@ -144,4 +144,8 @@ public abstract class Notification {
         String handledStr = handled ? "1" : "0";
         return handledStr;
     }
+
+    public static void editNotificationInDb(int notificationId){
+
+    }
 }

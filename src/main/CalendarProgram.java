@@ -5,6 +5,7 @@ import database.Database;
 import notification.Notification;
 
 import java.io.Console;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -77,9 +78,9 @@ public class CalendarProgram {
 
             this.user.fetchNotifications();
 
-            System.out.println("\t♪┏(°.°)┛┗(°.°)┓┗(°.°)┛┏(°.°)┓ ♪ ");
+            System.out.println(    "\t♪┏(°.°)┛┗(°.°)┓┗(°.°)┛┏(°.°)┓ ♪ ");
             System.out.println("   \t\tYou have " + user.getNumberOfNewNotifications() + " new notification(s)!");
-            System.out.println("\t♪┏(°.°)┛┗(°.°)┓┗(°.°)┛┏(°.°)┓ ♪\n ");
+            System.out.println(    "\t♪┏(°.°)┛┗(°.°)┓┗(°.°)┛┏(°.°)┓ ♪\n ");
 
 
 
@@ -280,7 +281,7 @@ public class CalendarProgram {
                 break;
             }
             try {
-                appointment.getRoom().getRoomName();
+
                 appointment.inviteAttendant(bruker);
                 System.out.println(bruker + "ble lagt til");
             } catch (IllegalArgumentException e){
@@ -339,7 +340,8 @@ public class CalendarProgram {
                         "7. legg til gruppe\n" +
                         "8. Sjekk deltakere\n" +
                         "9. Slett event" +
-                        "10 Gå tilbake");
+                        "10. Svar på en av de invitertes notifikasjon" +
+                        "11. Gå tilbake");
 
                 int value2 = KeyIn.inInt("Select option.\n ");
                 switch (value2) {
@@ -389,6 +391,32 @@ public class CalendarProgram {
                         System.out.println("Appointment removed.");
                         break;
                     case 10:
+
+                        String username = KeyIn.inString("Skriv inn username til den du vil endre notifikasjon til");
+
+                        int notificationId = -1;
+
+                        Database db = new Database();
+                        db.connectDb();
+                        String sql = "SELECT notification.notificationId FROM notification, appointment WHERE" +
+                                " notification.appointmentId = " + String.valueOf(idToChange) + " AND " +
+                                "notification.handled = 0 AND appointment.appointmentId = notification.appointmentId;";
+
+                        ResultSet rs = db.readQuery(sql);
+                        try {
+                            while (rs.next()){
+                                notificationId = rs.getInt("notificationId");
+                            }
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+
+                        Notification not = Notification.getNotificationFromDB(notificationId);
+                        User user = User.getUserFromDB(username);
+                        user.replyToInvite(not);
+
+                        break;
+                    case 11:
                         stay = false;
                         break;
                     default:

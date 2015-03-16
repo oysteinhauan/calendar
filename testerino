@@ -28,3 +28,11 @@ legge til  while-løkker slik at programmet lar deg prøve på ny istedet for å
 si ifra hvilken felt som er feil når man skriver inn noe feil.
 slette bruker.
 akseptansetesting??
+
+
+i endre avtale så skal mans om owner kunne godta på vegne av inviterte brukere.
+finn listen over alle inviterte i appointmenten som det gjelder
+se alle ikke-handled notifikasjoner.
+endre vedkommende til attending / ikke attending.
+
+prompte på nytt istedetfor krasj når  man skriver noe feil.
