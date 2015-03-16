@@ -1,6 +1,7 @@
 package client;
 
 import database.Database;
+import notification.AppointmentUpdateNotification;
 import notification.InviteNotification;
 import notification.Notification;
 
@@ -242,6 +243,7 @@ public class Appointment {
                 throw new IllegalArgumentException("Du må velge et fremtidig tidspunkt!!");
             }
 
+            sendAppointmenUpdateNotification();
         }
 
         if (columnToUpdate  == "start"){
@@ -268,6 +270,7 @@ public class Appointment {
 
                 throw new IllegalArgumentException("Du må velge et fremtidig tidspunkt!!");
             }
+            sendAppointmenUpdateNotification();
         }
         String sql =  "UPDATE appointment SET " + columnToUpdate + "='" + updatedInfo + "' WHERE appointmentId = '" + this.appointmentId + "';";
         db.updateQuery(sql);
@@ -357,9 +360,41 @@ public class Appointment {
                 attendingPeople.add(rs.getString("username"));
             }
         }catch (SQLException e){
+        }
+    }
+
+    public void fetchInvitedUsersFromDB(){
+        Database db = new Database();
+        String sql = "SELECT notificationId, recipient FROM notification WHERE appointmentId = " + this.appointmentId + " AND handled = 0;";
+        db.connectDb();
+        ResultSet rs = db.readQuery(sql);
+        try {
+            while (rs.next()){
+                invitedUsers.add(rs.getString("recipient"));
+                Notification not = Notification.getNotificationFromDB(rs.getInt("notificationId"));
+                not.handle();
+            }
+        }catch (SQLException e){
 
         }
+    }
 
+    public void sendAppointmenUpdateNotification() {
+        attendingPeople.clear();
+        invitedUsers.clear();
+        fetchInvitedUsersFromDB();
+        fetchAttendingPeopleFromDB();
+        for (String username: attendingPeople) {
+            if (username != this.owner) {
+                removeAttendant(username);
+                Notification updateNot = new AppointmentUpdateNotification(this.owner, username, this.appointmentId);
+                updateNot.createNotificationInDB();
+            }
+         }
+        for (String username: invitedUsers) {
+            Notification updateNot = new AppointmentUpdateNotification(this.owner, username, this.appointmentId);
+            updateNot.createNotificationInDB();
+        }
     }
 
     public void addAttendant(String username) {
@@ -403,7 +438,9 @@ public class Appointment {
         attendingPeople.add(username);
         db.updateQuery("insert into userAppointment values('" + username + "', " + this.appointmentId + ");");
         db.closeConnection();
+        System.out.println("");
         System.out.println("User added to event.");
+        System.out.println("");
 
     }
 

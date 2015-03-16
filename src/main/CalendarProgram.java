@@ -163,6 +163,7 @@ public class CalendarProgram {
                     }
                 case 6:
                     clearConsole();
+
                     System.out.println("-----------------------------------------");
                     for (Notification notification : this.user.notifications){
                         if (!notification.isHandled()){
@@ -175,15 +176,15 @@ public class CalendarProgram {
                                     continue;
                                 case 3:
                                     this.user.replyToInvite(notification);
-                                    ;
+                                    continue;
                                 default:
                                     notification.handle();
-                                    break;
+                                    continue;
                             }
                         }
 
                     }
-                    System.out.println("Do you want to handle your invitations");
+
                 case 7:
                     continue;
 

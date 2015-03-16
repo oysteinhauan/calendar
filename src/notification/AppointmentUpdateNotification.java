@@ -23,6 +23,6 @@ public class AppointmentUpdateNotification extends Notification {
     @Override
     public void setMessage() {
         Appointment appointment = Appointment.getAppointment(appointmentId);
-        message = ("" + senderUsername + " has updated the appointment: " + appointment.toString() + "");
+        message = ("" + senderUsername + " has updated the appointment you were either attending or invited to attend.\n Here is the updated appointment: " + appointment.toString() + "");
     }
 }
