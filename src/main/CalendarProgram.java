@@ -277,6 +277,7 @@ public class CalendarProgram {
                 break;
             }
             try {
+                appointment.getRoom().getRoomName();
                 appointment.inviteAttendant(bruker);
                 System.out.println(bruker + "ble lagt til");
             } catch (IllegalArgumentException e){
