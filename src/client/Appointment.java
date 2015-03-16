@@ -115,10 +115,9 @@ public class Appointment {
     }
 
 
-    @Override
     public String toString() {
 
-        return ("\nSubject: " + subject + "\nDescription: " + description + "\nRoom: " + room.getRoomName() + "\nStart: " + start + "\nEnd: " + end +"");
+        return ("\nSubject: " + subject + "\nDescription: " + description + "\nRoom: " + room.getRoom(roomId).getRoomName() + "\nStart: " + start + "\nEnd: " + end +"");
     }
 
     public static boolean checkIfOwner(String owner, Appointment appointment, int id){

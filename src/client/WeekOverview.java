@@ -27,6 +27,7 @@ public class WeekOverview {
     public WeekOverview(String username, int week, int year) {
         User u = User.getUserFromDB(username);
         this.appointments = u.getAppointmentsForUser(u);
+        System.out.println(this.appointments);
         this.week = week;
         this.year = year;
     }
