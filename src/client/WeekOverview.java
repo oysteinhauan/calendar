@@ -27,7 +27,6 @@ public class WeekOverview {
     public WeekOverview(String username, int week, int year) {
         User u = User.getUserFromDB(username);
         this.appointments = u.getAppointmentsForUser(u);
-        System.out.println(this.appointments);
         this.week = week;
         this.year = year;
     }
@@ -59,12 +58,10 @@ public class WeekOverview {
             }
 
         }
-        //System.out.println(weekAppointments);
         return weekAppointments;
     }
 
     public int getWeekday(Appointment appointment) {
-        Calendar c = Calendar.getInstance();
 
         String s = String.valueOf(appointment.getStart());
         String[] parts = s.split("-");
@@ -75,16 +72,21 @@ public class WeekOverview {
         String d = parts2[0];
 
         int year1 = Integer.valueOf(y);
-        int month1 = Integer.valueOf(m) - 1;
+        int month1 = Integer.valueOf(m);
         int date1 = Integer.valueOf(d);
 
         Calendar cal = Calendar.getInstance();
 
-        cal.set(year1, month1, date1);
+        System.out.println(year1);
+        System.out.println(month1);
+        System.out.println(date1);
 
-        int dayOfWeek = c.get(Calendar.DAY_OF_WEEK) - 2;
+        cal.set(year1, month1 + 1, date1);
 
-        return dayOfWeek;
+        int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+
+
+        return dayOfWeek + 1;
     }
 
     public void printDay(String day) {
@@ -160,6 +162,7 @@ public class WeekOverview {
     public void sortDays(){
         for (Appointment a: weekAppointments){
             int weekday = this.getWeekday(a);
+            System.out.println(weekday);
             if (weekday == 1){
                 mondays.add(a);
             }
