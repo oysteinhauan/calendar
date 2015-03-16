@@ -1,10 +1,10 @@
 package main;
 
 import client.*;
-import com.sun.xml.internal.bind.v2.TODO;
 import database.Database;
 import notification.Notification;
 
+import java.io.Console;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -45,8 +45,9 @@ public class CalendarProgram {
 
         System.out.println("\nPlease give me ur passwd!");
 
-        while (scn.hasNext()) {
+        while (true) {
             String password = scn.next();
+            //String password = passwordMasker();
             try {
                 login.login(password);
                 this.user = User.getUserFromDB(username);
@@ -76,11 +77,11 @@ public class CalendarProgram {
 
             this.user.fetchNotifications();
 
-            for (Notification not: this.user.notifications) {
-                if(!not.isHandled()) {
-                    System.out.println("\n" + not.getMessage() + "\n\n");
-                }
-            }
+            System.out.println("\t♪┏(°.°)┛┗(°.°)┓┗(°.°)┛┏(°.°)┓ ♪ ");
+            System.out.println("   \t\tYou have " + user.getNumberOfNewNotifications() + " new notification(s)!");
+            System.out.println("\t♪┏(°.°)┛┗(°.°)┓┗(°.°)┛┏(°.°)┓ ♪\n ");
+
+
 
 
             System.out.println("hva vil du gjøre? bruk tallene for å navigere i menyene \n" +
@@ -159,7 +160,28 @@ public class CalendarProgram {
                             continue;
                     }
                 case 6:
-                    //respond to notifications
+                    clearConsole();
+                    System.out.println("-----------------------------------------");
+                    for (Notification notification : this.user.notifications){
+                        if (!notification.isHandled()){
+
+                            System.out.println(notification.getMessage());
+                            System.out.println("-----------------------------------------");
+                            switch(notification.getNotificationType()){
+                                case 1:
+                                    this.user.replyToInvite(notification);
+                                    break;
+                                case 3:
+                                    this.user.replyToInvite(notification);
+                                    break;
+                                default:
+                                    notification.handle();
+                                    break;
+                            }
+                        }
+
+                    }
+                    System.out.println("Do you want to handle your invitations");
 
                 case 8:
 
@@ -206,13 +228,13 @@ public class CalendarProgram {
     }
 
     public static void createAppointment() {
-        Timestamp start = Timestamp.valueOf((KeyIn.inString("Legg inn avtaleinformasjon: starttidspunkt (YYYY-MM-DD HH:MM)")) + ":00");
+        Timestamp start = Timestamp.valueOf(( "2015-" + KeyIn.inString("Legg inn avtaleinformasjon: starttidspunkt (MM-DD HH:MM)")) + ":00");
         //kjør sjekk her
         Timestamp timeNow = new Timestamp((new java.util.Date()).getTime());
         if (start.before(timeNow)) {
             throw new IllegalArgumentException("for tidlig!!!");
         }
-        Timestamp slutt = Timestamp.valueOf((KeyIn.inString("Legg inn avtaleinformasjon: slutttidspunkt (YYYY-MM-DD HH:MM)")) + ":00");
+        Timestamp slutt = Timestamp.valueOf(("2015-" + KeyIn.inString("Legg inn avtaleinformasjon: slutttidspunkt (MM-DD HH:MM)")) + ":00");
         //kjør sjekk her
         if (slutt.before(timeNow) || slutt.before(start)) {
             throw new IllegalArgumentException("for TIDLIG SA JEG!!");
@@ -248,14 +270,15 @@ public class CalendarProgram {
 
         appointment.addAttendant(username);
 
-        while (appointment.attendingPeople.size() < antall) {
+        while (appointment.invitedUsers.size() + 1 < antall) {
 
             String bruker = KeyIn.inString("skriv inn username. 'cancel' to cancel");
             if (bruker.compareToIgnoreCase("cancel") == 0){
                 break;
             }
             try {
-                appointment.addAttendant(bruker);
+                appointment.inviteAttendant(bruker);
+                System.out.println(bruker + "ble lagt til");
             } catch (IllegalArgumentException e){
                 //dritt
                 System.out.println("Try again.");
@@ -317,13 +340,13 @@ public class CalendarProgram {
                 int value2 = KeyIn.inInt("Select option.\n ");
                 switch (value2) {
                     case 1:
-                        String newStartTime = KeyIn.inString("skriv inn nytt tidspunkt: (YYYY-MM-DD HH:MM)") + ":00";
+                        String newStartTime = "2015-" + KeyIn.inString("skriv inn nytt tidspunkt: (MM-DD HH:MM)") + ":00";
                         appointmentToChange.updateAppointmentInDB("start", newStartTime);
                         continue;
 
                     case 2:
 
-                    String newEndTime = KeyIn.inString("skriv inn nytt tidspunkt: (YYYY-MM-DD HH:MM)") + ":00";
+                    String newEndTime = "2015-" + KeyIn.inString("skriv inn nytt tidspunkt: (MM-DD HH:MM)") + ":00";
                     try {
                         appointmentToChange.updateAppointmentInDB("slutt", newEndTime);
                     } catch (IllegalArgumentException e) {
@@ -389,10 +412,12 @@ public class CalendarProgram {
             switch (value1) {
                 case 1:
                     createAppointment();
-                    continue;
+                    stay = false;
+                    break;
                 case 2:
                     editAppointment();
-                    continue;
+                    stay = false;
+                    break;
                 case 3:
                     stay = false;
                     break;
@@ -533,4 +558,17 @@ public class CalendarProgram {
             }
         }
     }
+
+    public String passwordMasker() {
+
+        Console console = System.console();
+        if (console == null) {
+            System.out.println("Couldn't get Console instance");
+            System.exit(0);
+        }
+        char passwordArray[] = console.readPassword();
+        //console.printf("Password entered was: %s%n", new String(passwordArray));
+        return new String(passwordArray);
+    }
 }
+

@@ -4,6 +4,7 @@ import database.Database;
 import notification.Notification;
 import notification.ReplyFromInvitedUserNotification;
 
+import javax.management.NotificationFilter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -309,6 +310,7 @@ public class User{
         notifications = getNotificationsForUser(username);
     }
 
+
     public void addNotification(Notification notification){
         notifications.add(notification);
     }
@@ -324,7 +326,7 @@ public class User{
                 size++;
             }
         }
-        return notifications.size();
+        return size;
     }
 
     public void removeAppointmentNotification(Appointment appointment){
@@ -338,6 +340,7 @@ public class User{
         boolean replied = false;
         Boolean reply = null;
         Appointment ap = Appointment.getAppointment(inviteNotification.getAppointmentId());
+        Notification replyToInviteNotification;
 
         System.out.println(inviteNotification.getMessage());
 
@@ -353,6 +356,7 @@ public class User{
            // Switch construct
         while(!replied){
             swValue = KeyIn.inInt("Select option: ");
+
             switch (swValue) {
                 case 1:
                     System.out.println("Option 1 selected: You have accepted the invitation.");
@@ -360,21 +364,24 @@ public class User{
                     ap.addAttendant(username);
                     replied = true;
                     inviteNotification.handle();
+                    replyToInviteNotification = new ReplyFromInvitedUserNotification(ap.getOwner(), username, ap.appointmentId, reply);
+                    replyToInviteNotification.createNotificationInDB();
+                    System.out.println("" + ap.getOwner() + " will now be notified about your reply.");
                     break;
                 case 2:
                     System.out.println("Option 2 selected: You have declined the invitation.");
                     reply = false;
                     replied = true;
                     inviteNotification.handle();
+                    replyToInviteNotification = new ReplyFromInvitedUserNotification(ap.getOwner(), username, ap.appointmentId, reply);
+                    replyToInviteNotification.createNotificationInDB();
+                    System.out.println("" + ap.getOwner() + " will now be notified about your reply.");
                     break;
                 default:
                     System.out.println("Invalid selection (ノಠ益ಠ)ノ彡┻━┻");
                     break;
                     // This break is not really necessary
             }
-            Notification replyToInviteNotification = new ReplyFromInvitedUserNotification(ap.getOwner(), username, ap.appointmentId, reply);
-            replyToInviteNotification.createNotificationInDB();
-            System.out.println("" + ap.getOwner() + " will now be notified about your reply.");
         }
     }
 

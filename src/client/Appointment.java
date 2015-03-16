@@ -20,11 +20,11 @@ public class Appointment {
 
     int size;
     public ArrayList<String> attendingPeople = new ArrayList<String>();
-    ArrayList<String> invitedUsers = new ArrayList<String>();
+    public ArrayList<String> invitedUsers = new ArrayList<String>();
     String subject;
     String description;
     Room room;
-    int roomId;
+    public int roomId;
     int appointmentId;
     int attendingGroup;
     String owner;
@@ -72,8 +72,10 @@ public class Appointment {
         if(useSystem) {
             try {
                 appointment = new Appointment(start, end, subject, description, size, owner);
-                appointment.findRoom();
+                appointment.findRoomId();
+                appointment.setRoom(Room.getRoom(appointment.getRoomId()));
                 appointment.createAppointmentInDB(appointment, db);
+
 
                 ResultSet rs = db.readQuery("select last_insert_id();");
                 int id = -1;
@@ -88,14 +90,13 @@ public class Appointment {
             } finally {
 
                 db.closeConnection();
-
-
             }
         } else {
 
             try{
             appointment = new Appointment(start, end, subject, description, owner, null);
                 appointment.createAppointmentInDB(appointment, db);
+                appointment.setRoom(null);
             ResultSet rs = db.readQuery("select last_insert_id();");
             int id = -1;
             while (rs.next()) {
@@ -117,7 +118,7 @@ public class Appointment {
     @Override
     public String toString() {
 
-        return ("\nSubject: " + subject + "\nDescription: " + description + "\nRoom: " + room + "\nStart: " + start + "\nEnd: " + end +"");
+        return ("\nSubject: " + subject + "\nDescription: " + description + "\nRoom: " + room.getRoomName() + "\nStart: " + start + "\nEnd: " + end +"");
     }
 
     public static boolean checkIfOwner(String owner, Appointment appointment, int id){
@@ -281,7 +282,7 @@ public class Appointment {
 
 
 
-    public void findRoom() {
+    public void findRoomId() {
 
 
         try {
