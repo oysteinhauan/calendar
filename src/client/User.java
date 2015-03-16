@@ -4,7 +4,6 @@ import database.Database;
 import notification.Notification;
 import notification.ReplyFromInvitedUserNotification;
 
-import javax.management.NotificationFilter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -342,7 +341,6 @@ public class User{
         Appointment ap = Appointment.getAppointment(inviteNotification.getAppointmentId());
         Notification replyToInviteNotification;
 
-        System.out.println(inviteNotification.getMessage());
 
             // Display menu graphics
             System.out.println("============================");
@@ -359,7 +357,7 @@ public class User{
 
             switch (swValue) {
                 case 1:
-                    System.out.println("Option 1 selected: You have accepted the invitation.");
+                    System.out.println("Option 1 selected: You have accepted the invitation.\n\n");
                     reply = true;
                     ap.addAttendant(username);
                     replied = true;
@@ -369,13 +367,13 @@ public class User{
                     System.out.println("" + ap.getOwner() + " will now be notified about your reply.");
                     break;
                 case 2:
-                    System.out.println("Option 2 selected: You have declined the invitation.");
+                    System.out.println("Option 2 selected: You have declined the invitation.\n\n");
                     reply = false;
                     replied = true;
                     inviteNotification.handle();
                     replyToInviteNotification = new ReplyFromInvitedUserNotification(ap.getOwner(), username, ap.appointmentId, reply);
                     replyToInviteNotification.createNotificationInDB();
-                    System.out.println("" + ap.getOwner() + " will now be notified about your reply.");
+                    System.out.println("" + ap.getOwner() + " will now be notified about your reply.\n\n");
                     break;
                 default:
                     System.out.println("Invalid selection (ノಠ益ಠ)ノ彡┻━┻");

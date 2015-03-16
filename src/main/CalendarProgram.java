@@ -167,7 +167,7 @@ public class CalendarProgram {
                         if (!notification.isHandled()){
 
                             System.out.println(notification.getMessage());
-                            System.out.println("-----------------------------------------");
+                            System.out.println("-----------------------------------------\n");
                             switch(notification.getNotificationType()){
                                 case 1:
                                     this.user.replyToInvite(notification);
