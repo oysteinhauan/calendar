@@ -119,7 +119,7 @@ public class CalendarProgram {
                         int id = Group.getGroupIDFromDB(groupname);
                         Group group = Group.getGroup(id);
                         Calendar groupCalendar = new Calendar(group);
-                        groupCalendar.viewCalendar();
+                        groupCalendar.viewGroupCalendar();
                     } catch (IllegalArgumentException e) {
                         System.out.println("Invalid groupname. Try again.");
                     }

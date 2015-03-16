@@ -184,12 +184,13 @@ public class Group implements AppointmentListener {
         try {
             ArrayList<Integer> appIdList = new ArrayList<Integer>();
             ArrayList<Appointment> appList = new ArrayList<Appointment>();
+            int groupId = group.getGroupID();
 
             Database db = new Database();
             db.connectDb("all_s_gruppe40", "qwerty");
-            String sql = "select appointment.appointmentId, start from groupAppointment, appointment " +
-                    "where groupId = " + group.getGroupID() + " and appointment.appointmentId = groupAppointment.appointmentId " +
-                    "order by start;";
+            String sql = "SELECT appointment.appointmentId FROM userAppointment, appointment, group_1, userGroup WHERE " +
+                    "appointment.appointmentId = userAppointment.appointmentId AND userGroup.username = userAppointment.username" +
+                    " AND group_1.groupId = " + String.valueOf(groupId) + " ORDER BY start;"; //+ " ORDER BY userAppointment.username";
 
             ResultSet rs = db.readQuery(sql);
             while (rs.next()) {
