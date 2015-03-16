@@ -14,8 +14,9 @@ public class ReplyFromInvitedUserNotification extends Notification{
         setRecipientUsername(recieverUsername);
         setAppointmentId(appointmentId);
         setSenderUsername(senderUsername);
-        setMessage();
         this.replyFromInvitedUser = replyFromInvitedUser;
+        setMessage();
+
     }
 
     @Override

@@ -115,9 +115,10 @@ public class Appointment {
     }
 
 
+    @Override
     public String toString() {
 
-        return ("\nSubject: " + subject + "\nDescription: " + description + "\nRoom: " + room.getRoom(roomId).getRoomName() + "\nStart: " + start + "\nEnd: " + end +"");
+        return ("\nSubject: " + subject + "\nDescription: " + description + "\nRoom: " + roomId + "\nStart: " + start + "\nEnd: " + end +"");
     }
 
     public static boolean checkIfOwner(String owner, Appointment appointment, int id){
@@ -348,6 +349,13 @@ public class Appointment {
 
     public ArrayList<String> getAttendingPeople() {
         return attendingPeople;
+    }
+
+    public void fetchAttendingPeopleFromDB(){
+        Database db = new Database();
+        String sql = "SELECT username FROM userAppointment WHERE appointmentId = " + this.appointmentId + "" ;
+        db.connectDb();
+
     }
 
     public void addAttendant(String username) {
