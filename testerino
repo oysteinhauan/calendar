@@ -21,7 +21,7 @@ Decline / Accept til  avtaleEier må fixxes. Room blir null i notifikation.
 counter på hvor mange du har igjen å adde
 vis avtalen etter den er opprettet.
 
-legge til  while-løkker slik at programmet lar deg prøve på ny istedet for å krasje.
+legge til  while-løkker slik at programmet lar deg prøve på ny istedet for å krasje. check
 
 
 
