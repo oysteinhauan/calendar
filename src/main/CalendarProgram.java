@@ -171,10 +171,10 @@ public class CalendarProgram {
                             switch(notification.getNotificationType()){
                                 case 1:
                                     this.user.replyToInvite(notification);
-                                    break;
+                                    continue;
                                 case 3:
                                     this.user.replyToInvite(notification);
-                                    break;
+                                    ;
                                 default:
                                     notification.handle();
                                     break;

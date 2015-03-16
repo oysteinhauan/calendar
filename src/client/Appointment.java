@@ -118,7 +118,7 @@ public class Appointment {
     @Override
     public String toString() {
 
-        return ("\nSubject: " + subject + "\nDescription: " + description + "\nRoom: " + room.getRoomName() + "\nStart: " + start + "\nEnd: " + end +"");
+        return ("\nSubject: " + subject + "\nDescription: " + description + "\nRoom: " + roomId + "\nStart: " + start + "\nEnd: " + end +"");
     }
 
     public static boolean checkIfOwner(String owner, Appointment appointment, int id){
@@ -216,22 +216,18 @@ public class Appointment {
 
     public void updateAppointmentInDB(String columnToUpdate, String updatedInfo){
 
-
-
         Database db = new Database();
         db.connectDb("all_s_gruppe40", "qwerty");
 
         //sjekker om ny slutt ikke er før nåværende start eller omvendt
         if (columnToUpdate == "slutt"){
-
             String sql = "Select start from appointment where appointmentId ='" + this.appointmentId + "';";
             ResultSet rs = db.readQuery(sql);
             Timestamp currentStart = null;
             try {
                 while (rs.next()){
                     currentStart = rs.getTimestamp("start");
-
-            }
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -349,6 +345,21 @@ public class Appointment {
 
     public ArrayList<String> getAttendingPeople() {
         return attendingPeople;
+    }
+
+    public void fetchAttendingPeopleFromDB(){
+        Database db = new Database();
+        String sql = "SELECT username FROM userAppointment WHERE appointmentId = " + this.appointmentId + "" ;
+        db.connectDb();
+        ResultSet rs = db.readQuery(sql);
+        try {
+            while (rs.next()) {
+                attendingPeople.add(rs.getString("username"));
+            }
+        }catch (SQLException e){
+
+        }
+
     }
 
     public void addAttendant(String username) {
