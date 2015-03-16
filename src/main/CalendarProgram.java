@@ -91,12 +91,13 @@ public class CalendarProgram {
                             "3. Se en annens private kalender\n" +
                             "4. Endre min brukerinfo\n" +
                             "5. Vis min personlige kalender\n" +
-                            "6. Oprett ny bruker\n" +
-                            "7. Logg ut\n\n"
+                            "6. Vis svar på notifikasjoner\n" +
+                            "7. Oppdater\n" +
+                            "8. Logg ut\n\n"
             );
 
             if(this.user.isAdmin()){
-                System.out.println("8. ADMIN");
+                System.out.println("9. ADMIN");
 
             }
 
@@ -182,8 +183,10 @@ public class CalendarProgram {
 
                     }
                     System.out.println("Do you want to handle your invitations");
+                case 7:
+                    continue;
 
-                case 8:
+                case 9:
 
                     if(!this.user.isAdmin()){
                         continue;
@@ -191,7 +194,7 @@ public class CalendarProgram {
                     admin();
                     continue;
 
-                case 7:
+                case 8:
                     clearConsole();
                     System.out.printf("snx m8s!!!!1!\n\n\n\n");
 
