@@ -22,6 +22,7 @@ public class Group implements AppointmentListener {
     Database db;
     String sql;
     ArrayList<String> members = new ArrayList<String>();
+    ArrayList<Group> subgroups = new ArrayList<Group>();
 
     public Group(String groupname) {
         this.groupname = groupname;
@@ -44,6 +45,20 @@ public class Group implements AppointmentListener {
         sql = ("INSERT INTO group_1 (name) values('" + (group.groupname) + "');");
         db.updateQuery(sql);
        // db.closeConnection();
+    }
+
+    public ArrayList<String> getMembers(){
+        return this.members;
+    }
+
+    public void createSubGroup(String subGroupName, Database db){
+        Group subgroup = new Group(this.getGroupname() + "." + subGroupName);
+        if(!subgroups.contains(subgroup)) {
+            subgroups.add(subgroup);
+            sql = ("insert into group_1 (name) values('" + subgroup.getGroupname() + "');");
+            db.updateQuery(sql);
+            System.out.println("Group created");
+        }
     }
 
 
@@ -91,6 +106,11 @@ public class Group implements AppointmentListener {
         return groupID;
     }
 
+    public String getMember(int i){
+        return this.members.get(i);
+
+    }
+
     public static Group getGroup(int groupID) {
         Database db = new Database();
         Group group = new Group();
@@ -126,8 +146,16 @@ public class Group implements AppointmentListener {
             }
             //db.closeConnection();
             rs.close();
+            sql = "select name from group_1 where name like '" + group.getGroupname()
+                    + ".%'";
+            rs = db.readQuery(sql);
+            while (rs.next()){
+                group.subgroups.add(new Group(rs.getString(0)));
+            }
+            rs.close();
         } catch (SQLException e) {
         }
+        group.getMembers(db);
         return group;
     }
 
@@ -290,8 +318,8 @@ public class Group implements AppointmentListener {
 
     }
 
-    public ArrayList<String> getMembers(String groupname, Database db) {
-        this.groupID = getGroupIDFromDB(groupname);
+    public void getMembers(Database db) {
+        this.groupID = getGroupIDFromDB(this.getGroupname());
         try {
             //Database db = new Database("all_s_gruppe40_calendar");
            // db.connectDb("all_s_gruppe40", "qwerty");
@@ -299,7 +327,7 @@ public class Group implements AppointmentListener {
             ResultSet rs = db.readQuery(sql);
             while (rs.next()) {
 
-                members.add(rs.getString("username"));
+                this.members.add(rs.getString("username"));
             }
 
            // db.closeConnection();
@@ -308,7 +336,7 @@ public class Group implements AppointmentListener {
             e.printStackTrace();
 
         }
-        return members;
+
 
     }
 
@@ -400,5 +428,9 @@ public class Group implements AppointmentListener {
 
         return groups;
 
+    }
+
+    public static ArrayList<Group> getSubGroups(Group group){
+        return group.subgroups;
     }
 }

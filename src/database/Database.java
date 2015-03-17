@@ -23,6 +23,10 @@ public class Database {
 
     }
 
+    public boolean isConnected(){
+         return this.connected;
+    }
+
 
     public void connectDb(String username, String password) {
         try {
@@ -37,6 +41,7 @@ public class Database {
             connection = DriverManager.getConnection(url, username, password);
             //System.out.println("Database connected! :)");
             connected = true;
+
         } catch (SQLException e) {
             throw new RuntimeException("Cannot connect the database! :(", e);
         }

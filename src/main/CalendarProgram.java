@@ -73,7 +73,8 @@ public class CalendarProgram {
         Database db = new Database();
         db.connectDb("all_s_gruppe40", "qwerty");
 
-        while (loggedIn) {
+
+        while (loggedIn && db.isConnected()) {
 
             clearConsole();
             calendar = new Calendar(username, db);
@@ -93,7 +94,7 @@ public class CalendarProgram {
             System.out.println("hva vil du gjøre? bruk tallene for å navigere i menyene \n" +
 
                             "1. opprett / endre avtaler \n" +
-                            "2. Vis en gruppekalender\n" +
+                            "2. gruppestuff\n" +
                             "3. Se en annens private kalender\n" +
                             "4. Endre min brukerinfo\n" +
                             "5. Vis min personlige kalender\n" +
@@ -119,12 +120,20 @@ public class CalendarProgram {
                     continue;
 
                 case 2:
+                    clearConsole();
 
                     ArrayList<String> groupNames = Group.getGroupNames(db);
-                    String groupname;
-                    while (true) {
-                        groupname = KeyIn.inString("Vennligst skriv inn navnet paa gruppen du vil utforske!");
+                    String groupname = "";
+                    boolean fail = true;
+                    while (fail) {
+                        groupname = KeyIn.inString("Vennligst skriv inn navnet paa gruppen du vil utforske! Enter for å gå til gruppemeny.");
                         if(groupNames.contains(groupname)){
+                            fail = false;
+                            break;
+                        }
+                        else if(groupname == ""){
+                            //Group group = null;
+                            fail = false;
                             break;
                         }
                         System.out.println("prøv igjen, gruppenavnet finnes ikke!!");
@@ -134,6 +143,9 @@ public class CalendarProgram {
                             Group group = Group.getGroup(id, db);
                             Calendar groupCalendar = new Calendar(group, db);
                             groupCalendar.viewGroupCalendar();
+                            groupStuff(group, db);
+                            String bæsj = KeyIn.inString("Trykk Enter når du er ferdig.");
+                            // legge inn gruppelogikk
                             break;
                         } catch (IllegalArgumentException e) {
                             System.out.println("Invalid groupname. Try again.");
@@ -315,6 +327,111 @@ public class CalendarProgram {
         }
     }
 
+    public void groupStuff(Group group, Database db){
+        boolean stay = true;
+
+        while (stay) {
+
+            clearConsole();
+
+            System.out.println("1. Vis medlemmer for gruppen\n2. Legg til deltaker i gruppe/subgruppe. 3. Vis grupper\n" +
+                    "4. Lag ny gruppe\n6. Gå tilbake");
+
+            int value = KeyIn.inInt("Select Option");
+            switch (value) {
+                case 1:
+                    //Se gruppemedlemmer
+                    int index = 1;
+                    for (String str: group.getMembers()){
+                        System.out.println();
+                        System.out.println(index +". "  + str);
+                        index++;
+                    }
+                    String dritt = KeyIn.inString("Enter når du er ferdig.");
+                    continue;
+
+                case 4:
+                    //Legg til medlem / deg selv
+                    char ans = KeyIn.inChar("Subgruppe? y/n");
+                    if(ans == 'y'){
+                        String gname = KeyIn.inString("Skriv inn navn på subgruppe");
+                        try {
+                            group.createSubGroup(gname, db);
+                        } catch(RuntimeException e){
+                            System.out.println("Gruppen finnes allerede ellernoe");
+
+                        }
+                        continue;
+
+                    }
+                    else{
+                        String gname = KeyIn.inString("Skriv navn på ny gruppe.");
+                        Group newGroup = new Group(gname);
+                        try {
+                            newGroup.createGroup(newGroup, db);
+                        } catch(RuntimeException e){
+                            e.printStackTrace();
+                        }
+                        continue;
+                    }
+
+
+                case 3:
+                    clearConsole();
+                    ResultSet rs = db.readQuery("select * from group_1;");
+
+                    try {
+                        while (rs.next()){
+                            System.out.println("||");
+                            System.out.println("||" + rs.getString("name"));
+                            System.out.println("||");
+                        }
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    continue;
+
+                    //Vis grupper / subgrupper
+                case 2:
+                    //Legg til deltaker i gruppe
+                    try {
+                        if(group.getGroupname() == null){
+                            String asdf = KeyIn.inString("Skriv inn gruppen du vil legge til bruker i");
+                            group = Group.getGroup(Group.getGroupIDFromDB(asdf, db), db);
+                        }
+                        String yn = KeyIn.inString("Vil du legge til deg selv eller noen andre? y/n");
+                        if(yn.equals("y") || yn.equals("yes")){
+                            group.addMember(user, group.getGroupID(), db);
+                            System.out.println("Brukeren ble mest sannsynlig lagt til.");
+
+                            //burde catche runtime
+                        }
+                        else{
+                            String usr = KeyIn.inString("Skriv inn brukeren du vil legge til.");
+                            group.addMember(User.getUserFromDB(usr), group.getGroupID(), db);
+                            System.out.println("Brukeren ble mest sannsynlig lagt til.");
+                            //burde catche runtime
+
+                        }
+                    } catch (RuntimeException e) {
+                        System.out.println("Brukeren ble ikke lagt til. Sikkert allerede medlem elns.");
+                    }
+                    continue;
+
+
+                case 5:
+                    //hvis admin slett gruppe / subgruppe
+                case 6:
+                    stay = false;
+                    break;
+                    //gå tilbake
+
+                default: continue;
+
+            }
+        }
+    }
+
     public void editAppointment(Database db) {
 
 
@@ -339,7 +456,7 @@ public class CalendarProgram {
                 Appointment app = Appointment.getAppointment(idToChange, db);
                 if (!app.hasRecord(idToChange, db)) {
                     System.out.println("id'en finnes ikke, prøv igjen!!");
-                } else if (!(Appointment.checkIfOwner(this.user.getUsername(), app, idToChange))) {
+                } else if (!(Appointment.checkIfOwner(this.user.getUsername(), app, idToChange)) && !this.user.isAdmin()) {
                     throw new IllegalArgumentException("Du må være eieren for å endre.");
                 }
 
@@ -428,6 +545,7 @@ public class CalendarProgram {
                         //slett event
                         Appointment.removeAppointmentInDB(appointmentToChange.getAppointmentId(), db);
                         System.out.println("Appointment removed.");
+                        stay = false;
                         break;
                     case 10:
 
