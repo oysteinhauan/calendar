@@ -22,8 +22,9 @@ public class MenuTest {
 
 
     public static void main(String[] args) {
+        Database db;
 
-        init();
+        //init(db);
         run();
 
     }
@@ -33,7 +34,7 @@ public class MenuTest {
     }
 
 
-    public static void init() {
+    public static void init(Database db) {
 
         Scanner scn = new Scanner(System.in);
         System.out.println("Wilkommen! Bitte schreiben sie Ihren Name!");
@@ -71,7 +72,7 @@ public class MenuTest {
 
             }
         }
-        calendar = new Calendar(username);
+        calendar = new Calendar(username, db);
     }
 
     public static void run() {
@@ -187,24 +188,24 @@ public class MenuTest {
 
                                 case 123:
 
-                                    String newAttendant = KeyIn.inString("Hvilken deltaker vil du legge til? skriv inn username");
-                                    if (User.existsCheck(newAttendant)){
-                                        appointmentToChange.addAttendant(newAttendant);
-                                    } else {
-                                        System.out.println("brukeren eksisterer ikke!");
-                                    }
-                                    continue;
+//                                    String newAttendant = KeyIn.inString("Hvilken deltaker vil du legge til? skriv inn username");
+//                                    if (User.existsCheck(newAttendant)){
+//                                        appointmentToChange.addAttendant(newAttendant);
+//                                    } else {
+//                                        System.out.println("brukeren eksisterer ikke!");
+//                                    }
+//                                    continue;
 
                                 case 124:
 
-                                    String attendantToRemove = KeyIn.inString("Hvilken deltaker vil du fjerne? skriv inn username");
+                                   /* String attendantToRemove = KeyIn.inString("Hvilken deltaker vil du fjerne? skriv inn username");
                                     if (User.existsCheck(attendantToRemove)) {
                                         String sql = "DELETE from userAppointment WHERE username ='" + attendantToRemove +
                                                 ", AND appointmentId =" + appointmentToChange.getAppointmentId() + ";";
 
                                         db.updateQuery(sql);
                                         db.closeConnection();
-                                    } else {
+                                    }*/ if (true){
                                         System.out.println("brukeren eksisterer ikke!");
                                         continue;
                                     }
@@ -252,8 +253,8 @@ public class MenuTest {
                     try {
                         int id = Group.getGroupIDFromDB(groupname);
                         Group group = Group.getGroup(id);
-                        Calendar groupCalendar = new Calendar(group);
-                        groupCalendar.viewCalendar();
+                       // Calendar groupCalendar = new Calendar(group);
+                      //  groupCalendar.viewCalendar();
                     } catch (IllegalArgumentException e) {
                         System.out.println("Invalid groupname. Try again.");
                     }
@@ -263,15 +264,15 @@ public class MenuTest {
                     clearConsole();
 
                     String otherUser = KeyIn.inString("hvem sin kalender vil du se? skriv inn brukernavnet\n\n");
-                    if (User.existsCheck(otherUser)) {
-                        Calendar otherCalendar = new Calendar(otherUser);
-                        otherCalendar.viewCalendar();
-                    } else {
+                    //if (User.existsCheck(otherUser)) {
+                        //Calendar otherCalendar = new Calendar(otherUser);
+                        //otherCalendar.viewCalendar();
+                    //} //else {
                         System.out.println("ugyldig brukernavn");
                         continue;
-                    }
 
-                    break;
+
+
 
                 case 4:
                     clearConsole();

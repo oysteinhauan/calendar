@@ -63,20 +63,23 @@ public class CalendarProgram {
                 System.out.println("How did you get here???");
             }
         }
-        calendar = new Calendar(username);
+
     }
 
     public void run() {
 
         boolean loggedIn = true;
 
+        Database db = new Database();
+        db.connectDb("all_s_gruppe40", "qwerty");
+
         while (loggedIn) {
+
             clearConsole();
-            calendar = new Calendar(username);
+            calendar = new Calendar(username, db);
 
             int swValue;
-            Database db = new Database();
-            db.connectDb("all_s_gruppe40", "qwerty");
+
 
             this.user.fetchNotifications();
 
@@ -99,7 +102,7 @@ public class CalendarProgram {
                             "8. Logg ut\n\n"
             );
 
-            if(this.user.isAdmin()){
+            if(this.user.isAdmin(db)){
                 System.out.println("9. ADMIN");
 
             }
@@ -112,7 +115,7 @@ public class CalendarProgram {
             switch (swValue) {
                 case 1:
                     clearConsole();
-                    appNav();
+                    appNav(db);
                     continue;
 
                 case 2:
@@ -120,9 +123,9 @@ public class CalendarProgram {
 
                     String groupname = KeyIn.inString("Vennligst skriv inn navnet paa gruppen du vil utforske!");
                     try {
-                        int id = Group.getGroupIDFromDB(groupname);
-                        Group group = Group.getGroup(id);
-                        Calendar groupCalendar = new Calendar(group);
+                        int id = Group.getGroupIDFromDB(groupname, db);
+                        Group group = Group.getGroup(id, db);
+                        Calendar groupCalendar = new Calendar(group, db);
                         groupCalendar.viewGroupCalendar();
                     } catch (IllegalArgumentException e) {
                         System.out.println("Invalid groupname. Try again.");
@@ -133,8 +136,8 @@ public class CalendarProgram {
                     clearConsole();
 
                     String otherUser = KeyIn.inString("hvem sin kalender vil du se? skriv inn brukernavnet\n\n");
-                    if (User.existsCheck(otherUser)) {
-                        Calendar otherCalendar = new Calendar(otherUser);
+                    if (User.existsCheck(otherUser, db)) {
+                        Calendar otherCalendar = new Calendar(otherUser, db);
                         otherCalendar.viewCalendar();
                         String ferdig = KeyIn.inString("" + "Trykk Enter når du er ferdig.");
                     } else {
@@ -147,7 +150,7 @@ public class CalendarProgram {
                 case 4:
                     clearConsole();
 
-                    editUserInfo(username);
+                    editUserInfo(username, db);
 
                     break;
 
@@ -175,10 +178,10 @@ public class CalendarProgram {
                             System.out.println("-----------------------------------------\n");
                             switch(notification.getNotificationType()){
                                 case 1:
-                                    this.user.replyToInvite(notification);
+                                    this.user.replyToInvite(notification, db);
                                     continue;
                                 case 3:
-                                    this.user.replyToInvite(notification);
+                                    this.user.replyToInvite(notification, db);
                                     continue;
                                 default:
                                     System.out.println("1. Se neste notification");
@@ -188,7 +191,7 @@ public class CalendarProgram {
 
                                     switch (c) {
                                         case 51:
-                                            notification.handle();
+                                            notification.handle(db);
                                             continue;
                                     }
                             }
@@ -201,10 +204,10 @@ public class CalendarProgram {
 
                 case 9:
 
-                    if(!this.user.isAdmin()){
+                    if(!this.user.isAdmin(db)){
                         continue;
                     }
-                    admin();
+                    admin(db);
                     continue;
 
                 case 8:
@@ -243,7 +246,7 @@ public class CalendarProgram {
         cp.run();
     }
 
-    public static void createAppointment() {
+    public static void createAppointment(Database db) {
         Timestamp start = Timestamp.valueOf(( "2015-" + KeyIn.inString("Legg inn avtaleinformasjon: starttidspunkt (MM-DD HH:MM)")) + ":00");
         //kjør sjekk her
         Timestamp timeNow = new Timestamp((new java.util.Date()).getTime());
@@ -272,19 +275,19 @@ public class CalendarProgram {
 
             if (roomChoice == 1) {
                 useSystem = true;
-                appointment = Appointment.createAppointment(start, slutt, subject, description, antall, username, useSystem);
+                appointment = Appointment.createAppointment(start, slutt, subject, description, antall, username, useSystem, db);
                 break;
 
             } else if (roomChoice == 2) {
                 useSystem = false;
-                appointment = Appointment.createAppointment(start, slutt, subject, description, antall, username, useSystem);
+                appointment = Appointment.createAppointment(start, slutt, subject, description, antall, username, useSystem, db);
                 break;
 
             }
             System.out.println("prøv igjen!");
         }
 
-        appointment.addAttendant(username);
+        appointment.addAttendant(username, db);
 
         while (appointment.invitedUsers.size() + 1 < antall) {
 
@@ -294,7 +297,7 @@ public class CalendarProgram {
             }
             try {
 
-                appointment.inviteAttendant(bruker);
+                appointment.inviteAttendant(bruker, db);
                 System.out.println(bruker + "ble lagt til");
             } catch (IllegalArgumentException e){
                 //dritt
@@ -303,7 +306,7 @@ public class CalendarProgram {
         }
     }
 
-    public void editAppointment() {
+    public void editAppointment(Database db) {
 
 
         boolean bol = true;
@@ -319,8 +322,8 @@ public class CalendarProgram {
                     break;
 
                 }
-                Appointment app = Appointment.getAppointment(idToChange);
-                if (!app.hasRecord(idToChange)) {
+                Appointment app = Appointment.getAppointment(idToChange, db);
+                if (!app.hasRecord(idToChange, db)) {
                     System.out.println("id'en finnes ikke, prøv igjen!!");
                 } else if (!(Appointment.checkIfOwner(this.user.getUsername(), app, idToChange))) {
                     throw new IllegalArgumentException("Du må være eieren for å endre.");
@@ -344,7 +347,7 @@ public class CalendarProgram {
         }
         if (!skip) {
 
-            Appointment appointmentToChange = Appointment.getAppointment(idToChange);
+            Appointment appointmentToChange = Appointment.getAppointment(idToChange, db);
 
             boolean stay = true;
 
@@ -367,7 +370,7 @@ public class CalendarProgram {
                         String newStartTime = KeyIn.inString("\nNåværende start: " + appointmentToChange.getStart().toString()
                                 + "\n\nNåværende slutt: " +appointmentToChange.getEnd().toString()
                                 + "\n\nSkriv inn nytt starttidspunkt: (YYYY-MM-DD HH:MM)") + ":00";
-                        appointmentToChange.updateAppointmentInDB("start", newStartTime);
+                        appointmentToChange.updateAppointmentInDB("start", newStartTime, db);
                         continue;
 
                     case 2:
@@ -376,23 +379,23 @@ public class CalendarProgram {
                             + "\n\nNåværende slutt: " +appointmentToChange.getEnd().toString()
                             + "\n\nSkriv inn nytt sluttidspunkt: (YYYY-MM-DD HH:MM)") + ":00";
                     try {
-                        appointmentToChange.updateAppointmentInDB("slutt", newEndTime);
+                        appointmentToChange.updateAppointmentInDB("slutt", newEndTime, db);
                     } catch (IllegalArgumentException e) {
                         System.out.println(e);
                     }
                     continue;
                 case 3:
                     String newAttendant = KeyIn.inString("Hvilken deltaker vil du legge til? skriv inn username");
-                    appointmentToChange.addAttendant(newAttendant);
+                    appointmentToChange.addAttendant(newAttendant, db);
                     continue;
                 case 4:
                     String attendantToRemove = KeyIn.inString("Hvilken deltaker vil du fjerne? skriv inn username");
-                    appointmentToChange.removeAttendant(attendantToRemove);
+                    appointmentToChange.removeAttendant(attendantToRemove, db);
                     continue;
 
                     case 5:
                         String newDescription = KeyIn.inString("Skriv inn ny description:");
-                        appointmentToChange.updateAppointmentInDB("description", newDescription);
+                        appointmentToChange.updateAppointmentInDB("description", newDescription, db);
                         continue;
                     case 6:
                         //endre romstr
@@ -403,13 +406,13 @@ public class CalendarProgram {
                         ArrayList<String> applist = appointmentToChange.getAttendingPeople();
                         int index = 1;
                         for (String usr : applist) {
-                            System.out.println((index + "") + ". " + User.getUserFromDB(usr).getFullName() + "\n");
+                            System.out.println((index + "") + ". " + User.getUserFromDB(usr, db).getFullName() + "\n");
                             index++;
                         }
                         continue;
                     case 9:
                         //slett event
-                        Appointment.removeAppointmentInDB(appointmentToChange.getAppointmentId());
+                        Appointment.removeAppointmentInDB(appointmentToChange.getAppointmentId(), db);
                         System.out.println("Appointment removed.");
                         break;
                     case 10:
@@ -418,8 +421,8 @@ public class CalendarProgram {
 
                         int notificationId = -1;
 
-                        Database db = new Database();
-                        db.connectDb();
+                        //Database db = new Database();
+                        //db.connectDb();
                         String sql = "SELECT notification.notificationId FROM notification, appointment WHERE" +
                                 " notification.appointmentId = " + String.valueOf(idToChange) + " AND " +
                                 "notification.handled = 0 AND appointment.appointmentId = notification.appointmentId;";
@@ -433,9 +436,9 @@ public class CalendarProgram {
                             e.printStackTrace();
                         }
 
-                        Notification not = Notification.getNotificationFromDB(notificationId);
-                        User user = User.getUserFromDB(username);
-                        user.replyToInvite(not);
+                        Notification not = Notification.getNotificationFromDB(notificationId, db);
+                        User user = User.getUserFromDB(username, db);
+                        user.replyToInvite(not, db);
 
                         break;
                     case 11:
@@ -451,7 +454,7 @@ public class CalendarProgram {
 
 
 
-    public void appNav() {
+    public void appNav(Database db) {
 
         System.out.println("hva vil du gjøre? bruk tallene for å navigere i menyene \n" +
                         "1. Opprett ny avtale \n" +
@@ -465,11 +468,11 @@ public class CalendarProgram {
 
             switch (value1) {
                 case 1:
-                    createAppointment();
+                    createAppointment(db);
                     stay = false;
                     break;
                 case 2:
-                    editAppointment();
+                    editAppointment(db);
                     stay = false;
                     break;
                 case 3:
@@ -484,11 +487,11 @@ public class CalendarProgram {
         }
     }
 
-    public void editUserInfo(String username) {
+    public void editUserInfo(String username, Database db) {
 
 
-        Database db = new Database();
-        db.connectDb();
+        //Database db = new Database();
+        //db.connectDb();
         boolean stay = true;
 
         while (stay) {
@@ -525,24 +528,24 @@ public class CalendarProgram {
         }
     }
 
-    public void viewUser(String username) {
+    public void viewUser(String username, Database db) {
 
 
-        if (User.existsCheck(username)) {
-            Calendar otherCalendar = new Calendar(username);
+        if (User.existsCheck(username, db)) {
+            Calendar otherCalendar = new Calendar(username, db);
             otherCalendar.viewCalendar();
         } else {
             throw new IllegalArgumentException("ugyldig bruker");
 
         }
     }
-    public void viewGroup(){
+    public void viewGroup(Database db){
 
         String groupname = KeyIn.inString("Vennligst skriv inn navnet paa gruppen du vil utforske!");
         try {
             int id = Group.getGroupIDFromDB(groupname);
             Group group = Group.getGroup(id);
-            Calendar groupCalendar = new Calendar(group);
+            Calendar groupCalendar = new Calendar(group, db);
             groupCalendar.viewCalendar();
         } catch (IllegalArgumentException e) {
             System.out.println("Invalid groupname. Try again.");
@@ -550,13 +553,17 @@ public class CalendarProgram {
 
     }
 
-    public void admin(){
-        System.out.println("ADMIN: \n1: Lag ny bruker\n2. Slett bruker\n3. Opprett rom\n4" +
-                ". Slett rom\n5. Gå tilbake\n6. Gjør bruker til admin\n");
+    public void admin(Database db){
+        //System.out.println("ADMIN: \n1: Lag ny bruker\n2. Slett bruker\n3. Opprett rom\n4" +
+        //        ". Slett rom\n5. Gå tilbake\n6. Gjør bruker til admin\n");
 
-        int value = KeyIn.inInt("Select option:\n");
         boolean stay= true;
         while (stay) {
+
+            System.out.println("ADMIN: \n1: Lag ny bruker\n2. Slett bruker\n3. Opprett rom\n4" +
+                    ". Slett rom\n5. Gå tilbake\n6. Gjør bruker til admin\n");
+            int value = KeyIn.inInt("Select option:\n");
+
 
 
             switch (value) {
@@ -568,7 +575,7 @@ public class CalendarProgram {
                     String un = "";
                     while (taken) {
                         un = KeyIn.inString("Skriv inn nytt brukernavn: ");
-                        if (User.usernameTaken(un)) {
+                        if (User.usernameTaken(un, db)) {
                             System.out.println("Username taken!");
                             break;
                         }
@@ -580,13 +587,13 @@ public class CalendarProgram {
                     String position = KeyIn.inString("Skriv inn stilling ('None' hvis ingen)");
                     String email = KeyIn.inString("Skriv inn e-post: ");
                     User user = new User(un, pswd, fn, en, email, position);
-                    user.addUserToDB();
+                    user.addUserToDB(db);
                     String admin = KeyIn.inString("Make user admin? y/n");
                     if(admin.equalsIgnoreCase("y") || admin.equalsIgnoreCase("yes")) {
-                        User.setAdmin(un);
+                        User.setAdmin(un, db);
                     }
 
-                    continue;
+                    break;
 
                 case 2:
                     //slett bruker
@@ -605,7 +612,7 @@ public class CalendarProgram {
                 case 6:
                     String usr = KeyIn.inString("Type in username for new admin: ");
                     try{
-                        User.setAdmin(usr);
+                        User.setAdmin(usr, db);
                     } catch(RuntimeException e) {
                         System.out.println("User doesnt exist or is already an admin.");
                     }

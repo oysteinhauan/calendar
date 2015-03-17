@@ -30,13 +30,62 @@ public abstract class Notification {
 //4 <=> AttendanceCanceled
 
     public void createNotificationInDB(){
-        db = new Database("all_s_gruppe40_calendar");
+        this.db = new Database("all_s_gruppe40_calendar");
         sql = "INSERT INTO notification (message, type, sender, recipient, handled, appointmentId) VALUES('" + getMessage() +"', '"
                 + getNotificationType() + "', '" + getSenderUsername() + "', '" + getRecipientUsername() + "', " + handledToString() + ", '" + getAppointmentId() + "');";
 
-        db.connectDb("all_s_gruppe40", "qwerty");
+        this.db.connectDb("all_s_gruppe40", "qwerty");
+        this.db.updateQuery(sql);
+        this.db.closeConnection();
+    }
+
+    public void createNotificationInDB(Database db){
+        //this.db = new Database("all_s_gruppe40_calendar");
+        sql = "INSERT INTO notification (message, type, sender, recipient, handled, appointmentId) VALUES('" + getMessage() +"', '"
+                + getNotificationType() + "', '" + getSenderUsername() + "', '" + getRecipientUsername() + "', " + handledToString() + ", '" + getAppointmentId() + "');";
+
+        //this.db.connectDb("all_s_gruppe40", "qwerty");
         db.updateQuery(sql);
-        db.closeConnection();
+        //this.db.closeConnection();
+    }
+
+    public static Notification getNotificationFromDB(int notificationId, Database db){
+        //henter ut informasjonen om en varsling fra databasen, basert på varsleidentifikatoren som skrives
+
+        //Database db = new Database();
+        Notification notification = new Notification() {
+
+            @Override
+            public void setNotificationType() {
+
+            }
+
+            @Override
+            public void setMessage() {
+
+            }
+        };
+        try {
+            //db = new Database("all_s_gruppe40_calendar");
+            //db.connectDb("all_s_gruppe40", "qwerty");
+            String sql = "SELECT * FROM notification WHERE notificationId='" + notificationId + "';";
+            ResultSet rs = db.readQuery(sql);
+
+            while (rs.next()){
+                notification.notificationId = notificationId;
+                notification.senderUsername = rs.getString("sender");
+                notification.recipientUsername = rs.getString("recipient");
+                notification.appointmentId = rs.getInt("appointmentId");
+                notification.message =rs.getString("message");
+                notification.notificationType= rs.getInt("type");
+                notification.handled = rs.getBoolean("handled");
+            }
+            //db.closeConnection();
+            rs.close();
+
+        } catch (SQLException e){
+        }
+        return notification;
     }
 
     public static Notification getNotificationFromDB(int notificationId){
@@ -128,15 +177,15 @@ public abstract class Notification {
         return appointmentId;
     }
 
-    public void handle(){
+    public void handle(Database db){
         handled = true;
 
         //skriv inn hvilken kolonne som skal få sin informasjon oppdatert, og hva den nye informasjonen skal være
-        db = new Database("all_s_gruppe40_calendar");
+        //db = new Database("all_s_gruppe40_calendar");
         sql = "UPDATE notification SET handled = 1 WHERE notificationId = '" + notificationId + "';";
-        db.connectDb("all_s_gruppe40", "qwerty");
+        //db.connectDb("all_s_gruppe40", "qwerty");
         db.updateQuery(sql);
-        db.closeConnection();
+        //db.closeConnection();
         }
 
 

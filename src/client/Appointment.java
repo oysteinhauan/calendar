@@ -115,6 +115,59 @@ public class Appointment {
         return appointment;
     }
 
+    public static Appointment createAppointment(Timestamp start, Timestamp end,
+                                                String subject, String description, int size,
+                                                String owner, boolean useSystem, Database db ) {
+
+
+        //Database db = new Database();
+        //db.connectDb("all_s_gruppe40", "qwerty");
+        Appointment appointment = null;
+        if(useSystem) {
+            try {
+                appointment = new Appointment(start, end, subject, description, size, owner);
+                appointment.findRoomId();
+                appointment.setRoom(Room.getRoom(appointment.getRoomId()));
+                appointment.createAppointmentInDB(appointment, db);
+
+
+                ResultSet rs = db.readQuery("select last_insert_id();");
+                int id = -1;
+                while (rs.next()) {
+                    id = rs.getInt("last_insert_id()");
+                }
+                appointment.setAppointmentId(id);
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+
+                //db.closeConnection();
+            }
+        } else {
+
+
+            appointment = new Appointment(start, end, subject, description, owner);
+
+            appointment.createAppointmentInDB(appointment, db);
+
+            ResultSet rs = db.readQuery("select last_insert_id();");
+            int id = -1;
+            try {
+                while (rs.next()) {
+                    id = rs.getInt("last_insert_id()");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            appointment.setAppointmentId(id);
+
+        }
+
+        return appointment;
+    }
+
 
     @Override
     public String toString() {
@@ -164,6 +217,41 @@ public class Appointment {
 
     }
 
+    public static Appointment getAppointment(int appointmentId, Database db){
+        //Database db = new Database();
+        Appointment appointment = new Appointment();
+        try {
+
+            //db.connectDb("all_s_gruppe40", "qwerty");
+            String sql = "select * from appointment where appointmentId = " + appointmentId +";";
+            String sql2 = "select username from userAppointment where appointmentId = " + appointmentId +";";
+            ResultSet rs = db.readQuery(sql);
+            ResultSet rs2 = db.readQuery(sql2);
+            while (rs.next()){
+                appointment.setSubject(rs.getString("subject"));
+                appointment.setAppointmentId(appointmentId);
+                appointment.setDescription(rs.getString("description"));
+                appointment.setStart(rs.getTimestamp("start"));
+                appointment.setEnd(rs.getTimestamp("end"));
+                appointment.setRoomId(rs.getInt("roomId"));
+                appointment.setOwner(rs.getString("owner"));
+            }
+            rs.close();
+            while (rs2.next()){
+                appointment.attendingPeople.add(rs2.getString("username"));
+            }
+            rs2.close();
+            //db.closeConnection();
+            return appointment;
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+        throw new IllegalArgumentException("Something went haywire!");
+
+
+    }
+
 
 
     public static boolean hasRecord(int id) throws SQLException {
@@ -175,6 +263,18 @@ public class Appointment {
             throw new IllegalArgumentException("Appointment doesnt exist.");
         }
         db.closeConnection();
+        return true;
+    }
+
+    public static boolean hasRecord(int id, Database db) throws SQLException {
+        //Database db = new Database();
+        //db.connectDb();
+        String sql = "select appointmentId from appointment where appointmentId = " + id +";";
+        ResultSet rs = db.readQuery(sql);
+        if(!rs.next()){
+            throw new IllegalArgumentException("Appointment doesnt exist.");
+        }
+        //db.closeConnection();
         return true;
     }
 
@@ -194,6 +294,8 @@ public class Appointment {
 
     }
 
+
+
     public static void removeAppointmentInDB(int appointmentID) {
         Database db = new Database("all_s_gruppe40_calendar");
         db.connectDb("all_s_gruppe40", "qwerty");
@@ -209,6 +311,88 @@ public class Appointment {
         }   catch (SQLException e){
             e.printStackTrace();
         }
+    }
+
+    public static void removeAppointmentInDB(int appointmentID, Database db) {
+        //Database db = new Database("all_s_gruppe40_calendar");
+        //db.connectDb("all_s_gruppe40", "qwerty");
+        try {
+            if (hasRecord(appointmentID)) {
+                String sql1 = "DELETE from userAppointment where appointmentId = " + appointmentID + ";";
+                String sql2 = "DELETE from appointment where appointmentId = " + appointmentID + ";";
+                db.updateQuery(sql1);
+                db.updateQuery(sql2);
+                db.closeConnection();
+            } else
+                throw new IllegalArgumentException("denne avtalen finnes ikke");
+        }   catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void updateAppointmentInDB(String columnToUpdate, String updatedInfo, Database db){
+
+        //Database db = new Database();
+        //db.connectDb("all_s_gruppe40", "qwerty");
+
+        //sjekker om ny slutt ikke er før nåværende start eller omvendt
+        if (columnToUpdate == "slutt"){
+            String sql = "Select start from appointment where appointmentId ='" + this.appointmentId + "';";
+            ResultSet rs = db.readQuery(sql);
+            Timestamp currentStart = null;
+            try {
+                while (rs.next()){
+                    currentStart = rs.getTimestamp("start");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            if (Timestamp.valueOf(updatedInfo).before(currentStart)){
+                throw new IllegalArgumentException("sluttid må være etter starttid!!");
+            }
+            Timestamp timeNow = new Timestamp((new java.util.Date()).getTime());
+
+            if( Timestamp.valueOf(updatedInfo).before(timeNow)){
+
+                throw new IllegalArgumentException("Du må velge et fremtidig tidspunkt!!");
+            }
+
+            sendAppointmenUpdateNotification();
+
+        }
+
+        if (columnToUpdate  == "start"){
+
+            String sql = "Select end from appointment where appointmentId ='" + this.appointmentId + "';";
+            ResultSet rs = db.readQuery(sql);
+            Timestamp currentEnd = null;
+
+            try {
+                while (rs.next()){
+                    currentEnd = rs.getTimestamp("end");
+
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            if (Timestamp.valueOf(updatedInfo).after(currentEnd)){
+                throw new IllegalArgumentException("Starttid må være før sluttid!!!!");
+            }
+
+            Timestamp timeNow = new Timestamp((new java.util.Date()).getTime());
+            if( Timestamp.valueOf(updatedInfo).before(timeNow)){
+
+                throw new IllegalArgumentException("Du må velge et fremtidig tidspunkt!!");
+            }
+            sendAppointmenUpdateNotification();
+        }
+        String sql =  "UPDATE appointment SET " + columnToUpdate + "='" + updatedInfo + "' WHERE appointmentId = '" + this.appointmentId + "';";
+        db.updateQuery(sql);
+       // db.closeConnection();
+
+
     }
 
 
@@ -323,6 +507,47 @@ public class Appointment {
 
     }
 
+    public void findRoomId(Database db) {
+
+
+        try {
+            //Database db = new Database("all_s_gruppe40_calendar");
+            //db.connectDb("all_s_gruppe40", "qwerty");
+            String sql = "select roomId, size from room where size >= " + this.size +
+                    " and roomId not in (select roomId from appointment where start between '" +
+                    start + "' and '" + end + "' or end between '" + start + "' and '" + end + "');";
+
+            ResultSet rs = db.readQuery(sql);
+            int actualroom = -1;
+            int tempsize = 0;
+            int index = 0;
+
+            while (rs.next()) {
+                if (index == 0){
+                    tempsize = rs.getInt("size");
+                    actualroom = rs.getInt("roomId");
+                    index++;
+                }
+                if(rs.getInt("size") < tempsize){
+                    actualroom = rs.getInt("roomId");
+                }
+
+            }
+            this.roomId = actualroom;
+            if(this.roomId == -1){
+                throw new IllegalAccessError("No available roomz");
+            }
+
+
+            //System.out.println(sql);
+            //db.closeConnection();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public void setId(int id) {
         this.appointmentId = id;
     }
@@ -364,6 +589,19 @@ public class Appointment {
         }
     }
 
+    public void fetchAttendingPeopleFromDB(Database db){
+        //Database db = new Database();
+        String sql = "SELECT username FROM userAppointment WHERE appointmentId = " + this.appointmentId + "" ;
+        //db.connectDb();
+        ResultSet rs = db.readQuery(sql);
+        try {
+            while (rs.next()) {
+                attendingPeople.add(rs.getString("username"));
+            }
+        }catch (SQLException e){
+        }
+    }
+
     public void fetchInvitedUsersFromDB(){
         Database db = new Database();
         String sql = "SELECT notificationId, recipient FROM notification WHERE appointmentId = " + this.appointmentId + " AND handled = 0;";
@@ -373,7 +611,23 @@ public class Appointment {
             while (rs.next()){
                 invitedUsers.add(rs.getString("recipient"));
                 Notification not = Notification.getNotificationFromDB(rs.getInt("notificationId"));
-                not.handle();
+                not.handle(db);
+            }
+        }catch (SQLException e){
+
+        }
+    }
+
+    public void fetchInvitedUsersFromDB(Database db){
+        //Database db = new Database();
+        String sql = "SELECT notificationId, recipient FROM notification WHERE appointmentId = " + this.appointmentId + " AND handled = 0;";
+        //db.connectDb();
+        ResultSet rs = db.readQuery(sql);
+        try {
+            while (rs.next()){
+                invitedUsers.add(rs.getString("recipient"));
+                Notification not = Notification.getNotificationFromDB(rs.getInt("notificationId"));
+                not.handle(db);
             }
         }catch (SQLException e){
 
@@ -407,7 +661,7 @@ public class Appointment {
 
     public void addAttendant(String username) {
         Database db = new Database();
-        if(!User.existsCheck(username)){
+        if(!User.existsCheck(username, db)){
             throw new IllegalArgumentException("User doesnt exist.");
         }
 
@@ -452,6 +706,53 @@ public class Appointment {
 
     }
 
+    public void addAttendant(String username, Database db) {
+        //Database db = new Database();
+        if(!User.existsCheck(username, db)){
+            throw new IllegalArgumentException("User doesnt exist.");
+        }
+
+        //db.connectDb();
+        String sql1 = "select count(*) as no_of_attendants from userAppointment where appointmentId = " + this.appointmentId + ";";
+        String sql2 = "select username from userAppointment where username = '" + username + "' and appointmentId = " + this.appointmentId + ";";
+        String sql3 = "select size from room, appointment where room.roomId = appointment.roomId" +
+                " and appointmentId = " + appointmentId +";";
+        ResultSet rs1 = db.readQuery(sql1);
+        ResultSet rs2 = db.readQuery(sql2);
+        ResultSet rs3 = db.readQuery(sql3);
+        int attendants = -1;
+
+        int roomsize = 0;
+        try {
+            while (rs1.next()) {
+                attendants = rs1.getInt("no_of_attendants");
+            }
+            //rs1.close();
+            if(rs2.next()){
+                throw new IllegalArgumentException("User is already registered.");
+            }
+            while(rs3.next()) {
+                if (rs3.getInt("size") <= attendants) {
+                    throw new IllegalArgumentException("Room is full, you must book a new room if you wish to add attendants.");
+                }
+            }
+            rs2.close();
+            rs3.close();
+            rs1.close();
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        attendingPeople.add(username);
+        db.updateQuery("insert into userAppointment values('" + username + "', " + this.appointmentId + ");");
+        //db.closeConnection();
+        System.out.println("");
+        System.out.println("User added to event.");
+        System.out.println("");
+
+    }
+
     public void removeAttendant(String username){
         Database db = new Database();
         db.connectDb();
@@ -464,13 +765,25 @@ public class Appointment {
         this.attendingPeople.remove(username);
     }
 
+    public void removeAttendant(String username, Database db){
+        //Database db = new Database();
+        //db.connectDb();
+        try{
+            String sql = "delete from userAppointment where username = '" + username +"' and appointmentId = " + this.getAppointmentId()+";";
+            db.updateQuery(sql);
+        } catch(RuntimeException e){
+            System.out.println("User not in event");
+        }
+        this.attendingPeople.remove(username);
+    }
+
     //NOTIFICATION
 
 
-    public void inviteAttendant(String username){
+    public void inviteAttendant(String username, Database db){
         invitedUsers.add(username);
         Notification invite = new InviteNotification(username, this.getOwner(), getAppointmentId());
-        invite.createNotificationInDB();
+        invite.createNotificationInDB(db);
     }
 
 

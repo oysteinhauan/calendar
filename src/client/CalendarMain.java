@@ -56,7 +56,7 @@ public class CalendarMain {
 
         }
         //her blir alle appointments generert som objekter fra databasen
-        calendar = new Calendar(username);
+        //calendar = new Calendar(username, db);
 
         // generer gruppekalendere(n)
         // vise og svare på notifikasjoner.
@@ -154,8 +154,8 @@ public class CalendarMain {
 
                         System.out.println("Hvem sin kalender vil du se?");
                         String otherUser = sc.next();
-                        Calendar otherCalendar = new Calendar(otherUser);
-                        otherCalendar.viewCalendar();
+                        //Calendar otherCalendar = new Calendar(otherUser);
+                        //otherCalendar.viewCalendar();
 
                         break;
 

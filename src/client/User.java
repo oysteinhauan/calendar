@@ -66,6 +66,22 @@ public class User{
         }
     }
 
+    public void addUserToDB(Database db){
+        //db = new Database("all_s_gruppe40_calendar");
+        sql = "INSERT INTO user (username, password, firstname, lastname, position, email) VALUES( '" + getUsername() + "', '" + getPassword() + "', '" + getFirstname() + "', '"
+                + getLastname() + "', '" + getPosition() + "', '" + getEmail() + "');";
+
+        //db.connectDb("all_s_gruppe40", "qwerty");
+        try {
+            db.updateQuery(sql);
+        } catch(RuntimeException e){
+            System.out.println("Something went haywire!");
+        } finally {
+            //db.closeConnection();
+        }
+    }
+
+
     public ArrayList<Appointment> getAppointmentsForUser(User user){
 
         try {
@@ -82,6 +98,36 @@ public class User{
                 appIdList.add(rs.getInt("appointmentId"));
             }
             db.closeConnection();
+
+            for (Integer id: appIdList){
+                appList.add(Appointment.getAppointment(id));
+            }
+            return appList;
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
+    public ArrayList<Appointment> getAppointmentsForUser(User user, Database db){
+
+        try {
+            ArrayList<Integer> appIdList = new ArrayList<Integer>();
+            ArrayList<Appointment> appList = new ArrayList<Appointment>();
+
+            //Database db = new Database();
+            //db.connectDb("all_s_gruppe40", "qwerty");
+            String sql = "select appointment.appointmentId, start from userAppointment, appointment " +
+                    "where username = '" + user.getUsername() + "' and appointment.appointmentId = userAppointment.appointmentId " +
+                    "order by start;";
+            ResultSet rs = db.readQuery(sql);
+            while (rs.next()) {
+                appIdList.add(rs.getInt("appointmentId"));
+            }
+            //db.closeConnection();
 
             for (Integer id: appIdList){
                 appList.add(Appointment.getAppointment(id));
@@ -119,8 +165,8 @@ public class User{
 //        return this;
 //    }
 
-    public static boolean existsCheck(String username){
-       User user = getUserFromDB(username);
+    public static boolean existsCheck(String username, Database db){
+       User user = getUserFromDB(username, db);
         return (user != null);
     }
 
@@ -147,9 +193,32 @@ public class User{
         return user;
     }
 
-    public static boolean usernameTaken(String username){
-        Database db = new Database();
-        db.connectDb();
+    public static User getUserFromDB(String username, Database db){
+        //henter ut informasjonen om en bruker fra databasen, basert på burkernavnet som skrives
+
+        //Database db;
+        User user = null;
+        try {
+            //db = new Database("all_s_gruppe40_calendar");
+            //db.connectDb("all_s_gruppe40", "qwerty");
+            String sql = "SELECT * FROM user WHERE username='" + username + "';";
+            ResultSet rs = db.readQuery(sql);
+
+            while (rs.next()){
+                user = new User(username, rs.getString("password"), rs.getString("firstname"), rs.getString("lastname"),
+                        rs.getString("email"), rs.getString("position"));
+            }
+            //db.closeConnection();
+            rs.close();
+
+        } catch (SQLException e){
+        }
+        return user;
+    }
+
+    public static boolean usernameTaken(String username, Database db){
+       // Database db = new Database();
+       // db.connectDb();
         String sql = "select username from user where username = '" + username +"';";
         ResultSet rs = db.readQuery(sql);
         try {
@@ -160,7 +229,7 @@ public class User{
             e.printStackTrace();
 
         } finally {
-            db.closeConnection();
+           // db.closeConnection();
         }
         return false;
 
@@ -173,6 +242,15 @@ public class User{
         db.connectDb("all_s_gruppe40", "qwerty");
         db.updateQuery(sql);
         db.closeConnection();
+    }
+
+    public void updateUserInfoInDB(String columnToUpdate, String updatedInfo, Database db){
+        //skriv inn hvilken kolonne som skal få sin informasjon oppdatert, og hva den nye informasjonen skal være
+        //db = new Database("all_s_gruppe40_calendar");
+        sql = "UPDATE user SET " + columnToUpdate + "='" + updatedInfo + "' WHERE username = '" + username + "';";
+       // db.connectDb("all_s_gruppe40", "qwerty");
+        db.updateQuery(sql);
+       // db.closeConnection();
     }
 
 
@@ -243,6 +321,16 @@ public class User{
         db.closeConnection();
     }
 
+    public void deleteUserFromDb(String username, Database db) {
+        //db = new Database("all_s_gruppe40_calendar");
+        sql = "DELETE FROM user WHERE username='" + username + "';";
+        //db.connectDb("all_s_gruppe40", "qwerty");
+        db.updateQuery(sql);
+        //db.closeConnection();
+    }
+
+
+
     public boolean isAdmin(){
         db = new Database();
         db.connectDb();
@@ -266,6 +354,29 @@ public class User{
 
     }
 
+    public boolean isAdmin(Database db){
+        //db = new Database();
+        //db.connectDb();
+        sql = "select admin from user where username = '" + this.getUsername() +"';";
+        ResultSet rs = db.readQuery(sql);
+        try {
+            while(rs.next()){
+                if(rs.getInt(1) == 1){
+                    return true;
+                }
+            }
+            rs.close();
+        } catch (SQLException e) {
+            System.out.println("Oops.");
+            e.printStackTrace();
+        } finally {
+            //db.closeConnection();
+
+        }
+        return false;
+
+    }
+
     public static void setAdmin(String username){
         Database db;
         db = new Database();
@@ -274,6 +385,16 @@ public class User{
 
         db.updateQuery(sql);
         db.closeConnection();
+    }
+
+    public static void setAdmin(String username, Database db){
+        //Database db;
+        //db = new Database();
+        //db.connectDb();
+        String sql = "update user set admin = 1 where username = '" + username +"';";
+
+        db.updateQuery(sql);
+        //db.closeConnection();
     }
 
     //NOTIFICATION
@@ -302,6 +423,32 @@ public class User{
         e.printStackTrace();
     }
     return null;
+    }
+
+    public ArrayList<Notification> getNotificationsForUser(String username, Database db){
+        try{
+            ArrayList<Notification> notifications = new ArrayList<Notification>();
+            ArrayList<Integer> notificationIds = new ArrayList<Integer>();
+
+            //Database db = new Database();
+            //db.connectDb("all_s_gruppe40", "qwerty");
+            String sql = "SELECT notificationId FROM notification" +
+                    " WHERE recipient = '" + username + "';";
+            ResultSet rs = db.readQuery(sql);
+            while (rs.next()) {
+                notificationIds.add(rs.getInt("notificationId"));
+            }
+            //db.closeConnection();
+
+            for (Integer id: notificationIds){
+                notifications.add(Notification.getNotificationFromDB(id));
+            }
+            return notifications;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void fetchNotifications(){
@@ -334,7 +481,7 @@ public class User{
 
 
 
-    public void replyToInvite(Notification inviteNotification){
+    public void replyToInvite(Notification inviteNotification, Database db){
         int swValue;
         boolean replied = false;
         Boolean reply = null;
@@ -363,7 +510,7 @@ public class User{
                     reply = true;
                     ap.addAttendant(username);
                     replied = true;
-                    inviteNotification.handle();
+                    inviteNotification.handle(db);
                     replyToInviteNotification = new ReplyFromInvitedUserNotification(ap.getOwner(), username, ap.appointmentId, reply);
                     replyToInviteNotification.createNotificationInDB();
                     System.out.println("");
@@ -376,7 +523,7 @@ public class User{
                     System.out.println(" ");
                     reply = false;
                     replied = true;
-                    inviteNotification.handle();
+                    inviteNotification.handle(db);
                     replyToInviteNotification = new ReplyFromInvitedUserNotification(ap.getOwner(), username, ap.appointmentId, reply);
                     replyToInviteNotification.createNotificationInDB();
                     System.out.println("");

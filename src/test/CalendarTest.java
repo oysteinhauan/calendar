@@ -9,8 +9,8 @@ public class CalendarTest {
 
     public static void main(String[] args) {
 
-        Calendar cal = new Calendar("oysteibh");
-        cal.viewCalendar();
+       // Calendar cal = new Calendar("oysteibh");
+        //cal.viewCalendar();
 
     }
 }

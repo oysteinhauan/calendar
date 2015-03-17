@@ -16,13 +16,13 @@ public class UserTest {
         System.out.println("Type in username:\n");
         while (scn.hasNext()){
             String usr = scn.nextLine();
-            if(!User.usernameTaken(usr)){
+            //if(!User.usernameTaken(usr)){
                 System.out.println("Username available!\n");
                 user.setUsername(usr);
                 break;
-            } else {
-                System.out.println("Username taken! Try again:\n");
-            }
+            //} else {
+               // System.out.println("Username taken! Try again:\n");
+           // }
         }
         System.out.println("Please type firstname: \n");
         while (scn.hasNext()){

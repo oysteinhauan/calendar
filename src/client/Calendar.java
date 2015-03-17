@@ -1,5 +1,7 @@
 package client;
 
+import database.Database;
+
 import java.util.ArrayList;
 
 /**
@@ -11,20 +13,20 @@ public class Calendar {
     private ArrayList<Appointment> appointments;
     private Group group;
 
-    public Calendar(String username) {
+    public Calendar(String username, Database db) {
 
 
-        this.user = user.getUserFromDB(username);
-        appointments = user.getAppointmentsForUser(user);
+        this.user = user.getUserFromDB(username, db);
+        appointments = user.getAppointmentsForUser(user, db);
         group = null;
     }
 
-    public Calendar(Group group){
+    public Calendar(Group group, Database db){
 
         //ny konstruktør som skal hente ut avtalene til en gruppe.
         user = null;
         this.group = group;
-        appointments = group.getAppointmentsForGroup(group);
+        appointments = group.getAppointmentsForGroup(group, db);
 
     }
 
