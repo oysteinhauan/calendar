@@ -12,11 +12,11 @@ public class UserNotificationTest {
         Appointment ap = Appointment.getAppointment(37);
         User participant = User.getUserFromDB("henloef");
         User owner = User.getUserFromDB(ap.getOwner());
-        System.out.println(owner.getUsername());
-        ap.inviteAttendant("mummi");
-//        ap.addAttendant("henloef");
-//        ap.sendAppointmenUpdateNotification();
-//        ap.addAttendant(owner.getUsername());
+//        System.out.println(owner.getUsername());
+  //      ap.inviteAttendant("mummi");
+ //       ap.addAttendant("henloef");
+        ap.sendAppointmenUpdateNotification();
+//       ap.addAttendant(owner.getUsername());
 
         System.out.println("\t♪┏(°.°)┛┗(°.°)┓┗(°.°)┛┏(°.°)┓ ♪ ");
         System.out.println("   \t\tYou have " + owner.getNumberOfNewNotifications() + " new notification(s)!");
