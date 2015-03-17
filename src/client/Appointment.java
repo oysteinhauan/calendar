@@ -322,7 +322,7 @@ public class Appointment {
                 String sql2 = "DELETE from appointment where appointmentId = " + appointmentID + ";";
                 db.updateQuery(sql1);
                 db.updateQuery(sql2);
-                db.closeConnection();
+               // db.closeConnection();
             } else
                 throw new IllegalArgumentException("denne avtalen finnes ikke");
         }   catch (SQLException e){
