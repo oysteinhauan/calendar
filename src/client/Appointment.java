@@ -244,6 +244,7 @@ public class Appointment {
             }
 
             sendAppointmenUpdateNotification();
+
         }
 
         if (columnToUpdate  == "start"){
@@ -380,20 +381,27 @@ public class Appointment {
     }
 
     public void sendAppointmenUpdateNotification() {
+        ArrayList<String> newInvitees = new ArrayList<String>();
         attendingPeople.clear();
         invitedUsers.clear();
         fetchInvitedUsersFromDB();
         fetchAttendingPeopleFromDB();
+
         for (String username: attendingPeople) {
-            if (username != this.owner) {
+            if (!username.equals(this.owner)) {
+                newInvitees.add(username);
                 removeAttendant(username);
-                Notification updateNot = new AppointmentUpdateNotification(this.owner, username, this.appointmentId);
-                updateNot.createNotificationInDB();
+                System.out.println("the attendants added to invite list");
             }
          }
         for (String username: invitedUsers) {
+            newInvitees.add(username);;
+            System.out.println("the invited added invite list");
+        }
+        for (String username: newInvitees) {
             Notification updateNot = new AppointmentUpdateNotification(this.owner, username, this.appointmentId);
             updateNot.createNotificationInDB();
+            System.out.println("the invited and attending people got a new invite");
         }
     }
 
