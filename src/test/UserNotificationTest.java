@@ -19,7 +19,7 @@ public class UserNotificationTest {
 //       ap.addAttendant(owner.getUsername());
 
         System.out.println("\t♪┏(°.°)┛┗(°.°)┓┗(°.°)┛┏(°.°)┓ ♪ ");
-        System.out.println("   \t\tYou have " + owner.getNumberOfNewNotifications() + " new notification(s)!");
+        System.out.println("\t\tYou have " + owner.getNumberOfNewNotifications() + " new notification(s)!");
         System.out.println("\t♪┏(°.°)┛┗(°.°)┓┗(°.°)┛┏(°.°)┓ ♪\n ");
 
 

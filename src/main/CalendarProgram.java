@@ -167,7 +167,7 @@ public class CalendarProgram {
                     System.out.println("-----------------------------------------");
                     for (Notification notification : this.user.notifications){
                         if (!notification.isHandled()){
-
+                            System.out.println("-----------------------------------------\n");
                             System.out.println(notification.getMessage());
                             System.out.println("-----------------------------------------\n");
                             switch(notification.getNotificationType()){
@@ -178,8 +178,16 @@ public class CalendarProgram {
                                     this.user.replyToInvite(notification);
                                     continue;
                                 default:
-                                    notification.handle();
-                                    continue;
+                                    System.out.println("1. Se neste notification");
+
+
+                                    c = Integer.valueOf((5 + "") + KeyIn.inInt("Select option"));
+
+                                    switch (c) {
+                                        case 51:
+                                            notification.handle();
+                                            continue;
+                                    }
                             }
                         }
 
