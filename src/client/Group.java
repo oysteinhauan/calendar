@@ -246,8 +246,8 @@ public class Group implements AppointmentListener {
 
     }
 
-    public ArrayList<String> getMembers(int groupID, Database db) {
-
+    public static ArrayList<String> getMembers(int groupID, Database db) {
+        ArrayList<String> members = new ArrayList<String>();
         try {
             //Database db = new Database("all_s_gruppe40_calendar");
             //db.connectDb("all_s_gruppe40", "qwerty");
@@ -382,5 +382,23 @@ public class Group implements AppointmentListener {
                 "groupname='" + groupname + '\'' +
                 ", groupID=" + groupID +
                 '}';
+    }
+
+    public  static ArrayList<String> getGroupNames(Database db){
+
+        ArrayList<String> groups = new ArrayList<String>();
+
+        String sql = "SELECT name FROM group_1;";
+        ResultSet rs = db.readQuery(sql);
+        try {
+            while(rs.next()){
+                groups.add(rs.getString("name"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return groups;
+
     }
 }

@@ -119,18 +119,27 @@ public class CalendarProgram {
                     continue;
 
                 case 2:
-                    clearConsole();
 
-                    String groupname = KeyIn.inString("Vennligst skriv inn navnet paa gruppen du vil utforske!");
-                    try {
-                        int id = Group.getGroupIDFromDB(groupname, db);
-                        Group group = Group.getGroup(id, db);
-                        Calendar groupCalendar = new Calendar(group, db);
-                        groupCalendar.viewGroupCalendar();
-                    } catch (IllegalArgumentException e) {
-                        System.out.println("Invalid groupname. Try again.");
+                    ArrayList<String> groupNames = Group.getGroupNames(db);
+                    String groupname;
+                    while (true) {
+                        groupname = KeyIn.inString("Vennligst skriv inn navnet paa gruppen du vil utforske!");
+                        if(groupNames.contains(groupname)){
+                            break;
+                        }
+                        System.out.println("prøv igjen, gruppenavnet finnes ikke!!");
                     }
-                    break;
+                        try {
+                            int id = Group.getGroupIDFromDB(groupname, db);
+                            Group group = Group.getGroup(id, db);
+                            Calendar groupCalendar = new Calendar(group, db);
+                            groupCalendar.viewGroupCalendar();
+                            break;
+                        } catch (IllegalArgumentException e) {
+                            System.out.println("Invalid groupname. Try again.");
+                        }
+
+
 
                 case 3:
                     clearConsole();
