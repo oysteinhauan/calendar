@@ -14,8 +14,8 @@ gruppe som finnes da krasjer den
 avtaler som starter / slutter i fortiden blir fortsatt godtatt uten feilmelding. check
 legge inn valg om systemet skal velge rom for deg. check
 all gruppefunksjonalitet.
-notifications som kommer fra avtaler man lager selv må fikses / unfixxxes
-Decline / Accept til  avtaleEier må fixxes. Room blir null i notifikation.
+notifications som kommer fra avtaler man lager selv må fikses / unfixxxes fixxed
+Decline / Accept til  avtaleEier må fixxes. Room blir null i notifikation. chevk
 
 
 counter på hvor mange du har igjen å adde
@@ -30,9 +30,9 @@ slette bruker.
 akseptansetesting??
 
 
-i endre avtale så skal mans om owner kunne godta på vegne av inviterte brukere.
+i endre avtale så skal mans om owner kunne godta på vegne av inviterte brukere. check
 finn listen over alle inviterte i appointmenten som det gjelder
-se alle ikke-handled notifikasjoner.
-endre vedkommende til attending / ikke attending.
+se alle ikke-handled notifikasjoner. check
+endre vedkommende til attending / ikke attending. check
 
 prompte på nytt istedetfor krasj når  man skriver noe feil.
