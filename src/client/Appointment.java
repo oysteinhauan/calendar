@@ -124,7 +124,7 @@ public class Appointment {
 
     public static boolean checkIfOwner(String owner, Appointment appointment, int id){
 
-        return(owner == appointment.getOwner() && appointment.getAppointmentId() == id );
+        return(owner.equalsIgnoreCase(appointment.getOwner()) && appointment.getAppointmentId() == id );
     }
 
 
@@ -254,7 +254,7 @@ public class Appointment {
 
             try {
                 while (rs.next()){
-                    currentEnd = rs.getTimestamp("start");
+                    currentEnd = rs.getTimestamp("end");
 
                 }
             } catch (SQLException e) {

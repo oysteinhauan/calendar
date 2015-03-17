@@ -53,7 +53,7 @@ public class User{
 
     public void addUserToDB(){
         db = new Database("all_s_gruppe40_calendar");
-        sql = "INSERT INTO user VALUES( '" + getUsername() + "', '" + getPassword() + "', '" + getFirstname() + "', '"
+        sql = "INSERT INTO user (username, password, firstname, lastname, position, email) VALUES( '" + getUsername() + "', '" + getPassword() + "', '" + getFirstname() + "', '"
                 + getLastname() + "', '" + getPosition() + "', '" + getEmail() + "');";
 
         db.connectDb("all_s_gruppe40", "qwerty");

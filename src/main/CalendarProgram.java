@@ -311,11 +311,17 @@ public class CalendarProgram {
                 Appointment app = Appointment.getAppointment(idToChange);
                 if (!app.hasRecord(idToChange)) {
                     System.out.println("id'en finnes ikke, prøv igjen!!");
-                } else if (!(Appointment.checkIfOwner(username, app, idToChange))) {
+                } else if (!(Appointment.checkIfOwner(this.user.getUsername(), app, idToChange))) {
                     throw new IllegalArgumentException("Du må være eieren for å endre.");
-                } else {
-                    System.out.println("du må være eieren av en avtale for å endre på den!! prøv igjen!!!" + idToChange);
                 }
+
+
+                bol = false;
+                break;
+
+//                } else {
+//                    System.out.println("du må være eieren av en avtale for å endre på den!! prøv igjen!!!" + idToChange);
+//                }
             } catch (SQLException e) {
                 System.out.println("blabla");
                 e.printStackTrace();
@@ -334,11 +340,11 @@ public class CalendarProgram {
             while (stay) {
                 System.out.println("1. Endre starttid\n" +
                         "2. Endre sluttid\n" +
-                        "3. legg til deltaker\n" +
-                        "4. fjern deltaker\n" +
-                        "5. endre description\n" +
-                        "6. endre rom\n" +
-                        "7. legg til gruppe\n" +
+                        "3. Legg til deltaker\n" +
+                        "4. Fjern deltaker\n" +
+                        "5. Endre description\n" +
+                        "6. Endre rom\n" +
+                        "7. Legg til gruppe\n" +
                         "8. Sjekk deltakere\n" +
                         "9. Slett event" +
                         "10. Svar på en av de invitertes notifikasjon" +
@@ -347,13 +353,17 @@ public class CalendarProgram {
                 int value2 = KeyIn.inInt("Select option.\n ");
                 switch (value2) {
                     case 1:
-                        String newStartTime = "2015-" + KeyIn.inString("skriv inn nytt tidspunkt: (MM-DD HH:MM)") + ":00";
+                        String newStartTime = KeyIn.inString("\nNåværende start: " + appointmentToChange.getStart().toString()
+                                + "\n\nNåværende slutt: " +appointmentToChange.getEnd().toString()
+                                + "\n\nSkriv inn nytt starttidspunkt: (YYYY-MM-DD HH:MM)") + ":00";
                         appointmentToChange.updateAppointmentInDB("start", newStartTime);
                         continue;
 
                     case 2:
 
-                    String newEndTime = "2015-" + KeyIn.inString("skriv inn nytt tidspunkt: (MM-DD HH:MM)") + ":00";
+                    String newEndTime = KeyIn.inString("\nNåværende start: " + appointmentToChange.getStart().toString()
+                            + "\n\nNåværende slutt: " +appointmentToChange.getEnd().toString()
+                            + "\n\nSkriv inn nytt sluttidspunkt: (YYYY-MM-DD HH:MM)") + ":00";
                     try {
                         appointmentToChange.updateAppointmentInDB("slutt", newEndTime);
                     } catch (IllegalArgumentException e) {
@@ -569,12 +579,15 @@ public class CalendarProgram {
 
                 case 2:
                     //slett bruker
+                    continue;
 
                 case 3:
                     //oprett rom
+                    continue;
 
                 case 4:
                     //slett rom
+                    continue;
                 case 5:
                     stay = false;
                     break;
@@ -583,7 +596,7 @@ public class CalendarProgram {
                     try{
                         User.setAdmin(usr);
                     } catch(RuntimeException e) {
-                        System.out.println("User doesnt exist.");
+                        System.out.println("User doesnt exist or is already an admin.");
                     }
                     continue;
                 default:
