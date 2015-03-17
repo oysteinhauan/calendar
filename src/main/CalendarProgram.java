@@ -298,7 +298,7 @@ public class CalendarProgram {
             try {
 
                 appointment.inviteAttendant(bruker, db);
-                System.out.println(bruker + "ble lagt til");
+                System.out.println(bruker + " ble lagt til");
             } catch (IllegalArgumentException e){
                 //dritt
                 System.out.println("Try again.");
@@ -365,9 +365,9 @@ public class CalendarProgram {
                         "6. Endre rom\n" +
                         "7. Legg til gruppe\n" +
                         "8. Sjekk deltakere\n" +
-                        "9. Slett event" +
-                        "10. Svar på en av de invitertes notifikasjon" +
-                        "11. Gå tilbake");
+                        "9. Slett event\n" +
+                        "10. Svar på en av de invitertes notifikasjon\n" +
+                        "11. Gå tilbake\n");
 
                 int value2 = KeyIn.inInt("Select option.\n ");
                 switch (value2) {
