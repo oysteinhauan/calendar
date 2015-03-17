@@ -1,6 +1,7 @@
 package client;
 
 import database.Database;
+import notification.AppointmentCanceledNotification;
 import notification.AppointmentUpdateNotification;
 import notification.InviteNotification;
 import notification.Notification;
@@ -316,6 +317,7 @@ public class Appointment {
     public static void removeAppointmentInDB(int appointmentID, Database db) {
         //Database db = new Database("all_s_gruppe40_calendar");
         //db.connectDb("all_s_gruppe40", "qwerty");
+        getAppointment(appointmentID).sendAppointmentCanceledNotification();
         try {
             if (hasRecord(appointmentID)) {
                 String sql1 = "DELETE from userAppointment where appointmentId = " + appointmentID + ";";
@@ -609,9 +611,12 @@ public class Appointment {
         ResultSet rs = db.readQuery(sql);
         try {
             while (rs.next()){
-                invitedUsers.add(rs.getString("recipient"));
+                String user = rs.getString("recipient");
                 Notification not = Notification.getNotificationFromDB(rs.getInt("notificationId"));
-                not.handle(db);
+                if (!not.isHandled())
+                    invitedUsers.add(user);
+                    not.handle(db);
+
             }
         }catch (SQLException e){
 
@@ -645,14 +650,39 @@ public class Appointment {
             if (!username.equals(this.owner)) {
                 newInvitees.add(username);
                 removeAttendant(username);
-                System.out.println("the attendants added to invite list");
+                System.out.println("the attendants added to notification list");
             }
          }
         for (String username: invitedUsers) {
             newInvitees.add(username);;
-            System.out.println("the invited added invite list");
+            System.out.println("the invited added notification list list");
         }
         for (String username: newInvitees) {
+            Notification cancelNot = new AppointmentCanceledNotification(this.owner, username, this.appointmentId);
+            cancelNot.createNotificationInDB();
+            System.out.println("the invited and attending people got a cancellation notification");
+        }
+    }
+
+    public void sendAppointmentCanceledNotification(){
+        ArrayList<String> recievers = new ArrayList<String>();
+        attendingPeople.clear();
+        invitedUsers.clear();
+        fetchInvitedUsersFromDB();
+        fetchAttendingPeopleFromDB();
+
+        for (String username: attendingPeople) {
+            if (!username.equals(this.owner)) {
+                recievers.add(username);
+                removeAttendant(username);
+                System.out.println("the attendants added to invite list");
+            }
+        }
+        for (String username: invitedUsers) {
+            recievers.add(username);;
+            System.out.println("the invited added invite list");
+        }
+        for (String username: recievers) {
             Notification updateNot = new AppointmentUpdateNotification(this.owner, username, this.appointmentId);
             updateNot.createNotificationInDB();
             System.out.println("the invited and attending people got a new invite");

@@ -47,8 +47,8 @@ public class CalendarProgram {
         System.out.println("\nPlease give me ur passwd!");
 
         while (true) {
-            //String password = scn.next();
-            String password = passwordMasker();
+            String password = scn.next();
+            //String password = passwordMasker();
             try {
                 login.login(password);
                 this.user = User.getUserFromDB(username);

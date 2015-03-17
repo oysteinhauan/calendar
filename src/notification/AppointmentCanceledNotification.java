@@ -5,9 +5,9 @@ import client.Appointment;
 /**
  * Created by Henrik on 09.03.2015.
  */
-public class AttendanceCanceledNotification extends Notification{
+public class AppointmentCanceledNotification extends Notification{
 
-    public AttendanceCanceledNotification(String recieverUsername, String senderUsername, int appointmentId){
+    public AppointmentCanceledNotification(String recieverUsername, String senderUsername, int appointmentId){
         setNotificationType();
         setAppointmentId(appointmentId);
         setRecipientUsername(recieverUsername);
@@ -23,6 +23,6 @@ public class AttendanceCanceledNotification extends Notification{
     @Override
     public void setMessage() {
         Appointment appointment = Appointment.getAppointment(appointmentId);
-        message = ("" + senderUsername + " is no longer able to attend your appointment: " + appointment.toString()+ ".");
+        message = ("" + senderUsername + " has deleted the appointment you were attending or invited to attend: " + appointment.toString()+ ".");
     }
 }
