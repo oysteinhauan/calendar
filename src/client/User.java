@@ -142,6 +142,24 @@ public class User{
 
     }
 
+    public ArrayList<Integer> getAppointmentsForOwner(User owner, Database db){
+
+
+        ArrayList<Integer> appIdList = new ArrayList<Integer>();
+        String sql = "select appointment.appointmentId from appointment " +
+                "where owner = '" + owner.getUsername() + "';";
+
+        try {
+            ResultSet rs = db.readQuery(sql);
+            while (rs.next()) {
+                appIdList.add(rs.getInt("appointmentId"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return appIdList;
+    }
+
 //    public User getUserFromDB(String username){
 //        //henter ut informasjonen om en bruker fra databasen, basert på burkernavnet som skrives
 //        try {

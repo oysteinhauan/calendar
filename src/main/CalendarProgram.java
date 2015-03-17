@@ -315,6 +315,11 @@ public class CalendarProgram {
 
         while (bol) {
             try {
+                System.out.println("disse er du eier av:");
+                ArrayList<Integer> ids = user.getAppointmentsForOwner(user, db);
+                for (Integer i : ids){
+                    System.out.println(i.toString());
+                }
                 idToChange = KeyIn.inInt("Skriv inn avtaleID (0 for å gå tilbake):\n");
                 if(idToChange == 0){
                     bol = false;
