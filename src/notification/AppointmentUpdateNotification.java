@@ -13,6 +13,7 @@ public class AppointmentUpdateNotification extends Notification {
         setRecipientUsername(recieverUsername);
         setSenderUsername(senderUsername);
         setMessage();
+        handled = false;
     }
 
     @Override
