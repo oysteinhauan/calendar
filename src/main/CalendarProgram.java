@@ -47,8 +47,8 @@ public class CalendarProgram {
         System.out.println("\nPlease give me ur passwd!");
 
         while (true) {
-            String password = scn.next();
-            //String password = passwordMasker();
+            //String password = scn.next();
+            String password = passwordMasker();
             try {
                 login.login(password);
                 this.user = User.getUserFromDB(username);
@@ -71,6 +71,8 @@ public class CalendarProgram {
         boolean loggedIn = true;
 
         while (loggedIn) {
+            clearConsole();
+            calendar = new Calendar(username);
 
             int swValue;
             Database db = new Database();
@@ -79,7 +81,7 @@ public class CalendarProgram {
             this.user.fetchNotifications();
 
             System.out.println(    "\t♪┏(°.°)┛┗(°.°)┓┗(°.°)┛┏(°.°)┓ ♪ ");
-            System.out.println("   \t\tYou have " + user.getNumberOfNewNotifications() + " new notification(s)!");
+            System.out.println(    "\t\tYou have " + user.getNumberOfNewNotifications() + " new notification(s)!");
             System.out.println(    "\t♪┏(°.°)┛┗(°.°)┓┗(°.°)┛┏(°.°)┓ ♪\n ");
 
 
@@ -134,6 +136,7 @@ public class CalendarProgram {
                     if (User.existsCheck(otherUser)) {
                         Calendar otherCalendar = new Calendar(otherUser);
                         otherCalendar.viewCalendar();
+                        String ferdig = KeyIn.inString("" + "Trykk Enter når du er ferdig.");
                     } else {
                         System.out.println("ugyldig brukernavn");
                         continue;

@@ -391,50 +391,6 @@ public class User{
         }
     }
 
-/*    public boolean replyToNotification(Appointment appointment){
-        Scanner sc = new Scanner(System.in);
-        Boolean replyToAppointer = null;
 
-        int choiceEntry = -1;
-        System.out.println("You have bee invited to attend the appointment:");
-        System.out.println("****************************************************");
-        System.out.println(" You have been invited to attend the appointment: ");
-        System.out.println("      Subject: " + appointment.getSubject() + "         ");
-        System.out.println("      Description: " + appointment.getDescription());
-        System.out.println("      Room: " + appointment.getRoomId());
-        System.out.println("      Start: " + appointment.getStart());
-        System.out.println("      End: " + appointment.getEnd());
-        System.out.println("****************************************************");
-        do {
-            System.out.println("============================");
-            System.out.println("|       YOUR OPTIONS       |");
-            System.out.println("============================");
-            System.out.println("|        1. Accept         |");
-            System.out.println("|        2. Decline        |");
-            System.out.println("============================");
-            try {
-                choiceEntry = sc.nextInt();
-            } catch (InputMismatchException e) {
-                choiceEntry = -1;
-            }
-
-
-                switch (choiceEntry) {
-                    case 1:
-                        replyToAppointer = true;
-                        break;
-                    case 2:
-                        replyToAppointer = false;
-                        break;
-                    default:
-                        System.out.println("(╯°□°）╯︵ ┻━┻ Invalid reply.");
-                        break;
-                }
-
-        }while (choiceEntry != 1 && choiceEntry != 2);
-
-
-        removeAppointmentNotification(appointment);
-        return replyToAppointer;*/
 }
 
