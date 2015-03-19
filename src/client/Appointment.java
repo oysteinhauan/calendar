@@ -671,11 +671,10 @@ public class Appointment {
         for (String username: attendingPeople) {
             if (!username.equals(this.owner)) {
                 newInvitees.add(username);
-                removeAttendant(username);
             }
          }
         for (String username: invitedUsers) {
-            newInvitees.add(username);;
+            newInvitees.add(username);
         }
         for (String username: newInvitees) {
             Notification cancelNot = new AppointmentCanceledNotification(username, this.owner, this.appointmentId);
@@ -687,7 +686,7 @@ public class Appointment {
     }
 
     public void sendAppointmenUpdateNotification(){
-        ArrayList<String> recievers = new ArrayList<String>();
+        ArrayList<String> updateRecievers = new ArrayList<String>();
         attendingPeople.clear();
         invitedUsers.clear();
         fetchInvitedUsersFromDB();
@@ -695,14 +694,14 @@ public class Appointment {
 
         for (String username: attendingPeople) {
             if (!username.equals(this.owner)) {
-                recievers.add(username);
+                updateRecievers.add(username);
                 removeAttendant(username);
             }
         }
         for (String username: invitedUsers) {
-            recievers.add(username);;
+            updateRecievers.add(username);;
         }
-        for (String username: recievers) {
+        for (String username: updateRecievers) {
             Notification updateNot = new AppointmentUpdateNotification(this.owner, username, this.appointmentId);
             updateNot.createNotificationInDB();
         }

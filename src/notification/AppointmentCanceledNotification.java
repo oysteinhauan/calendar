@@ -12,6 +12,7 @@ public class AppointmentCanceledNotification extends Notification{
         setAppointmentId(appointmentId);
         setRecipientUsername(recieverUsername);
         setSenderUsername(senderUsername);
+
         setMessage();
     }
 
