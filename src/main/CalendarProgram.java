@@ -8,6 +8,8 @@ import java.io.Console;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
@@ -270,23 +272,38 @@ public class CalendarProgram {
     }
 
     public static void createAppointment(Database db) {
-        Timestamp start = Timestamp.valueOf(( "2015-" + KeyIn.inString("Legg inn avtaleinformasjon: starttidspunkt (MM-DD HH:MM)")) + ":00");
-        //kjør sjekk her
+        Timestamp start;
+        Timestamp slutt;
         Timestamp timeNow = new Timestamp((new java.util.Date()).getTime());
+
+        while(true) {
+            String str = "2015-" + KeyIn.inString("Legg inn avtaleinformasjon: starttidspunkt (MM-DD HH:MM)") + ":00";
+            if(CalendarProgram.isTimeStampValid(str)){
+                start = Timestamp.valueOf(str);
+                break;
+            }
+            System.out.println("Feil format, prøv igjen!");
+        }
         if (start.before(timeNow)) {
             throw new IllegalArgumentException("for tidlig!!!");
         }
-        Timestamp slutt = Timestamp.valueOf(("2015-" + KeyIn.inString("Legg inn avtaleinformasjon: slutttidspunkt (MM-DD HH:MM)")) + ":00");
-        //kjør sjekk her
+
+        while(true){
+        String str = "2015-" + KeyIn.inString("Legg inn avtaleinformasjon: slutttidspunkt (MM-DD HH:MM)") + ":00";
+            if(CalendarProgram.isTimeStampValid(str)){
+                slutt = Timestamp.valueOf(str);
+                break;
+            }
+            System.out.println("Feil format, prøv igjen!");
+        }
         if (slutt.before(timeNow) || slutt.before(start)) {
             throw new IllegalArgumentException("for TIDLIG SA JEG!!");
         }
+
         String subject = KeyIn.inString("Legg inn subject:");
         String description = KeyIn.inString("Legg inn description:");
         int antall = KeyIn.inInt("Legg inn antall møtedeltakere");
         System.out.println(username);
-
-
 
         boolean useSystem;
         Appointment appointment;
@@ -543,17 +560,34 @@ public class CalendarProgram {
                 int value2 = KeyIn.inInt("Select option.\n ");
                 switch (value2) {
                     case 1:
-                        String newStartTime = KeyIn.inString("\nNåværende start: " + appointmentToChange.getStart().toString()
-                                + "\n\nNåværende slutt: " +appointmentToChange.getEnd().toString()
-                                + "\n\nSkriv inn nytt starttidspunkt: (YYYY-MM-DD HH:MM)") + ":00";
-                        appointmentToChange.updateAppointmentInDB("start", newStartTime, db);
-                        continue;
+                        String newStartTime;
+                        while(true) {
+                            newStartTime = KeyIn.inString("\nNåværende start: " + appointmentToChange.getStart().toString()
+                                    + "\n\nNåværende slutt: " + appointmentToChange.getEnd().toString()
+                                    + "\n\nSkriv inn nytt starttidspunkt: (YYYY-MM-DD HH:MM)") + ":00";
+                            if(CalendarProgram.isTimeStampValid(newStartTime)){
+                                break;
+                            }
+                            System.out.println("Feil format, prøv igjen!!");
+                        }
+                        try {
+                            appointmentToChange.updateAppointmentInDB("start", newStartTime, db);
+                        } catch(IllegalArgumentException e){
+                            System.out.println(e);
+                        }
+                            continue;
 
                     case 2:
-
-                    String newEndTime = KeyIn.inString("\nNåværende start: " + appointmentToChange.getStart().toString()
-                            + "\n\nNåværende slutt: " +appointmentToChange.getEnd().toString()
-                            + "\n\nSkriv inn nytt sluttidspunkt: (YYYY-MM-DD HH:MM)") + ":00";
+                    String newEndTime;
+                    while(true) {
+                        newEndTime = KeyIn.inString("\nNåværende start: " + appointmentToChange.getStart().toString()
+                                + "\n\nNåværende slutt: " + appointmentToChange.getEnd().toString()
+                                + "\n\nSkriv inn nytt sluttidspunkt: (YYYY-MM-DD HH:MM)") + ":00";
+                        if(CalendarProgram.isTimeStampValid(newEndTime)){
+                            break;
+                        }
+                        System.out.println("Feil format, prøv igjen");
+                    }
                     try {
                         appointmentToChange.updateAppointmentInDB("slutt", newEndTime, db);
                     } catch (IllegalArgumentException e) {
@@ -810,6 +844,19 @@ public class CalendarProgram {
         char passwordArray[] = console.readPassword();
         //console.printf("Password entered was: %s%n", new String(passwordArray));
         return new String(passwordArray);
+    }
+
+    public static boolean isTimeStampValid(String timeStamp)
+    {
+        SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        try{
+            format.parse(timeStamp);
+            return true;
+        }
+        catch(ParseException e) {
+            return false;
+        }
     }
 }
 
