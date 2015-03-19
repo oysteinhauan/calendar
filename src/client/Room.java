@@ -91,6 +91,9 @@ public class Room {
                 }
             db.closeConnection();
             rs.close();
+            if(room.roomName == null){
+                room.roomName = "Ikke noe rom spesifisert.";
+            }
 
 
             }

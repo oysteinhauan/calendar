@@ -397,6 +397,28 @@ public class Appointment {
 
     }
 
+    public void updateTimeInDB(Timestamp newStart, Timestamp newEnd, Database db){
+
+        //Database db = new Database();
+        //db.connectDb("all_s_gruppe40", "qwerty");
+
+        //sjekker om ny slutt ikke er før nåværende start eller omvendt
+        Timestamp timeNow = new Timestamp((new java.util.Date()).getTime());
+        if(newEnd.before(newStart) || newEnd.before(timeNow) || newStart.before(timeNow)){
+            throw new IllegalArgumentException("Ugyldige tidspunkter.");
+        }
+
+
+        sendAppointmenUpdateNotification();
+        String sql =  "UPDATE appointment SET start ='" + newStart + "' WHERE appointmentId = '" + this.appointmentId + "';";
+        String sql2 =  "UPDATE appointment SET end ='" + newEnd + "' WHERE appointmentId = '" + this.appointmentId + "';";
+        db.updateQuery(sql);
+        db.updateQuery(sql2);
+        // db.closeConnection();
+
+
+    }
+
 
 
 

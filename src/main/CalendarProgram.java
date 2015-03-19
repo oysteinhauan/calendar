@@ -87,7 +87,7 @@ public class CalendarProgram {
             this.user.fetchNotifications(db);
 
             System.out.println(    "\t♪┏(°.°)┛┗(°.°)┓┗(°.°)┛┏(°.°)┓ ♪ ");
-            System.out.println(    "\tDu  har  " + user.getNumberOfNewNotifications() + "  ny(e)  varsling(er)!!!!!");
+            System.out.println(    "\tDu  har  " + user.getNumberOfNewNotifications() + "  ny(e)  varsling(er)");
             System.out.println(    "\t♪┏(°.°)┛┗(°.°)┓┗(°.°)┛┏(°.°)┓ ♪\n ");
 
 
@@ -95,8 +95,8 @@ public class CalendarProgram {
 
             System.out.println("hva vil du gjøre? bruk tallene for å navigere i menyene \n" +
 
-                            "1. opprett / endre avtaler \n" +
-                            "2. gruppestuff\n" +
+                            "1. Opprett / Endre avtaler \n" +
+                            "2. Se gruppekalender / Gå til gruppemeny\n" +
                             "3. Se en annens private kalender\n" +
                             "4. Endre min brukerinfo\n" +
                             "5. Vis min personlige kalender\n" +
@@ -135,7 +135,7 @@ public class CalendarProgram {
                             break;
                         }
                         else if(groupname == ""){
-                            //Group group = null;
+                            Group group = null;
                             fail = false;
                             break;
                         }
@@ -153,6 +153,8 @@ public class CalendarProgram {
                             break;
                         } catch (IllegalArgumentException e) {
                             System.out.println("Ugyldig gruppenavn");
+                        } catch (IllegalAccessError e){
+                            groupStuff(null, db);
                         }
 
 
@@ -361,14 +363,21 @@ public class CalendarProgram {
             switch (value) {
                 case 1:
                     //Se gruppemedlemmer
-                    int index = 1;
-                    for (String str: group.getMembers()){
-                        System.out.println();
-                        System.out.println(index +". "  + str);
-                        index++;
+                    String dritt = null;
+                    try {
+                        int index = 1;
+                        for (String str: group.getMembers()){
+                            System.out.println();
+                            System.out.println(index +". "  + str);
+                            index++;
+                        }
+                        dritt = KeyIn.inString("Enter når du er ferdig.");
+                        continue;
+                    } catch (NullPointerException e) {
+                        System.out.println("Du har ikke valgt noen gruppe." +
+                                " Gå tilbake, og skriv gruppenavnet på nytt.");
+                        continue;
                     }
-                    String dritt = KeyIn.inString("Enter når du er ferdig.");
-                    continue;
 
                 case 4:
                     //Legg til gruppe/subgruppe
@@ -379,6 +388,10 @@ public class CalendarProgram {
                         String asdf = KeyIn.inString("Skriv inn gruppen du vil lage subrguppe til");
                         try {
                             group = Group.getGroup(Group.getGroupIDFromDB(asdf));
+                            if (group.getGroupname() == null){
+                                throw new IllegalAccessError();
+
+                            }
                         } catch (IllegalAccessError e) {
                             System.out.println("Gruppen finnes ikke.");
                             continue;
@@ -397,10 +410,19 @@ public class CalendarProgram {
                     }
                     else{
                         String gname = KeyIn.inString("Skriv navn på ny gruppe.");
+                        try {
+                            if (gname == "" || gname == " " || gname == "  " || gname == "   ") {
+                                throw new RuntimeException();
+                            }
+                        } catch (RuntimeException e){
+                            System.out.println("Ugyldig gruppenavn\n");
+                            dritt = KeyIn.inString("\nEnter for å fortsette.");
+                        }
                         Group newGroup = new Group(gname);
                         try {
                             newGroup.createGroup(newGroup, db);
                         } catch(RuntimeException e){
+                            dritt = KeyIn.inString("Noe gikk adundas. Enter for å fortsette.");
                             e.printStackTrace();
                         }
                         continue;
@@ -503,7 +525,7 @@ public class CalendarProgram {
 
         while (bol) {
             try {
-                System.out.println("disse er du eier av:");
+                System.out.println("Disse er du eier av:");
                 ArrayList<Integer> ids = user.getAppointmentsForOwner(user, db);
                 for (Integer i : ids){
                     System.out.println(i.toString());
@@ -517,7 +539,7 @@ public class CalendarProgram {
                 }
                 Appointment app = Appointment.getAppointment(idToChange, db);
                 if (!app.hasRecord(idToChange, db)) {
-                    System.out.println("id'en finnes ikke, prøv igjen!!");
+                    System.out.println("ID'en finnes ikke, prøv igjen!!");
                 } else if (!(Appointment.checkIfOwner(this.user.getUsername(), app, idToChange)) && !this.user.isAdmin()) {
                     throw new IllegalArgumentException("Du må være eieren for å endre.");
                 }
@@ -545,8 +567,8 @@ public class CalendarProgram {
             boolean stay = true;
 
             while (stay) {
-                System.out.println("1. Endre starttid\n" +
-                        "2. Endre sluttid\n" +
+                System.out.println("1. Endre tid\n" +
+                      //  "2. Endre sluttid\n" +
                         "3. Legg til deltaker\n" +
                         "4. Fjern deltaker\n" +
                         "5. Endre description\n" +
@@ -561,38 +583,51 @@ public class CalendarProgram {
                 switch (value2) {
                     case 1:
                         String newStartTime;
+                        String newEndTime = "";
+                        Timestamp newStart= null;
+                        Timestamp newEnd = null;
                         while(true) {
                             newStartTime = KeyIn.inString("\nNåværende start: " + appointmentToChange.getStart().toString()
                                     + "\n\nNåværende slutt: " + appointmentToChange.getEnd().toString()
                                     + "\n\nSkriv inn nytt starttidspunkt: (YYYY-MM-DD HH:MM)") + ":00";
-                            if(CalendarProgram.isTimeStampValid(newStartTime)){
+                            if(!CalendarProgram.isTimeStampValid(newStartTime)){
+                                System.out.println("Ugyldig input");
                                 break;
                             }
-                            System.out.println("Feil format, prøv igjen!!");
+                            newEndTime = KeyIn.inString("Skriv inn nytt sluttidspunkt: (YYYY-MM-DD HH:MM)") + ":00";
+                            if(!CalendarProgram.isTimeStampValid(newEndTime)){
+                                System.out.println("Ugyldig input");
+                                break;
+                            }
+
+                            //System.out.println("Feil format, prøv igjen!!");
+                            newStart = Timestamp.valueOf(newStartTime);
+                            newEnd = Timestamp.valueOf(newEndTime);
+                            break;
                         }
                         try {
-                            appointmentToChange.updateAppointmentInDB("start", newStartTime, db);
+                            appointmentToChange.updateTimeInDB(newStart, newEnd, db);
                         } catch(IllegalArgumentException e){
                             System.out.println(e);
                         }
                             continue;
 
                     case 2:
-                    String newEndTime;
-                    while(true) {
-                        newEndTime = KeyIn.inString("\nNåværende start: " + appointmentToChange.getStart().toString()
-                                + "\n\nNåværende slutt: " + appointmentToChange.getEnd().toString()
-                                + "\n\nSkriv inn nytt sluttidspunkt: (YYYY-MM-DD HH:MM)") + ":00";
-                        if(CalendarProgram.isTimeStampValid(newEndTime)){
-                            break;
-                        }
-                        System.out.println("Feil format, prøv igjen");
-                    }
-                    try {
-                        appointmentToChange.updateAppointmentInDB("slutt", newEndTime, db);
-                    } catch (IllegalArgumentException e) {
-                        System.out.println(e);
-                    }
+//                    String newEndTime;
+//                    while(true) {
+//                        newEndTime = KeyIn.inString("\nNåværende start: " + appointmentToChange.getStart().toString()
+//                                + "\n\nNåværende slutt: " + appointmentToChange.getEnd().toString()
+//                                + "\n\nSkriv inn nytt sluttidspunkt: (YYYY-MM-DD HH:MM)") + ":00";
+//                        if(CalendarProgram.isTimeStampValid(newEndTime)){
+//                            break;
+//                        }
+//                        System.out.println("Feil format, prøv igjen");
+//                    }
+//                    try {
+//                        appointmentToChange.updateAppointmentInDB("slutt", newEndTime, db);
+//                    } catch (IllegalArgumentException e) {
+//                        System.out.println(e);
+//                    }
                     continue;
                 case 3:
                     String newAttendant = KeyIn.inString("Hvilken deltaker vil du legge til? skriv inn username");
@@ -808,14 +843,77 @@ public class CalendarProgram {
 
                 case 2:
                     //slett bruker
+                    ResultSet rs = db.readQuery("select username from user;");
+                    int index = 1;
+                    System.out.printf("Liste over brukere:\n\n");
+                    try {
+                        while(rs.next()){
+                            System.out.println(index + ". " + rs.getString("username") + "\n");
+                            index++;
+                        }
+                    } catch (SQLException e) {
+                        System.out.println("Database kødd.");
+                    }
+                    String duser = KeyIn.inString("\n\nSkriv inn brukernavn som skal slettes.\n\n");
+                    try{
+                        db.updateQuery("delete from user where username = '" + duser +"';");
+                        System.out.println("Bruker slettet.");
+                    } catch (RuntimeException e){
+                        System.out.println("Brukeren finnes ikke.");
+                    }
                     continue;
 
                 case 3:
+                    rs = db.readQuery("select * from room;");
+                    System.out.println("Liste over tilgjengelige rom:\n\n");
+                    try {
+                        while(rs.next()){
+                            System.out.println("Romnr " +  " " +
+                                    rs.getString("roomId") + "  " + "Kapasitet: " +
+                                    rs.getString("size") + "  Romnavn: " +
+                                    rs.getString("roomName") + "\n");
+
+                        }
+                    } catch (SQLException e) {
+                        System.out.println("Databasekødd.");
+                    }
+
+                    int rsize = KeyIn.inInt("Skriv inn ny romstørrelse");
+                    String rname = KeyIn.inString("Skriv inn navn på nytt rom.");
+                    try {
+                        db.updateQuery("insert into room (size, roomName) values ("
+                        + rsize + ", '" + rname + "');");
+                        System.out.println("\nRommet ble opprettet\n");
+                        String dritt = KeyIn.inString("\nEnter for å fortsette");
+                    } catch (RuntimeException e) {
+                        System.out.println("Dette gikk ikke bra. ");
+                    }
                     //oprett rom
+
                     continue;
 
                 case 4:
+                    rs = db.readQuery("select * from room;");
+                    System.out.println("Liste over tilgjengelige rom:\n\n");
+                    try {
+                        while(rs.next()){
+                            System.out.println("Romnr " +  " " +
+                                    rs.getString("roomId") + "  " + "Kapasitet: " +
+                                    rs.getString("size") + "  Romnavn: " +
+                                    rs.getString("roomName") + "\n");
+
+                        }
+                    } catch (SQLException e) {
+                        System.out.println("Databasekødd.");
+                    }
                     //slett rom
+                    int droom = KeyIn.inInt("Skriv inn romId som skal slettes");
+                    try {
+                        db.updateQuery("delete from room where roomId = " + droom + ";");
+                    } catch(RuntimeException e){
+                        System.out.println("Rommet ble slettet. \n");
+                        String dritt = KeyIn.inString("\nEnter for å fortsette");
+                    }
                     continue;
                 case 5:
                     stay = false;

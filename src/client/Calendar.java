@@ -37,7 +37,7 @@ public class Calendar {
         for (Appointment appointment : appointments) {
             System.out.println("Subject: " + appointment.getSubject());
             System.out.println("Description: " + appointment.getDescription());
-            System.out.println("Room: " + appointment.getRoomId());
+            System.out.println("Room: " + appointment.getRoomId() + "  " + Room.getRoom(appointment.getRoomId()).getRoomName());
             System.out.println("Start: " + appointment.getStart());
             System.out.println("End: " + appointment.getEnd());
             System.out.println("__________________________");
@@ -48,7 +48,9 @@ public class Calendar {
 
     public void viewGroupCalendar(){
         System.out.println("**** Welcome! ****");
-        System.out.println("This is " + group.getGroupname() + "s appointments:");
+        if(!(group.getGroupname() == null)) {
+            System.out.println("This is " + group.getGroupname() + "s appointments:");
+        }
         System.out.println("   ");
         for (Appointment appointment : appointments) {
             System.out.println("Subject: " + appointment.getSubject());
