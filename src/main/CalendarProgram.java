@@ -279,7 +279,7 @@ public class CalendarProgram {
         Timestamp timeNow = new Timestamp((new java.util.Date()).getTime());
 
         while(true) {
-            String str = "2015-" + KeyIn.inString("Legg inn avtaleinformasjon: starttidspunkt (MM-DD HH:MM)") + ":00";
+            String str = KeyIn.inString("Legg inn avtaleinformasjon: starttidspunkt (YYYY-MM-DD HH:MM)") + ":00";
             if(CalendarProgram.isTimeStampValid(str)){
                 start = Timestamp.valueOf(str);
                 break;
@@ -291,7 +291,7 @@ public class CalendarProgram {
         }
 
         while(true){
-        String str = "2015-" + KeyIn.inString("Legg inn avtaleinformasjon: slutttidspunkt (MM-DD HH:MM)") + ":00";
+        String str = KeyIn.inString("Legg inn avtaleinformasjon: slutttidspunkt (YYYY-MM-DD HH:MM)") + ":00";
             if(CalendarProgram.isTimeStampValid(str)){
                 slutt = Timestamp.valueOf(str);
                 break;

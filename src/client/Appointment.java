@@ -814,7 +814,7 @@ public class Appointment {
         } catch(RuntimeException e){
             System.out.println("User not in event");
         }
-        this.attendingPeople.remove(username);
+        //this.attendingPeople.remove(username);
     }
 
     public void removeAttendant(String username, Database db){
@@ -826,7 +826,7 @@ public class Appointment {
         } catch(RuntimeException e){
             System.out.println("User not in event");
         }
-        this.attendingPeople.remove(username);
+        //this.attendingPeople.remove(username);
     }
 
     //NOTIFICATION
