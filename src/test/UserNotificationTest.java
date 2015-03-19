@@ -2,6 +2,7 @@ package test;
 
 import client.Appointment;
 import client.User;
+import database.Database;
 
 /**
  * Created by Henrik on 06.03.2015.
@@ -9,18 +10,30 @@ import client.User;
 public class UserNotificationTest {
 
     public static void main(String[] args) {
-        Appointment ap = Appointment.getAppointment(37);
+
+        Appointment ap = Appointment.getAppointment(44);
         User participant = User.getUserFromDB("henloef");
         User owner = User.getUserFromDB(ap.getOwner());
+        System.out.println(owner.getUsername());
+        Database db = new Database();
+        db.connectDb("all_s_gruppe40", "qwerty");
+       // ap.inviteAttendant("mummi", db);
+        //ap.inviteAttendant("henloef", db);
+        //ap.addAttendant("oddmrog", db);
+        ap.sendAppointmenUpdateNotification();
+
+
+        //ap.sendAppointmenUpdateNotification();
 //        System.out.println(owner.getUsername());
   //      ap.inviteAttendant("mummi");
  //       ap.addAttendant("henloef");
-        ap.sendAppointmenUpdateNotification();
+        //ap.sendAppointmenUpdateNotification();
 //       ap.addAttendant(owner.getUsername());
-
+        participant.fetchNotifications(db);
         System.out.println("\t♪┏(°.°)┛┗(°.°)┓┗(°.°)┛┏(°.°)┓ ♪ ");
-        System.out.println("\t\tYou have " + owner.getNumberOfNewNotifications() + " new notification(s)!");
+        System.out.println("\t\tYou have " + participant.getNumberOfNewNotifications() + " new notification(s)!");
         System.out.println("\t♪┏(°.°)┛┗(°.°)┓┗(°.°)┛┏(°.°)┓ ♪\n ");
+        db.closeConnection();
 
 
 

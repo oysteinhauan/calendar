@@ -49,8 +49,8 @@ public class CalendarProgram {
         System.out.println("\nSkriv inn ditt hemmelige passord!");
 
         while (true) {
-            //String password = scn.next();
-            String password = passwordMasker();
+            String password = scn.next();
+            //String password = passwordMasker();
             try {
                 login.login(password);
                 this.user = User.getUserFromDB(username);
@@ -87,7 +87,7 @@ public class CalendarProgram {
             this.user.fetchNotifications(db);
 
             System.out.println(    "\t♪┏(°.°)┛┗(°.°)┓┗(°.°)┛┏(°.°)┓ ♪ ");
-            System.out.println(    "\tDu  har  " + user.getNumberOfNewNotifications() + "  nye  meldinger!!!!!");
+            System.out.println(    "\tDu  har  " + user.getNumberOfNewNotifications() + "  ny(e)  varsling(er)!!!!!");
             System.out.println(    "\t♪┏(°.°)┛┗(°.°)┓┗(°.°)┛┏(°.°)┓ ♪\n ");
 
 

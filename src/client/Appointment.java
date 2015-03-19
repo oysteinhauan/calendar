@@ -639,7 +639,7 @@ public class Appointment {
         }
     }
 
-    public void sendAppointmenUpdateNotification() {
+    public void sendAppointmentCanceledNotification() {
         ArrayList<String> newInvitees = new ArrayList<String>();
         attendingPeople.clear();
         invitedUsers.clear();
@@ -658,13 +658,13 @@ public class Appointment {
             System.out.println("the invited added notification list list");
         }
         for (String username: newInvitees) {
-            Notification cancelNot = new AppointmentCanceledNotification(this.owner, username, this.appointmentId);
+            Notification cancelNot = new AppointmentCanceledNotification(username, this.owner, this.appointmentId);
             cancelNot.createNotificationInDB();
             System.out.println("the invited and attending people got a cancellation notification");
         }
     }
 
-    public void sendAppointmentCanceledNotification(){
+    public void sendAppointmenUpdateNotification(){
         ArrayList<String> recievers = new ArrayList<String>();
         attendingPeople.clear();
         invitedUsers.clear();
@@ -683,7 +683,7 @@ public class Appointment {
             System.out.println("the invited added invite list");
         }
         for (String username: recievers) {
-            Notification updateNot = new AppointmentUpdateNotification(this.owner, username, this.appointmentId);
+            Notification updateNot = new AppointmentUpdateNotification(username, this.owner, this.appointmentId);
             updateNot.createNotificationInDB();
             System.out.println("the invited and attending people got a new invite");
         }
