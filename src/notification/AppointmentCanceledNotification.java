@@ -23,6 +23,6 @@ public class AppointmentCanceledNotification extends Notification{
     @Override
     public void setMessage() {
         Appointment appointment = Appointment.getAppointment(appointmentId);
-        message = ("" + senderUsername + " has deleted the appointment you were attending or invited to attend: " + appointment.toString()+ ".");
+        message = ("" + senderUsername + " har avlyst avtalen du skulle, eller var invitert til å, delta på: " + appointment.toString()+ ".");
     }
 }

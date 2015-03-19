@@ -17,10 +17,10 @@ public class UserNotificationTest {
         System.out.println(owner.getUsername());
         Database db = new Database();
         db.connectDb("all_s_gruppe40", "qwerty");
-       // ap.inviteAttendant("mummi", db);
+        //ap.inviteAttendant("mummi", db);
         //ap.inviteAttendant("henloef", db);
         //ap.addAttendant("oddmrog", db);
-        ap.sendAppointmenUpdateNotification();
+        ap.sendAppointmentCanceledNotification();
 
 
         //ap.sendAppointmenUpdateNotification();
