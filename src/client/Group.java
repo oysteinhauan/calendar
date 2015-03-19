@@ -6,6 +6,7 @@ import javax.xml.crypto.Data;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.IllegalFormatException;
 
 /**
  * Created by andrealouise on 24.02.15.
@@ -45,6 +46,10 @@ public class Group implements AppointmentListener {
         sql = ("INSERT INTO group_1 (name) values('" + (group.groupname) + "');");
         db.updateQuery(sql);
        // db.closeConnection();
+    }
+
+    public static void removeGroupFromDB(String gname, Database db) throws IllegalArgumentException{
+        db.updateQuery("delete from group_1 where name like '" + gname + "%';");
     }
 
     public ArrayList<String> getMembers(){
@@ -237,9 +242,13 @@ public class Group implements AppointmentListener {
             //db.connectDb("all_s_gruppe40", "qwerty");
             String sql = ("SELECT groupID FROM group_1 WHERE name = '" + groupname +"' ;");
             ResultSet rs = db.readQuery(sql);
+            if(!rs.next()){
+                throw new IllegalAccessError();
+            }
             while(rs.next()) {
                 groupId = rs.getInt("groupID");
             }
+
            // db.closeConnection();
             rs.close();
 
@@ -387,12 +396,16 @@ public class Group implements AppointmentListener {
 
             ResultSet rs = db.readQuery(sql);
             while (rs.next()) {
-                appIdList.add(rs.getInt("appointmentId"));
+                if(!appIdList.contains(rs.getInt("appointmentId"))) {
+                    appIdList.add(rs.getInt("appointmentId"));
+                }
             }
             //db.closeConnection();
 
             for (Integer id: appIdList){
-                appList.add(Appointment.getAppointment(id));
+
+                appList.add(Appointment.getAppointment(id, db));
+
             }
             return appList;
 
@@ -421,6 +434,24 @@ public class Group implements AppointmentListener {
         try {
             while(rs.next()){
                 groups.add(rs.getString("name"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return groups;
+
+    }
+
+    public  static ArrayList<String> getGroupNamesLowerCase(Database db){
+
+        ArrayList<String> groups = new ArrayList<String>();
+
+        String sql = "SELECT name FROM group_1;";
+        ResultSet rs = db.readQuery(sql);
+        try {
+            while(rs.next()){
+                groups.add(rs.getString("name").toLowerCase());
             }
         } catch (Exception e) {
             e.printStackTrace();

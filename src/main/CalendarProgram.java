@@ -28,7 +28,7 @@ public class CalendarProgram {
     public void init() {
 
         Scanner scn = new Scanner(System.in);
-        System.out.println("Wilkommen! Bitte schreiben sie Ihren Name!");
+        System.out.println("Velkommen. Skriv inn brukernavn!\n");
         Login login = new Login();
         User user;
         username = "";
@@ -40,20 +40,20 @@ public class CalendarProgram {
                 //clearConsole();
                 break;
             } catch (IllegalArgumentException e) {
-                System.out.println("\nInvalid usrname. Try again plz\n\n");
+                System.out.println("\n\nUgyldig brukernavn. Prøv igjen!\n\n");
             }
         }
 
-        System.out.println("\nPlease give me ur passwd!");
+        System.out.println("\nSkriv inn ditt hemmelige passord!");
 
         while (true) {
-            String password = scn.next();
-            //String password = passwordMasker();
+            //String password = scn.next();
+            String password = passwordMasker();
             try {
                 login.login(password);
                 this.user = User.getUserFromDB(username);
                 //clearConsole();
-                System.out.println("Welcome to our fantastic calendar, " + this.user.getFullName() + "\n\n\n\n");
+                System.out.println("Velkommen til vår fantastiske kalender, " + this.user.getFullName() + "!\n\n\n\n");
                 TimeUnit.SECONDS.sleep(2);
                 clearConsole();
                 break;
@@ -82,10 +82,10 @@ public class CalendarProgram {
             int swValue;
 
 
-            this.user.fetchNotifications();
+            this.user.fetchNotifications(db);
 
             System.out.println(    "\t♪┏(°.°)┛┗(°.°)┓┗(°.°)┛┏(°.°)┓ ♪ ");
-            System.out.println(    "\t\tYou have " + user.getNumberOfNewNotifications() + " new notification(s)!");
+            System.out.println(    "\tDu  har  " + user.getNumberOfNewNotifications() + "  nye  meldinger!!!!!");
             System.out.println(    "\t♪┏(°.°)┛┗(°.°)┓┗(°.°)┛┏(°.°)┓ ♪\n ");
 
 
@@ -98,7 +98,7 @@ public class CalendarProgram {
                             "3. Se en annens private kalender\n" +
                             "4. Endre min brukerinfo\n" +
                             "5. Vis min personlige kalender\n" +
-                            "6. Vis svar på notifikasjoner\n" +
+                            "6. Vis/svar på meldinger\n" +
                             "7. Oppdater\n" +
                             "8. Logg ut\n\n"
             );
@@ -122,11 +122,12 @@ public class CalendarProgram {
                 case 2:
                     clearConsole();
 
-                    ArrayList<String> groupNames = Group.getGroupNames(db);
+                    ArrayList<String> groupNames = Group.getGroupNamesLowerCase(db);
                     String groupname = "";
                     boolean fail = true;
                     while (fail) {
-                        groupname = KeyIn.inString("Vennligst skriv inn navnet paa gruppen du vil utforske! Enter for å gå til gruppemeny.");
+                        groupname = KeyIn.inString("Vennligst skriv inn navnet paa gruppen du vil utforske!" +
+                                " Enter for å gå til gruppemeny.").toLowerCase();
                         if(groupNames.contains(groupname)){
                             fail = false;
                             break;
@@ -143,12 +144,13 @@ public class CalendarProgram {
                             Group group = Group.getGroup(id, db);
                             Calendar groupCalendar = new Calendar(group, db);
                             groupCalendar.viewGroupCalendar();
+
+                            String bæsj = KeyIn.inString("Trykk Enter for å gå videre.");
                             groupStuff(group, db);
-                            String bæsj = KeyIn.inString("Trykk Enter når du er ferdig.");
                             // legge inn gruppelogikk
                             break;
                         } catch (IllegalArgumentException e) {
-                            System.out.println("Invalid groupname. Try again.");
+                            System.out.println("Ugyldig gruppenavn");
                         }
 
 
@@ -312,17 +314,17 @@ public class CalendarProgram {
 
         while (appointment.invitedUsers.size() + 1 < antall) {
 
-            String bruker = KeyIn.inString("skriv inn username. 'cancel' to cancel");
+            String bruker = KeyIn.inString("Skriv inn brukernavn som skal inviteres, 'Cancel' for å avbryte");
             if (bruker.compareToIgnoreCase("cancel") == 0){
                 break;
             }
             try {
 
                 appointment.inviteAttendant(bruker, db);
-                System.out.println(bruker + " ble lagt til");
+                System.out.println(bruker + " ble invitert.");
             } catch (IllegalArgumentException e){
                 //dritt
-                System.out.println("Try again.");
+                System.out.println("Prøv igjen.");
             }
         }
     }
@@ -334,8 +336,9 @@ public class CalendarProgram {
 
             clearConsole();
 
-            System.out.println("1. Vis medlemmer for gruppen\n2. Legg til deltaker i gruppe/subgruppe. 3. Vis grupper\n" +
-                    "4. Lag ny gruppe\n6. Gå tilbake");
+            System.out.println("1. Vis medlemmer for gruppen\n2. Legg til deltaker i gruppe/subgruppe." +
+                    " \n3. Vis grupper\n" +
+                    "5. Slett bruker (ADMIN)\n4. Lag ny gruppe\n6. Gå tilbake");
 
             int value = KeyIn.inInt("Select Option");
             switch (value) {
@@ -351,14 +354,25 @@ public class CalendarProgram {
                     continue;
 
                 case 4:
-                    //Legg til medlem / deg selv
+                    //Legg til gruppe/subgruppe
                     char ans = KeyIn.inChar("Subgruppe? y/n");
-                    if(ans == 'y'){
+
+                    if (ans == 'y') {
+
+                        String asdf = KeyIn.inString("Skriv inn gruppen du vil lage subrguppe til");
+                        try {
+                            group = Group.getGroup(Group.getGroupIDFromDB(asdf));
+                        } catch (IllegalAccessError e) {
+                            System.out.println("Gruppen finnes ikke.");
+                            continue;
+                        }
+
                         String gname = KeyIn.inString("Skriv inn navn på subgruppe");
                         try {
                             group.createSubGroup(gname, db);
-                        } catch(RuntimeException e){
+                        } catch (RuntimeException e) {
                             System.out.println("Gruppen finnes allerede ellernoe");
+                            String bæsj = KeyIn.inString("Enter for å fortsette.");
 
                         }
                         continue;
@@ -389,6 +403,7 @@ public class CalendarProgram {
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
+                    String bæsj = KeyIn.inString("Enter for å fortsette.");
                     continue;
 
                     //Vis grupper / subgrupper
@@ -403,6 +418,7 @@ public class CalendarProgram {
                         if(yn.equals("y") || yn.equals("yes")){
                             group.addMember(user, group.getGroupID(), db);
                             System.out.println("Brukeren ble mest sannsynlig lagt til.");
+                            String d = KeyIn.inString("Enter for å fortsette.");
 
                             //burde catche runtime
                         }
@@ -410,16 +426,45 @@ public class CalendarProgram {
                             String usr = KeyIn.inString("Skriv inn brukeren du vil legge til.");
                             group.addMember(User.getUserFromDB(usr), group.getGroupID(), db);
                             System.out.println("Brukeren ble mest sannsynlig lagt til.");
+                            String g = KeyIn.inString("Enter for å fortsette.");
                             //burde catche runtime
 
                         }
                     } catch (RuntimeException e) {
                         System.out.println("Brukeren ble ikke lagt til. Sikkert allerede medlem elns.");
+                        String a = KeyIn.inString("Enter for å fortsette.");
                     }
                     continue;
 
 
                 case 5:
+                    if(!user.isAdmin(db)){
+                        System.out.println("Du kan ikke slette grupper, du er ikke admin!");
+                        dritt = KeyIn.inString("Enter for å fortsette.");
+
+                        continue;
+                    }
+                    String asdf = KeyIn.inString("Skriv inn navnet på gruppen du vil slette.\n" +
+                            "NB: Du sletter alle subgrupper også!");
+                    try{
+                        Group.removeGroupFromDB(asdf, db);
+                        System.out.println("Gruppen er slettet");
+
+                        try {
+                            TimeUnit.SECONDS.sleep(1);
+                        } catch (InterruptedException e) {
+
+                        }
+
+                        continue;
+                    } catch(IllegalArgumentException e){
+                        System.out.println("Gruppen finnes ikke.");
+                        bæsj = KeyIn.inString("Enter for å fortsette.");
+
+                        continue;
+                    }
+
+
                     //hvis admin slett gruppe / subgruppe
                 case 6:
                     stay = false;

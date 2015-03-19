@@ -469,9 +469,9 @@ public class User{
         return null;
     }
 
-    public void fetchNotifications(){
+    public void fetchNotifications(Database db){
         notifications.clear();
-        notifications = getNotificationsForUser(username);
+        notifications = getNotificationsForUser(username, db);
     }
 
 
@@ -526,7 +526,7 @@ public class User{
                     System.out.println("Option 1 selected: You have accepted the invitation.\n\n");
                     System.out.println("");
                     reply = true;
-                    ap.addAttendant(username);
+                    ap.addAttendant(username, db);
                     replied = true;
                     inviteNotification.handle(db);
                     replyToInviteNotification = new ReplyFromInvitedUserNotification(ap.getOwner(), username, ap.appointmentId, reply);
