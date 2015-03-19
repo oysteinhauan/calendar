@@ -130,7 +130,7 @@ public class User{
             //db.closeConnection();
 
             for (Integer id: appIdList){
-                appList.add(Appointment.getAppointment(id));
+                appList.add(Appointment.getAppointment(id, db));
             }
             return appList;
 

@@ -127,7 +127,7 @@ public class Appointment {
         if(useSystem) {
             try {
                 appointment = new Appointment(start, end, subject, description, size, owner);
-                appointment.findRoomId();
+                appointment.findRoomId(db);
                 appointment.setRoom(Room.getRoom(appointment.getRoomId()));
                 appointment.createAppointmentInDB(appointment, db);
 
@@ -173,7 +173,7 @@ public class Appointment {
     @Override
     public String toString() {
 
-        return ("\nSubject: " + subject + "\nDescription: " + description + "\nRoom: " + roomId + "\nStart: " + start + "\nEnd: " + end +"");
+        return ("\nSubject: " + subject + "\nDescription: " + description + "\nRoom: " + roomId + "\nStart: " + start + "\nEnd: " + end +"\nInvited by: " + owner);
     }
 
     public static boolean checkIfOwner(String owner, Appointment appointment, int id){
@@ -592,7 +592,7 @@ public class Appointment {
         this.end = end;
     }
 
-    public String getOwner(){return owner;};
+    public String getOwner(){return owner;}
 
     public void setOwner(String owner){ this.owner = owner; }
 
