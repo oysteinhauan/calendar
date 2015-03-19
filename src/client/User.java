@@ -520,39 +520,49 @@ public class User{
         while(!replied){
             swValue = KeyIn.inInt("Select option: ");
 
-            switch (swValue) {
-                case 1:
-                    System.out.println("");
-                    System.out.println("Option 1 selected: You have accepted the invitation.\n\n");
-                    System.out.println("");
-                    reply = true;
-                    ap.addAttendant(username, db);
-                    replied = true;
-                    inviteNotification.handle(db);
-                    replyToInviteNotification = new ReplyFromInvitedUserNotification(ap.getOwner(), username, ap.appointmentId, reply);
-                    replyToInviteNotification.createNotificationInDB();
-                    System.out.println("");
-                    System.out.println("" + ap.getOwner() + " will now be notified about your reply.");
-                    System.out.println("");
-                    break;
-                case 2:
-                    System.out.println(" ");
-                    System.out.println("Option 2 selected: You have declined the invitation.");
-                    System.out.println(" ");
-                    reply = false;
-                    replied = true;
-                    inviteNotification.handle(db);
-                    replyToInviteNotification = new ReplyFromInvitedUserNotification(ap.getOwner(), username, ap.appointmentId, reply);
-                    replyToInviteNotification.createNotificationInDB();
-                    System.out.println("");
-                    System.out.println("" + ap.getOwner() + " will now be notified about your reply.\n\n");
-                    System.out.println("");
-                    break;
-                default:
-                    System.out.println("Invalid selection (ノಠ益ಠ)ノ彡┻━┻");
-                    break;
+
+                switch (swValue) {
+                    case 1:
+                        System.out.println("");
+                        System.out.println("Option 1 selected: You have accepted the invitation.\n\n");
+                        System.out.println("");
+                        reply = true;
+                        try{
+                            ap.addAttendant(username, db);
+                        }catch (IllegalArgumentException e){
+                            System.out.println("User is already registered.");
+                            inviteNotification.handle(db);
+                            replied = true;
+                            break;
+
+                        }
+                        replied = true;
+                        inviteNotification.handle(db);
+                        replyToInviteNotification = new ReplyFromInvitedUserNotification(ap.getOwner(), username, ap.appointmentId, reply);
+                        replyToInviteNotification.createNotificationInDB();
+                        System.out.println("");
+                        System.out.println("" + ap.getOwner() + " will now be notified about your reply.");
+                        System.out.println("");
+                        break;
+                    case 2:
+                        System.out.println(" ");
+                        System.out.println("Option 2 selected: You have declined the invitation.");
+                        System.out.println(" ");
+                        reply = false;
+                        replied = true;
+                        inviteNotification.handle(db);
+                        replyToInviteNotification = new ReplyFromInvitedUserNotification(ap.getOwner(), username, ap.appointmentId, reply);
+                        replyToInviteNotification.createNotificationInDB();
+                        System.out.println("");
+                        System.out.println("" + ap.getOwner() + " will now be notified about your reply.\n\n");
+                        System.out.println("");
+                        break;
+                    default:
+                        System.out.println("Invalid selection (ノಠ益ಠ)ノ彡┻━┻");
+                        break;
                     // This break is not really necessary
-            }
+                }
+
         }
     }
 
