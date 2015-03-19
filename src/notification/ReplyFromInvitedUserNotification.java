@@ -27,14 +27,14 @@ public class ReplyFromInvitedUserNotification extends Notification{
     @Override
     public void setMessage() {
         Appointment appointment = Appointment.getAppointment(appointmentId);
-        message = ("" + senderUsername + " has " + replyFromInvitedUserToString() + " your invite to attend the appointment: " + appointment.toString() + "");
+        message = ("" + senderUsername + " har " + replyFromInvitedUserToString() + " din invitasjon til å delta på: " + appointment.toString() + "");
     }
 
     String replyFromInvitedUserToString() {
         if (replyFromInvitedUser){
-            return "accepted";
+            return "godtatt";
         } else {
-            return "declined";
+            return "avslått";
         }
     }
 }

@@ -23,6 +23,6 @@ public class InviteNotification extends Notification {
     @Override
     public void setMessage() {
         Appointment appointment = Appointment.getAppointment(appointmentId);
-        message = ("" + senderUsername + " has invited you to attend " + appointment.toString() + "");
+        message = ("" + senderUsername + " har invitert deg til å delta på: " + appointment.toString() + "");
     }
 }

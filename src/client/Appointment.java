@@ -650,18 +650,18 @@ public class Appointment {
             if (!username.equals(this.owner)) {
                 newInvitees.add(username);
                 removeAttendant(username);
-                System.out.println("the attendants added to notification list");
             }
          }
         for (String username: invitedUsers) {
             newInvitees.add(username);;
-            System.out.println("the invited added notification list list");
         }
         for (String username: newInvitees) {
             Notification cancelNot = new AppointmentCanceledNotification(username, this.owner, this.appointmentId);
             cancelNot.createNotificationInDB();
-            System.out.println("the invited and attending people got a cancellation notification");
         }
+        System.out.println("");
+        System.out.println("Brukerne som er blitt påvirket vil bli varslet om dette.");
+        System.out.println("");
     }
 
     public void sendAppointmenUpdateNotification(){
@@ -675,18 +675,18 @@ public class Appointment {
             if (!username.equals(this.owner)) {
                 recievers.add(username);
                 removeAttendant(username);
-                System.out.println("the attendants added to invite list");
             }
         }
         for (String username: invitedUsers) {
             recievers.add(username);;
-            System.out.println("the invited added invite list");
         }
         for (String username: recievers) {
             Notification updateNot = new AppointmentUpdateNotification(this.owner, username, this.appointmentId);
             updateNot.createNotificationInDB();
-            System.out.println("the invited and attending people got a new invite");
         }
+        System.out.println("");
+        System.out.println("Brukerne som er blitt påvirket vil nå mota en varsling om endringen");
+        System.out.println("");
     }
 
     public void addAttendant(String username) {
@@ -712,7 +712,7 @@ public class Appointment {
             }
             //rs1.close();
             if(rs2.next()){
-                throw new IllegalArgumentException("User is already registered.");
+                throw new IllegalArgumentException("Brukeren er allerede registrert i avtalen");
             }
             while(rs3.next()) {
                 if (rs3.getInt("size") <= attendants) {
