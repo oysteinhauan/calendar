@@ -958,10 +958,17 @@ public class CalendarProgram {
         return new String(passwordArray);
     }
 
-    public static boolean isTimeStampValid(String timeStamp)
-    {
+    public static boolean isTimeStampValid(String timeStamp) {
         SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+        String tokens [] = timeStamp.split(" ");
+        String str1 [] = tokens[0].split("-");
+        String str2 [] = tokens[1].split(":");
+
+        if(Integer.valueOf(str1[1]) > 12 || Integer.valueOf(str1[2]) > 31 || Integer.valueOf(str2[0]) > 24 || Integer.valueOf(str2[1]) > 60)
+            return false;
+        if(Integer.valueOf(str1[1]) < 0 || Integer.valueOf(str1[2]) < 0 || Integer.valueOf(str2[0]) < 0 || Integer.valueOf(str2[1]) < 0)
+            return false;
         try{
             format.parse(timeStamp);
             return true;
@@ -969,6 +976,7 @@ public class CalendarProgram {
         catch(ParseException e) {
             return false;
         }
+
     }
 }
 
