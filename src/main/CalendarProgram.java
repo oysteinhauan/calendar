@@ -645,7 +645,7 @@ public class CalendarProgram {
                     continue;
                 case 3:
                     String newAttendant = KeyIn.inString("Hvilken deltaker vil du legge til? skriv inn username");
-                    appointmentToChange.addAttendant(newAttendant, db);
+                    appointmentToChange.inviteAttendant(newAttendant, db);
                     continue;
                 case 4:
                     String attendantToRemove = KeyIn.inString("Hvilken deltaker vil du fjerne? skriv inn username");
