@@ -142,19 +142,21 @@ public class CalendarProgram {
                         System.out.println("prøv igjen, gruppenavnet finnes ikke!!");
                     }
                         try {
-                            int id = Group.getGroupIDFromDB(groupname, db);
+                            int id = Group.getGroupIDFromDB(groupname);
                             Group group = Group.getGroup(id, db);
                             Calendar groupCalendar = new Calendar(group, db);
                             groupCalendar.viewGroupCalendar();
 
                             String bæsj = KeyIn.inString("Trykk Enter for å gå videre.");
                             groupStuff(group, db);
+
                             // legge inn gruppelogikk
                             break;
                         } catch (IllegalArgumentException e) {
                             System.out.println("Ugyldig gruppenavn");
                         } catch (IllegalAccessError e){
                             groupStuff(null, db);
+                            break;
                         }
 
 
@@ -363,7 +365,8 @@ public class CalendarProgram {
             switch (value) {
                 case 1:
                     //Se gruppemedlemmer
-                    String dritt = null;
+                    String dritt = KeyIn.inString("Skriv inn gruppen du vil sjekke medlemmer for.");
+                    group = Group.getGroup(Group.getGroupIDFromDB(dritt), db);
                     try {
                         int index = 1;
                         for (String str: group.getMembers()){
@@ -385,7 +388,7 @@ public class CalendarProgram {
 
                     if (ans == 'y') {
 
-                        String asdf = KeyIn.inString("Skriv inn gruppen du vil lage subrguppe til");
+                        String asdf = KeyIn.inString("Skriv inn gruppen du vil lage subgruppe til");
                         try {
                             group = Group.getGroup(Group.getGroupIDFromDB(asdf));
                             if (group.getGroupname() == null){
@@ -411,12 +414,14 @@ public class CalendarProgram {
                     else{
                         String gname = KeyIn.inString("Skriv navn på ny gruppe.");
                         try {
-                            if (gname == "" || gname == " " || gname == "  " || gname == "   ") {
+                            if (gname == "" || gname == " " || gname == "  " || gname == "   " ||
+                                    gname.charAt(0) == ' ') {
                                 throw new RuntimeException();
                             }
                         } catch (RuntimeException e){
-                            System.out.println("Ugyldig gruppenavn\n");
+                            System.out.println("Ugyldig gruppenavn. Ikke begynn med space.....\n");
                             dritt = KeyIn.inString("\nEnter for å fortsette.");
+                            break;
                         }
                         Group newGroup = new Group(gname);
                         try {
@@ -449,11 +454,11 @@ public class CalendarProgram {
                 case 2:
                     //Legg til deltaker i gruppe
                     try {
-                        if(group.getGroupname() == null){
+                        if(group == null){
                             String asdf = KeyIn.inString("Skriv inn gruppen du vil legge til bruker i");
-                            group = Group.getGroup(Group.getGroupIDFromDB(asdf, db), db);
+                            group = Group.getGroup(Group.getGroupIDFromDB(asdf));
                         }
-                        String yn = KeyIn.inString("Vil du legge til deg selv eller noen andre? y/n");
+                        String yn = KeyIn.inString("Vil du legge til deg selv eller noen andre i " + group.getGroupname() + "? y/n");
                         if(yn.equals("y") || yn.equals("yes")){
                             group.addMember(user, group.getGroupID(), db);
                             System.out.println("Brukeren ble mest sannsynlig lagt til.");
@@ -485,6 +490,15 @@ public class CalendarProgram {
                     }
                     String asdf = KeyIn.inString("Skriv inn navnet på gruppen du vil slette.\n" +
                             "NB: Du sletter alle subgrupper også!");
+                    if(asdf == "" || asdf == " " || asdf.charAt(0) == ' '){
+                        System.out.println("Du må jo skrive gruppenavn.... Og ikke start med space!!!");
+                        try {
+                            TimeUnit.SECONDS.sleep(1);
+                        } catch (InterruptedException e) {
+
+                        }
+                        break;
+                    }
                     try{
                         Group.removeGroupFromDB(asdf, db);
                         System.out.println("Gruppen er slettet");

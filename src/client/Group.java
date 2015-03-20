@@ -240,13 +240,13 @@ public class Group implements AppointmentListener {
             //Database db = new Database();
             //db = new Database("all_s_gruppe40_calendar");
             //db.connectDb("all_s_gruppe40", "qwerty");
-            String sql = ("SELECT groupID FROM group_1 WHERE name = '" + groupname +"' ;");
+            String sql = ("SELECT groupId FROM group_1 WHERE name = '" + groupname +"';");
             ResultSet rs = db.readQuery(sql);
             if(!rs.next()){
                 throw new IllegalAccessError();
             }
             while(rs.next()) {
-                groupId = rs.getInt("groupID");
+                groupId = rs.getInt("groupId");
             }
 
            // db.closeConnection();
